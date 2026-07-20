@@ -47,3 +47,19 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+.Rproj.user
+.Rdata
+.positai
+lstrrr.Rcheck/
+lstrrr*.tar.gz
+lstrrr*.tgz
+CRAN-SUBMISSION
+cran-comments.md
+.github/pkg.lock
+*.rmarkdown
+Rplots.pdf
+/.quarto/
+**/*.quarto_ipynb
+index_files/
+*index.html
+pkgdown/*_files

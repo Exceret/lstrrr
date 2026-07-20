@@ -1,0 +1,23 @@
+Package: lstrrr
+Title: Functional Tools for Working with Complex and Deeply Nested 'R' Lists
+Version: 0.0.1
+Authors@R: c(
+    person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")))
+Description: Provides a suite of functional programming tools for working
+    with deeply nested R lists. Includes core accessors to read, write, and
+    query nested structures by path.
+License: MIT + file LICENSE
+URL: https://github.com/Exceret/lstrrr
+BugReports: https://github.com/Exceret/lstrrr/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    cli,
+    rlang (>= 1.0.0)
+Suggests:
+    ggplot2,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
