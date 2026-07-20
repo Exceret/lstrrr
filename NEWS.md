@@ -3,8 +3,6 @@
 ## NEW FEATURES
 
 * Init Version
-
-
-# lstrrr (development version)
-
-* Initial CRAN submission.
+  * purrr-like function to process nested list
+  * `viz_list()`: A funtion to visualize the structure of a nested list
+  * `modify_list()`: A function to modify list with another one

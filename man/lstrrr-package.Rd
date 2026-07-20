@@ -17,13 +17,12 @@ MIT + file LICENSE
 Useful links:
 \itemize{
   \item \url{https://github.com/Exceret/lstrrr}
-  \item \url{https://exceret.github.io/lstrrr/}
   \item Report bugs at \url{https://github.com/Exceret/lstrrr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Yuxi Yang \email{15364051195@163.com} (\href{https://orcid.org/0009-0001-0049-567X}{ORCID})
+\strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}
 
 }
 \keyword{internal}
