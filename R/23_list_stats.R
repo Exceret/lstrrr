@@ -120,10 +120,52 @@
 
 #' Convert a Nested List to Tree Data
 #'
-#' @param x A nested list.
-#' @param max_depth Maximum depth to include. `NULL` means no limit.
+#' @inherit viz_list
 #'
-#' @return A list with `nodes` and `edges` data frames.
+#' @return
+#' A list with two data frames:
+#'
+#' * `nodes`: one row per visited node, with columns:
+#'   * `id`: integer node id assigned in traversal order;
+#'   * `parent`: integer id of the parent node, or `NA` for the root;
+#'   * `name`: node name, using positional indices for unnamed elements;
+#'   * `type`: object type. Data frames are labelled `"data.frame"`, lists are
+#'     labelled `"list"`, and other objects use [base::typeof()];
+#'   * `path`: dot-separated path from `"root"` to the node;
+#'   * `depth`: integer depth, where the root has depth `0`;
+#'   * `is_leaf`: logical indicating whether the node is not traversed further.
+#'
+#' * `edges`: one row per parent-child relationship, with columns:
+#'   * `from`: parent node id;
+#'   * `to`: child node id.
+#'
+#' If no nodes or edges are produced, empty data frames with the same column
+#' structure are returned.
+#'
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 2,
+#'     y = list(i = 3, j = 4)
+#'   ),
+#'   unnamed = list(5, z = 6),
+#'   df = data.frame(v = 1:2)
+#' )
+#'
+#' stats <- list_stats(x)
+#'
+#' stats$nodes
+#' stats$edges
+#'
+#' # Limit traversal depth
+#' list_stats(x, max_depth = 1)
+#'
+#' # Unnamed elements use their position as the node name
+#' list_stats(list(10, a = list(20)))$nodes
+#'
+#' @seealso [viz_list()]
+#' @family lstrrr-visualization
 #'
 #' @export
 list_stats <- function(x, max_depth = NULL) {

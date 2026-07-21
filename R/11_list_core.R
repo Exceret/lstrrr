@@ -1,18 +1,13 @@
-#' Base functions for nested list
-#'
-#' @name lstrrr_core
-#'
-NULL
-
 #' Get an element from a nested list by path
 #'
 #' @param x A nested list.
 #' @param path Character or integer path.
 #' @param default Value returned if path does not exist.
 #'
-#' @rdname lstrrr_core
+#' @family lstrrr_core
 #'
 #' @examples
+#' \donttest{
 #' x <- list(
 #'   a = 1,
 #'   b = list(
@@ -23,6 +18,7 @@ NULL
 #'
 #' list_get(x, c("b", "x")) # 1
 #' list_get(x, c("b", "y", "i")) # 1
+#' }
 #'
 #' @export
 list_get <- function(x, path, default = NULL) {
@@ -33,7 +29,23 @@ list_get <- function(x, path, default = NULL) {
 #'
 #' @param x A nested list.
 #' @param path Character or integer path.
-#' @rdname lstrrr_core
+#' @family lstrrr_core
+#'
+#' @examples
+#' \donttest{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 1,
+#'     y = list(i = 1, j = 2)
+#'   )
+#' )
+#'
+#' list_has(x, c("b", "x")) # TRUE
+#' list_has(x, c("b", "y", "i")) # TRUE
+#' list_has(x, c("b", "y", "k")) # FALSE
+#' }
+#'
 #' @export
 list_has <- function(x, path) {
   .Call("lstrrr_c_list_has", x, path, PACKAGE = "lstrrr")
@@ -41,8 +53,22 @@ list_has <- function(x, path) {
 
 #' Compute nested list depth
 #'
-#' @param x An object.
-#' @rdname lstrrr_core
+#' @param x An list object.
+#' @family lstrrr_core
+#'
+#' @examples
+#' \donttest{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 1,
+#'     y = list(i = 1, j = 2)
+#'   )
+#' )
+#'
+#' list_depth(x) # 3
+#' }
+#'
 #' @export
 list_depth <- function(x) {
   .Call("lstrrr_c_list_depth", x, PACKAGE = "lstrrr")
@@ -51,7 +77,32 @@ list_depth <- function(x) {
 #' Get all leaf paths in a nested list
 #'
 #' @param x A nested list.
-#' @rdname lstrrr_core
+#' @family lstrrr_core
+#'
+#' @examples
+#' \donttest{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 1,
+#'     y = list(i = 1, j = 2)
+#'   )
+#' )
+#' res <- list_path(x)
+#' # [[1]]
+#' # [1] "a" # character
+#' #
+#' # [[2]]
+#' # [1] "b" "x"
+#' #
+#' # [[3]]
+#' # [1] "b" "y" "i"
+#' #
+#' # [[4]]
+#' # [1] "b" "y" "j"
+#' class(res) # "list"
+#' }
+#'
 #' @export
 list_path <- function(x) {
   .Call("lstrrr_c_list_path", x, PACKAGE = "lstrrr")
@@ -63,7 +114,33 @@ list_path <- function(x) {
 #' @param x A nested list.
 #' @param path Character or integer path.
 #' @param value Value to set.
-#' @rdname lstrrr_core
+#' @family lstrrr_core
+#'
+#' @examples
+#' \donttest{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 1,
+#'     y = list(i = 1, j = 2)
+#'   )
+#' )
+#' list_set(x, c("b", "x"), 2)
+#' # $a
+#' # [1] 1
+#' #
+#' # $b
+#' # $b$x
+#' # [1] 2 # <<< CHANGE
+#' #
+#' # $b$y
+#' # $b$y$i
+#' # [1] 1
+#' #
+#' # $b$y$j
+#' # [1] 2
+#' #
+#' }
 #' @export
 list_set <- function(x, path, value) {
   .Call("lstrrr_c_list_set", x, path, value, PACKAGE = "lstrrr")
@@ -73,7 +150,26 @@ list_set <- function(x, path, value) {
 #'
 #' @param x A nested list.
 #' @param path Character or integer path.
-#' @rdname lstrrr_core
+#' @family lstrrr_core
+#' @examples
+#' \donttest{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 1,
+#'     y = list(i = 1, j = 2)
+#'   )
+#' )
+#' list_delete(x, c("b", "y", "j"))
+#' # $a
+#' # [1] 1
+#' #
+#' # $b
+#' # $b$y
+#' # $b$y$i
+#' # [1] 1
+#' }
+#'
 #' @export
 list_delete <- function(x, path) {
   .Call("lstrrr_c_list_delete", x, path, PACKAGE = "lstrrr")

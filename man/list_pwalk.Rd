@@ -9,7 +9,9 @@ list_pwalk(.l, .f, ...)
 \arguments{
 \item{.l}{A list of nested lists.}
 
-\item{.f}{A function.}
+\item{.f}{A function, formula, or function-like object coercible by
+\code{\link[rlang:as_function]{rlang::as_function()}}.
+Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
 }
@@ -20,3 +22,31 @@ Invisibly returns \code{.l}.
 Applies \code{.f} to corresponding leaves of multiple nested lists
 for side effects.
 }
+\examples{
+x <- list(
+  a = 1,
+  b = list(
+    x = 2,
+    y = list(i = 3, j = 4)
+  )
+)
+
+# Print each leaf
+list_pwalk(.l = list(x, x, x, x), .f = function(x, y, z, w = 1) message((x + y) * z + w))
+# 3
+# 10
+# 21
+# 36
+
+}
+\seealso{
+Other lstrrr-purrrlike: 
+\code{\link{list_imap}()},
+\code{\link{list_map}()},
+\code{\link{list_map2}()},
+\code{\link{list_modify_if}()},
+\code{\link{list_pmap}()},
+\code{\link{list_walk}()},
+\code{\link{list_walk2}()}
+}
+\concept{lstrrr-purrrlike}

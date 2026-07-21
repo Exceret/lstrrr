@@ -7,13 +7,73 @@
 list_stats(x, max_depth = NULL)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{max_depth}{Maximum depth to include. \code{NULL} means no limit.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{max_depth}{Maximum depth to display.
+
+A single non-negative integer or \code{NULL}. If \code{NULL}, the full nested
+structure is displayed. If supplied, only nodes with depth less than or
+equal to \code{max_depth} are included. This value is passed directly to
+\code{\link[=list_stats]{list_stats()}}.}
 }
 \value{
-A list with \code{nodes} and \code{edges} data frames.
+A list with two data frames:
+\itemize{
+\item \code{nodes}: one row per visited node, with columns:
+\itemize{
+\item \code{id}: integer node id assigned in traversal order;
+\item \code{parent}: integer id of the parent node, or \code{NA} for the root;
+\item \code{name}: node name, using positional indices for unnamed elements;
+\item \code{type}: object type. Data frames are labelled \code{"data.frame"}, lists are
+labelled \code{"list"}, and other objects use \code{\link[base:typeof]{base::typeof()}};
+\item \code{path}: dot-separated path from \code{"root"} to the node;
+\item \code{depth}: integer depth, where the root has depth \code{0};
+\item \code{is_leaf}: logical indicating whether the node is not traversed further.
+}
+\item \code{edges}: one row per parent-child relationship, with columns:
+\itemize{
+\item \code{from}: parent node id;
+\item \code{to}: child node id.
+}
+}
+
+If no nodes or edges are produced, empty data frames with the same column
+structure are returned.
 }
 \description{
-Convert a Nested List to Tree Data
+Creates a tree-style visualization of the structure of a nested list using
+ggplot2.
 }
+\examples{
+x <- list(
+  a = 1,
+  b = list(
+    x = 2,
+    y = list(i = 3, j = 4)
+  ),
+  unnamed = list(5, z = 6),
+  df = data.frame(v = 1:2)
+)
+
+stats <- list_stats(x)
+
+stats$nodes
+stats$edges
+
+# Limit traversal depth
+list_stats(x, max_depth = 1)
+
+# Unnamed elements use their position as the node name
+list_stats(list(10, a = list(20)))$nodes
+
+}
+\seealso{
+\code{\link[=viz_list]{viz_list()}}
+
+Other lstrrr-visualization: 
+\code{\link{viz_list}()}
+}
+\concept{lstrrr-visualization}

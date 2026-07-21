@@ -7,12 +7,58 @@
 list_map(x, .f, ...)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{.f}{A function.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{.f}{A function, formula, or function-like object coercible by
+\code{\link[rlang:as_function]{rlang::as_function()}}.
+Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+}
+\value{
+A list with the same nested structure as \code{x}, where each leaf has been
+replaced by the result of calling \code{.f} on that leaf.
 }
 \description{
 Map over leaves of a nested list
 }
+\examples{
+\donttest{
+x <- list(
+  a = 1,
+  b = list(
+    x = 1,
+    y = list(i = 1, j = 2)
+  )
+)
+x2 <- list_map(x, function(x) x - 2)
+# $a
+# [1] -1
+#
+# $b
+# $b$x
+# [1] -1
+#
+# $b$y
+# $b$y$i
+# [1] -1
+#
+# $b$y$j
+# [1] 0
+}
+
+}
+\seealso{
+Other lstrrr-purrrlike: 
+\code{\link{list_imap}()},
+\code{\link{list_map2}()},
+\code{\link{list_modify_if}()},
+\code{\link{list_pmap}()},
+\code{\link{list_pwalk}()},
+\code{\link{list_walk}()},
+\code{\link{list_walk2}()}
+}
+\concept{lstrrr-purrrlike}

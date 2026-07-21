@@ -7,7 +7,10 @@
 modify_list(x, val, keep.null = FALSE)
 }
 \arguments{
-\item{x}{A named list to be modified.}
+\item{x}{A nested list to traverse.
+
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
 
 \item{val}{A named list whose components modify \code{x}.}
 
@@ -21,6 +24,7 @@ A modified list.
 A recursive version of \code{\link[utils:modifyList]{utils::modifyList()}}.
 }
 \examples{
+\donttest{
 x <- list(
   a = 1,
   b = list(
@@ -37,5 +41,6 @@ val <- list(
 )
 
 modify_list(x, val)
+}
 
 }

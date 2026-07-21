@@ -97,17 +97,72 @@
 
 #' Visualize Nested List Structure
 #'
-#' Visualize the structure of a nested list using ggplot2.
+#' Creates a tree-style visualization of the structure of a nested list using
+#' ggplot2.
 #'
-#' @param x A nested list.
-#' @param max_depth Maximum depth to display. `NULL` means no limit.
-#' @param show_path Logical. If `TRUE`, show full path in node labels instead of just the name.
-#' @param point_size Node point size.
-#' @param text_size Label text size.
-#' @param line_width Edge line width.
+#' @inheritParams list_map
+#' @param max_depth Maximum depth to display.
 #'
-#' @return A ggplot object.
+#'   A single non-negative integer or `NULL`. If `NULL`, the full nested
+#'   structure is displayed. If supplied, only nodes with depth less than or
+#'   equal to `max_depth` are included. This value is passed directly to
+#'   [list_stats()].
 #'
+#' @param show_path Logical scalar.
+#'
+#'   If `FALSE`, node labels show the node's own name and type.
+#'   If `TRUE`, node labels show the full path and type.
+#'
+#' @param point_size Numeric scalar giving the size of node points passed to
+#'   [ggplot2::geom_point()].
+#'
+#' @param text_size Numeric scalar giving the size of node labels passed to
+#'   [ggplot2::geom_text()].
+#'
+#' @param line_width Numeric scalar giving the width of edges passed to
+#'   [ggplot2::geom_segment()].
+#'
+#' @return
+#' A [ggplot2::ggplot] object representing the nested list as a tree diagram.
+#'
+#' The plot contains:
+#'
+#' * line segments for parent-child edges;
+#' * points for nodes, colored by node type;
+#' * text labels showing either node names or full paths plus node types;
+#' * a y-axis labelled by list depth.
+#'
+#' @examples
+#' \dontrun{
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 2,
+#'     y = list(i = 3, j = 4)
+#'   ),
+#'   c = data.frame(z = 1:3)
+#' )
+#'
+#' # Visualize the full structure
+#' viz_list(x)
+#'
+#' # Show full paths in node labels
+#' viz_list(x, show_path = TRUE)
+#'
+#' # Limit the displayed depth
+#' viz_list(x, max_depth = 1)
+#'
+#' # Customize appearance
+#' viz_list(
+#'   x,
+#'   point_size = 4,
+#'   text_size = 3.5,
+#'   line_width = 1
+#' )
+#' }
+#'
+#' @seealso [list_stats()]
+#' @family lstrrr-visualization
 #' @export
 viz_list <- function(
   x,

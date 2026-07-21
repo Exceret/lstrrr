@@ -14,21 +14,81 @@ viz_list(
 )
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{max_depth}{Maximum depth to display. \code{NULL} means no limit.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
 
-\item{show_path}{Logical. If \code{TRUE}, show full path in node labels instead of just the name.}
+\item{max_depth}{Maximum depth to display.
 
-\item{point_size}{Node point size.}
+A single non-negative integer or \code{NULL}. If \code{NULL}, the full nested
+structure is displayed. If supplied, only nodes with depth less than or
+equal to \code{max_depth} are included. This value is passed directly to
+\code{\link[=list_stats]{list_stats()}}.}
 
-\item{text_size}{Label text size.}
+\item{show_path}{Logical scalar.
 
-\item{line_width}{Edge line width.}
+If \code{FALSE}, node labels show the node's own name and type.
+If \code{TRUE}, node labels show the full path and type.}
+
+\item{point_size}{Numeric scalar giving the size of node points passed to
+\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}.}
+
+\item{text_size}{Numeric scalar giving the size of node labels passed to
+\code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+
+\item{line_width}{Numeric scalar giving the width of edges passed to
+\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}.}
 }
 \value{
-A ggplot object.
+A \link[ggplot2:ggplot]{ggplot2::ggplot} object representing the nested list as a tree diagram.
+
+The plot contains:
+\itemize{
+\item line segments for parent-child edges;
+\item points for nodes, colored by node type;
+\item text labels showing either node names or full paths plus node types;
+\item a y-axis labelled by list depth.
+}
 }
 \description{
-Visualize the structure of a nested list using ggplot2.
+Creates a tree-style visualization of the structure of a nested list using
+ggplot2.
 }
+\examples{
+\dontrun{
+x <- list(
+  a = 1,
+  b = list(
+    x = 2,
+    y = list(i = 3, j = 4)
+  ),
+  c = data.frame(z = 1:3)
+)
+
+# Visualize the full structure
+viz_list(x)
+
+# Show full paths in node labels
+viz_list(x, show_path = TRUE)
+
+# Limit the displayed depth
+viz_list(x, max_depth = 1)
+
+# Customize appearance
+viz_list(
+  x,
+  point_size = 4,
+  text_size = 3.5,
+  line_width = 1
+)
+}
+
+}
+\seealso{
+\code{\link[=list_stats]{list_stats()}}
+
+Other lstrrr-visualization: 
+\code{\link{list_stats}()}
+}
+\concept{lstrrr-visualization}

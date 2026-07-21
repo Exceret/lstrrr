@@ -1,6 +1,6 @@
 Package: lstrrr
 Title: Functional Tools for Working with Complex and Deeply Nested 'R' Lists
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")))
 Description: Provides a suite of functional programming tools for working

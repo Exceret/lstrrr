@@ -2,19 +2,80 @@
 % Please edit documentation in R/12_list_map.R
 \name{list_imap}
 \alias{list_imap}
-\title{Map over leaves with path}
+\title{Map over leaves with path (names)}
 \usage{
-list_imap(x, .f, ..., .path = character())
+list_imap(x, .f, ..., .name = c("name", "path"))
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{.f}{A function taking value and path.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{.f}{A function, formula, or function-like object coercible by
+\code{\link[rlang:as_function]{rlang::as_function()}}.
+Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
 
-\item{.path}{A character specifying the root of the list in \code{x}}
+\item{.name}{A character scalar controlling what identifier is passed to
+\code{.f}.
+
+Must be one of:
+\itemize{
+\item \code{"name"}: pass only the current leaf name or positional index;
+\item \code{"path"}: pass the full path (vector of names) from the root to the current leaf.
+}}
+}
+\value{
+A list with the same nested structure as \code{x}, where each leaf has been
+replaced by the result of calling \code{.f} on that leaf.
 }
 \description{
-Map over leaves with path
+Map over leaves with path (names)
 }
+\examples{
+\donttest{
+x <- list(
+  a = 1,
+  b = list(
+    x = 2,
+    y = list(i = 3, j = 4)
+  ),
+  unnamed = list(5, z = 6)
+)
+
+# Pass only the leaf name or positional index
+list_imap(x, \(value, name) paste(name, value, sep = " = "))
+
+# Pass the full path to each leaf
+list_imap(
+  x,
+  \(value, path) paste(paste(path, collapse = "."), value, sep = " = "),
+  .name = "path"
+)
+
+# Additional arguments are forwarded to `.f`
+list_imap(
+  x,
+  \(value, name, prefix) paste0(prefix, name, ": ", value),
+  prefix = "leaf_"
+)
+
+# Data frames are treated as leaves
+x2 <- list(a = data.frame(x = 1:3), b = list(c = 1))
+list_imap(x2, \(value, path) path, .name = "path")
+
+}
+}
+\seealso{
+Other lstrrr-purrrlike: 
+\code{\link{list_map}()},
+\code{\link{list_map2}()},
+\code{\link{list_modify_if}()},
+\code{\link{list_pmap}()},
+\code{\link{list_pwalk}()},
+\code{\link{list_walk}()},
+\code{\link{list_walk2}()}
+}
+\concept{lstrrr-purrrlike}

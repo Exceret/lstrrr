@@ -7,14 +7,72 @@
 list_modify_if(x, .p, .f, ...)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{.p}{Predicate function.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
 
-\item{.f}{Function applied to matched leaves.}
+\item{.p}{A predicate function, formula, or function-like object coercible by
+\code{\link[rlang:as_function]{rlang::as_function()}}.}
+
+\item{.f}{A function, formula, or function-like object coercible by
+\code{\link[rlang:as_function]{rlang::as_function()}}.
+Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+}
+\value{
+A nested list with the same structure and names as \code{x}, where leaves
+satisfying \code{.p} have been replaced by the result of \code{.f}.
 }
 \description{
 Modify leaves satisfying predicate
 }
+\examples{
+x <- list(
+  a = 1,
+  b = list(
+    x = 2,
+    y = list(i = 3, j = 4)
+  ),
+  c = "text"
+)
+
+# Double numeric leaves greater than 2
+list_modify_if(
+  x,
+  .p = \(value) is.numeric(value) && value > 2,
+  .f = \(value) value * 2
+)
+
+# Modify only character leaves
+list_modify_if(
+  x,
+  .p = is.character,
+  .f = toupper
+)
+
+# Additional arguments are passed to `.f`
+list_modify_if(
+  x,
+  .p = is.numeric,
+  .f = \(value, increment) value + increment,
+  increment = 10
+)
+
+# Data frames are treated as leaves
+x2 <- list(a = data.frame(x = 1:3), b = list(c = 1))
+list_modify_if(x2, is.data.frame, \(value) transform(value, y = x * 2))
+
+}
+\seealso{
+Other lstrrr-purrrlike: 
+\code{\link{list_imap}()},
+\code{\link{list_map}()},
+\code{\link{list_map2}()},
+\code{\link{list_pmap}()},
+\code{\link{list_pwalk}()},
+\code{\link{list_walk}()},
+\code{\link{list_walk2}()}
+}
+\concept{lstrrr-purrrlike}

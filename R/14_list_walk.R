@@ -2,15 +2,28 @@
 #'
 #' Applies `.f` to each leaf of `x` for side effects.
 #'
-#' @param x A nested list.
-#' @param .f A function applied to each leaf.
-#' @param ... Additional arguments passed to `.f`.
+#' @inherit list_map
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 2,
+#'     y = list(i = 3, j = 4)
+#'   )
+#' )
+#'
+#' # Print each leaf
+#' list_walk(x, print)
+#'
+#' # Use additional arguments
+#' list_walk(x, \(value, prefix) message(prefix, value, "\n"), prefix = "value:")
+#'
 #'
 #' @return Invisibly returns `x`.
-#'
+#' @family lstrrr-purrrlike
 #' @export
 list_walk <- function(x, .f, ...) {
-  .f <- match.fun(.f)
+  .f <- as_function(.f)
 
   walk_rec <- function(obj) {
     if (is.list(obj) && !is.data.frame(obj)) {
@@ -31,16 +44,26 @@ list_walk <- function(x, .f, ...) {
 #'
 #' Applies `.f` to corresponding leaves of `x` and `y` for side effects.
 #'
-#' @param x A nested list.
-#' @param y A nested list.
-#' @param .f A function taking two leaf values.
-#' @param ... Additional arguments passed to `.f`.
+#' @inherit list_map2
 #'
 #' @return Invisibly returns `x`.
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 2,
+#'     y = list(i = 3, j = 4)
+#'   )
+#' )
 #'
+#' # Print each leaf
+#' list_walk2(x, x, ~ message(.x +.y))
+#'
+#'
+#' @family lstrrr-purrrlike
 #' @export
 list_walk2 <- function(x, y, .f, ...) {
-  .f <- match.fun(.f)
+  .f <- as_function(.f)
 
   walk2_rec <- function(a, b) {
     a_is_list <- is.list(a) && !is.data.frame(a)
@@ -70,18 +93,36 @@ list_walk2 <- function(x, y, .f, ...) {
 #' Applies `.f` to corresponding leaves of multiple nested lists
 #' for side effects.
 #'
-#' @param .l A list of nested lists.
-#' @param .f A function.
-#' @param ... Additional arguments passed to `.f`.
+#' @inherit list_pmap
 #'
 #' @return Invisibly returns `.l`.
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     x = 2,
+#'     y = list(i = 3, j = 4)
+#'   )
+#' )
 #'
+#' # Print each leaf
+#' list_pwalk(.l = list(x, x, x, x), .f = function(x, y, z, w = 1) message((x + y) * z + w))
+#' # 3
+#' # 10
+#' # 21
+#' # 36
+#'
+#' @family lstrrr-purrrlike
 #' @export
 list_pwalk <- function(.l, .f, ...) {
-  .f <- match.fun(.f)
+  .f <- as_function(.f)
 
   if (!is.list(.l)) {
-    stop("`.l` must be a list.", call. = FALSE)
+    cli::cli_abort(
+      message = c("x" = "`.l` must be a {.cls list}."),
+      call = caller_call(),
+      .frame = caller_env()
+    )
   }
 
   pwalk_rec <- function(xs) {
@@ -92,7 +133,7 @@ list_pwalk <- function(.l, .f, ...) {
     )
 
     if (all(are_lists)) {
-      lens <- vapply(lengths(xs))
+      lens <- lengths(xs)
       n <- max(lens)
 
       for (i in seq_len(n)) {
