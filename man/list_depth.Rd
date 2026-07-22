@@ -7,13 +7,22 @@
 list_depth(x)
 }
 \arguments{
-\item{x}{An list object.}
+\item{x}{A nested list to traverse.
+
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+}
+\value{
+An integer scalar giving the maximum depth of \code{x}.
+
+A non-list leaf has depth \code{0}. A list containing only leaf values has depth
+\code{1}. Deeper nested lists have larger depth according to the longest path to a
+leaf.
 }
 \description{
 Compute nested list depth
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
@@ -22,8 +31,19 @@ x <- list(
   )
 )
 
-list_depth(x) # 3
-}
+list_depth(x)
+
+# A list with only leaf values has depth 1
+list_depth(list(a = 1, b = 2))
+
+# Non-list objects are leaves
+list_depth(1) # 0
+
+# Data frames are treated as leaves
+list_depth(list(a = data.frame(x = 1:3)))
+
+list_depth(x) # 1
+
 
 }
 \seealso{
@@ -31,6 +51,7 @@ Other lstrrr_core:
 \code{\link{list_delete}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_path}()},
 \code{\link{list_set}()}
 }

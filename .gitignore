@@ -63,3 +63,6 @@ Rplots.pdf
 index_files/
 *index.html
 pkgdown/*_files
+codebuddy/
+inst/doc
+docs

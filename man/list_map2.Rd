@@ -4,24 +4,28 @@
 \alias{list_map2}
 \title{Map over leaves of two nested lists}
 \usage{
-list_map2(x, y, .f, ...)
+list_map2(.x, .y, .f, ..., .progress = FALSE)
 }
 \arguments{
-\item{x}{A nested list to traverse.
+\item{.x}{A nested list to traverse.
 
 Lists are traversed recursively. Non-list objects are treated as leaves.
 Data frames are not traversed and are treated as leaf values.}
 
-\item{y}{A nested list. Must have the same structure as \code{x}.}
+\item{.y}{A nested list. Must have the same structure as \code{.x}.}
 
 \item{.f}{A function, formula, or function-like object coercible by
 \code{\link[rlang:as_function]{rlang::as_function()}}.
 Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+
+\item{.progress}{Whether to show a progress bar.
+
+Use TRUE to turn on a basic progress bar, use a string to give it a name}
 }
 \value{
-A list with the same nested structure as \code{x}, where each leaf has been
+A list with the same nested structure as \code{.x}, where each leaf has been
 replaced by the result of calling \code{.f} on that leaf.
 }
 \description{

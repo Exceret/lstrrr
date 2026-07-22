@@ -7,13 +7,21 @@
 list_path(x)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
+
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+}
+\value{
+A list of character vectors.
+
+Each element of the returned list is the path to one leaf value in \code{x}.
+If \code{x} has no leaves, an empty list is returned.
 }
 \description{
 Get all leaf paths in a nested list
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
@@ -21,28 +29,34 @@ x <- list(
     y = list(i = 1, j = 2)
   )
 )
+
 res <- list_path(x)
-# [[1]]
-# [1] "a" # character
-#
-# [[2]]
-# [1] "b" "x"
-#
-# [[3]]
-# [1] "b" "y" "i"
-#
-# [[4]]
-# [1] "b" "y" "j"
-class(res) # "list"
-}
+res
+
+# The paths can be used with list_get()
+lapply(res, \(path) list_get(x, path))
+
+# Top-level leaves have paths of length 1
+list_path(list(a = 1, b = 2))
+
+# Unnamed elements use their position as character labels
+list_path(list(10, list(20, z = 30)))
+
+# Data frames are treated as leaves
+list_path(list(a = data.frame(x = 1:3), b = list(c = 1)))
+
+
 
 }
 \seealso{
+\code{\link[=list_get]{list_get()}}, \code{\link[=list_has]{list_has()}}
+
 Other lstrrr_core: 
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_set}()}
 }
 \concept{lstrrr_core}

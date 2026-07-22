@@ -13,7 +13,8 @@
 ## NEW FEATURES
 
 * Added `dir_listwise()`, which makes output of `list.files()` into a nested list
-* 
+* `list_map()`, `list_map2()`, `list_imap()`, and `list_pmap()` now support a `.progress` argument to show a progress bar during traversal.
+* `list_map()`, `list_map2()`, and `list_imap()` now use `.x` as the first argument (renamed from `x`) for consistency with purrr naming conventions.
 
 
 # lstrrr 0.0.0.9000 (2026-07-20)

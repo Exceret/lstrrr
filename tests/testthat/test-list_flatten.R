@@ -186,23 +186,23 @@ test_that("list_find on NULL returns empty list", {
 })
 
 test_that("list_find with identity predicate", {
-  result <- list_find(x, ~ TRUE)
+  result <- list_find(x, ~TRUE)
   expect_named(result, c("a", "b.x", "b.y.i", "b.y.j"))
   expect_length(result, 4L)
 })
 
 test_that("list_find with always-false predicate", {
-  result <- list_find(x, ~ FALSE)
+  result <- list_find(x, ~FALSE)
   expect_length(result, 0L)
 })
 
 test_that("list_find ignores NA results from predicate (isTRUE)", {
-  result <- list_find(x, ~ NA)
+  result <- list_find(x, ~NA)
   expect_length(result, 0L)
 })
 
 test_that("list_find ignores non-logical results from predicate", {
-  result <- list_find(x, ~ "not_logical")
+  result <- list_find(x, ~"not_logical")
   expect_length(result, 0L)
 })
 

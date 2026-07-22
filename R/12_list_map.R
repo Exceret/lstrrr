@@ -1,6 +1,6 @@
 #' Map over leaves of a nested list
 #'
-#' @param x A nested list to traverse.
+#' @param .x A nested list to traverse.
 #'
 #'   Lists are traversed recursively. Non-list objects are treated as leaves.
 #'   Data frames are not traversed and are treated as leaf values.
@@ -11,8 +11,12 @@
 #'
 #' @param ... Additional arguments passed to `.f`.
 #'
+#' @param .progress Whether to show a progress bar.
+#'
+#'   Use TRUE to turn on a basic progress bar, use a string to give it a name
+#'
 #' @return
-#' A list with the same nested structure as `x`, where each leaf has been
+#' A list with the same nested structure as `.x`, where each leaf has been
 #' replaced by the result of calling `.f` on that leaf.
 #'
 #' @examples
@@ -42,27 +46,56 @@
 #'
 #' @family lstrrr-purrrlike
 #' @export
-list_map <- function(x, .f, ...) {
+list_map <- function(.x, .f, ..., .progress = FALSE) {
   .f <- as_function(.f)
 
-  if (is.list(x) && !is.data.frame(x)) {
-    out <- vector("list", length(x))
-    names(out) <- names(x)
+  total <- if (.list_progress_enabled(.progress)) {
+    list_nleaf(.x)
+  } else {
+    0L
+  }
 
-    for (i in seq_along(x)) {
-      out[[i]] <- list_map(x[[i]], .f, ...)
+  pb <- .list_progress_start(
+    .progress = .progress,
+    total = total
+  )
+
+  on.exit(.list_progress_done(pb), add = TRUE)
+
+  .list_map_impl(
+    .x = .x,
+    .f = .f,
+    ...,
+    .pb = pb
+  )
+}
+
+.list_map_impl <- function(.x, .f, ..., .pb = NULL) {
+  if (is.list(.x) && !is.data.frame(.x)) {
+    out <- vector("list", length(.x))
+    names(out) <- names(.x)
+
+    for (i in seq_along(.x)) {
+      out[[i]] <- .list_map_impl(
+        .x = .x[[i]],
+        .f = .f,
+        ...,
+        .pb = .pb
+      )
     }
 
-    out
-  } else {
-    .f(x, ...)
+    return(out)
   }
+
+  .list_progress_tick(.pb)
+
+  .f(.x, ...)
 }
 
 #' Map over leaves of two nested lists
 #'
 #' @inherit list_map
-#' @param y A nested list. Must have the same structure as `x`.
+#' @param .y A nested list. Must have the same structure as `.x`.
 #'
 #' @family lstrrr-purrrlike
 #' @examples
@@ -91,16 +124,33 @@ list_map <- function(x, .f, ...) {
 #' }
 #'
 #' @export
-list_map2 <- function(x, y, .f, ...) {
+list_map2 <- function(.x, .y, .f, ..., .progress = FALSE) {
   .f <- as_function(.f)
 
-  if (is.list(x) && !is.data.frame(x) && is.list(y) && !is.data.frame(y)) {
-    n <- max(length(x), length(y))
+  total <- if (.list_progress_enabled(.progress)) {
+    list_nleaf(.x)
+  } else {
+    0L
+  }
+
+  pb <- .list_progress_start(
+    .progress = .progress,
+    total = total
+  )
+
+  on.exit(.list_progress_done(pb), add = TRUE)
+
+  .list_map2_impl(.x, .y, .f, ..., .pb = pb)
+}
+
+.list_map2_impl <- function(.x, .y, .f, ..., .pb = NULL) {
+  if (is.list(.x) && !is.data.frame(.x) && is.list(.y) && !is.data.frame(.y)) {
+    n <- max(length(.x), length(.y))
 
     out <- vector("list", n)
 
-    nx <- names(x)
-    ny <- names(y)
+    nx <- names(.x)
+    ny <- names(.y)
 
     if (!is.null(nx)) {
       names(out) <- nx
@@ -109,14 +159,15 @@ list_map2 <- function(x, y, .f, ...) {
     }
 
     for (i in seq_len(n)) {
-      xi <- if (i <= length(x)) x[[i]] else NULL
-      yi <- if (i <= length(y)) y[[i]] else NULL
-      out[[i]] <- list_map2(xi, yi, .f, ...)
+      xi <- if (i <= length(.x)) .x[[i]] else NULL
+      yi <- if (i <= length(.y)) .y[[i]] else NULL
+      out[[i]] <- .list_map2_impl(xi, yi, .f, ..., .pb = .pb)
     }
 
     out
   } else {
-    .f(x, y, ...)
+    .list_progress_tick(.pb)
+    .f(.x, .y, ...)
   }
 }
 
@@ -151,12 +202,25 @@ list_map2 <- function(x, y, .f, ...) {
 #' }
 #' @family lstrrr-purrrlike
 #' @export
-list_pmap <- function(.l, .f, ...) {
+list_pmap <- function(.l, .f, ..., .progress = FALSE) {
   .f <- as_function(.f)
 
   if (!is.list(.l)) {
     cli::cli_abort(c("x" = "`.l` must be a {.cls list}."))
   }
+
+  total <- if (.list_progress_enabled(.progress)) {
+    list_nleaf(.l[[1L]])
+  } else {
+    0L
+  }
+
+  pb <- .list_progress_start(
+    .progress = .progress,
+    total = total
+  )
+
+  on.exit(.list_progress_done(pb), add = TRUE)
 
   rec <- function(xs) {
     are_lists <- vapply(
@@ -185,6 +249,7 @@ list_pmap <- function(.l, .f, ...) {
 
       out
     } else {
+      .list_progress_tick(pb)
       do.call(.f, c(xs, list(...)))
     }
   }
@@ -204,7 +269,7 @@ list_pmap <- function(.l, .f, ...) {
 #'   * `"path"`: pass the full path (vector of names) from the root to the current leaf.
 #'
 #' @return
-#' A list with the same nested structure as `x`, where each leaf has been
+#' A list with the same nested structure as `.x`, where each leaf has been
 #' replaced by the result of calling `.f` on that leaf.
 #'
 #' @examples
@@ -242,25 +307,44 @@ list_pmap <- function(.l, .f, ...) {
 #' }
 #' @family lstrrr-purrrlike
 #' @export
-list_imap <- function(x, .f, ..., .name = c("name", "path")) {
+list_imap <- function(
+  .x,
+  .f,
+  ...,
+  .name = c("name", "path"),
+  .progress = FALSE
+) {
   .name <- arg_match(.name)
   .f <- as_function(.f)
 
-  if (.name == "path") {
-    list_imap_path(x = x, .f = .f, ...)
+  total <- if (.list_progress_enabled(.progress)) {
+    list_nleaf(.x)
   } else {
-    list_imap_name(x = x, .f = .f, ...)
+    0L
+  }
+
+  pb <- .list_progress_start(
+    .progress = .progress,
+    total = total
+  )
+
+  on.exit(.list_progress_done(pb), add = TRUE)
+
+  if (.name == "path") {
+    list_imap_path(.x = .x, .f = .f, ..., .pb = pb)
+  } else {
+    list_imap_name(.x = .x, .f = .f, ..., .pb = pb)
   }
 }
 
-list_imap_name <- function(x, .f, ..., .name = character(0L)) {
-  if (is.list(x) && !is.data.frame(x)) {
-    out <- vector("list", length(x))
-    names(out) <- names(x)
+list_imap_name <- function(.x, .f, ..., .name = character(0L), .pb = NULL) {
+  if (is.list(.x) && !is.data.frame(.x)) {
+    out <- vector("list", length(.x))
+    names(out) <- names(.x)
 
-    nms <- names(x)
+    nms <- names(.x)
 
-    for (i in seq_along(x)) {
+    for (i in seq_along(.x)) {
       key <- if (!is.null(nms) && nzchar(nms[[i]])) {
         nms[[i]]
       } else {
@@ -268,27 +352,29 @@ list_imap_name <- function(x, .f, ..., .name = character(0L)) {
       }
 
       out[[i]] <- list_imap_name(
-        x[[i]],
+        .x[[i]],
         .f,
         ...,
-        .name = key
+        .name = key,
+        .pb = .pb
       )
     }
 
     out
   } else {
-    .f(x, .name, ...)
+    .list_progress_tick(.pb)
+    .f(.x, .name, ...)
   }
 }
 
-list_imap_path <- function(x, .f, ..., .path = character(0L)) {
-  if (is.list(x) && !is.data.frame(x)) {
-    out <- vector("list", length(x))
-    names(out) <- names(x)
+list_imap_path <- function(.x, .f, ..., .path = character(0L), .pb = NULL) {
+  if (is.list(.x) && !is.data.frame(.x)) {
+    out <- vector("list", length(.x))
+    names(out) <- names(.x)
 
-    nms <- names(x)
+    nms <- names(.x)
 
-    for (i in seq_along(x)) {
+    for (i in seq_along(.x)) {
       key <- if (!is.null(nms) && nzchar(nms[[i]])) {
         nms[[i]]
       } else {
@@ -296,16 +382,18 @@ list_imap_path <- function(x, .f, ..., .path = character(0L)) {
       }
 
       out[[i]] <- list_imap_path(
-        x[[i]],
+        .x[[i]],
         .f,
         ...,
-        .path = c(.path, key)
+        .path = c(.path, key),
+        .pb = .pb
       )
     }
 
     out
   } else {
-    .f(x, .path, ...)
+    .list_progress_tick(.pb)
+    .f(.x, .path, ...)
   }
 }
 

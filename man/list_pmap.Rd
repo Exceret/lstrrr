@@ -4,7 +4,7 @@
 \alias{list_pmap}
 \title{Map over leaves of multiple nested lists}
 \usage{
-list_pmap(.l, .f, ...)
+list_pmap(.l, .f, ..., .progress = FALSE)
 }
 \arguments{
 \item{.l}{A list of nested lists.}
@@ -14,9 +14,13 @@ list_pmap(.l, .f, ...)
 Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+
+\item{.progress}{Whether to show a progress bar.
+
+Use TRUE to turn on a basic progress bar, use a string to give it a name}
 }
 \value{
-A list with the same nested structure as \code{x}, where each leaf has been
+A list with the same nested structure as \code{.x}, where each leaf has been
 replaced by the result of calling \code{.f} on that leaf.
 }
 \description{

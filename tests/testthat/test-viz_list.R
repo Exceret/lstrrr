@@ -168,9 +168,14 @@ test_that(".viz_list_assign_x returns correct positions for simple tree", {
 
 test_that(".viz_list_assign_x with empty nodes returns empty numeric", {
   nodes <- data.frame(
-    id = integer(), parent = integer(), name = character(),
-    type = character(), path = character(), depth = integer(),
-    is_leaf = logical(), stringsAsFactors = FALSE
+    id = integer(),
+    parent = integer(),
+    name = character(),
+    type = character(),
+    path = character(),
+    depth = integer(),
+    is_leaf = logical(),
+    stringsAsFactors = FALSE
   )
   edges <- data.frame(from = integer(), to = integer())
   x_pos <- .viz_list_assign_x(nodes, edges)
@@ -192,9 +197,16 @@ test_that(".viz_list_add_edge_positions adds x/y/xend/yend columns", {
 
 test_that(".viz_list_add_edge_positions with empty edges returns empty columns", {
   nodes <- data.frame(
-    id = 1L, parent = NA_integer_, name = "root",
-    type = "list", path = "root", depth = 0L, is_leaf = FALSE,
-    x = 1, y = 0, stringsAsFactors = FALSE
+    id = 1L,
+    parent = NA_integer_,
+    name = "root",
+    type = "list",
+    path = "root",
+    depth = 0L,
+    is_leaf = FALSE,
+    x = 1,
+    y = 0,
+    stringsAsFactors = FALSE
   )
   edges <- data.frame(from = integer(), to = integer())
 

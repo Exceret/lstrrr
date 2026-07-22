@@ -2,6 +2,7 @@
 #include <Rinternals.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
 
 static int is_data_frame(SEXP x)
 {
@@ -519,4 +520,56 @@ SEXP lstrrr_c_list_delete(SEXP x, SEXP path)
     if (path_is_integerish(path)) return delete_int_rec(x, path, 0);
     Rf_error("`path` must be character, integer, or numeric.");
     return R_NilValue;
+}
+
+
+static int nleaf_is_data_frame(SEXP x)
+{
+    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
+    if (cls == R_NilValue)
+    {
+        return 0;
+    }
+    for (R_xlen_t i = 0; i < XLENGTH(cls); i++)
+    {
+        if (strcmp(CHAR(STRING_ELT(cls, i)), "data.frame") == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static int nleaf_is_plain_list(SEXP x)
+{
+    return TYPEOF(x) == VECSXP && !nleaf_is_data_frame(x);
+}
+
+static R_xlen_t nleaf_rec(SEXP x)
+{
+    if (!nleaf_is_plain_list(x))
+    {
+        return 1;
+    }
+    R_xlen_t n = XLENGTH(x);
+    if (n == 0)
+    {
+        return 0;
+    }
+    R_xlen_t total = 0;
+    for (R_xlen_t i = 0; i < n; i++)
+    {
+        total += nleaf_rec(VECTOR_ELT(x, i));
+    }
+    return total;
+}
+
+SEXP lstrrr_c_list_nleaf(SEXP x)
+{
+    R_xlen_t n = nleaf_rec(x);
+    if (n <= INT_MAX)
+    {
+        return Rf_ScalarInteger((int) n);
+    }
+    return Rf_ScalarReal((double) n);
 }

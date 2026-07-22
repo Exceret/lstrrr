@@ -1,0 +1,74 @@
+url: https://exceret.github.io/lstrrr/
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    bootswatch: slate
+    code_font: { google: "JetBrains Mono" }
+    pkgdown-nav-height: 100px
+    bg: white
+    fg: black
+    primary: "#2c5f9b"
+
+reference:
+  - title: lstrrr-core
+    desc: >
+      Basic functions for list manipulation.
+    contents:
+      - list_path
+      - list_delete
+      - list_depth
+      - list_find
+      - list_get
+      - list_has
+      - list_set
+
+  - title: purrr-like
+    contents:
+      - list_flatten
+      - list_imap
+      - list_map
+      - list_map2
+      - list_modify_if
+      - list_pmap
+      - list_pwalk
+      - list_walk
+      - list_walk2
+
+  - title: Utilities
+    contents:
+      - dir_listwise
+      - modify_list
+      - list_stats
+      - viz_list
+
+navbar:
+  structure:
+    left:
+      - intro
+      - reference
+      - articles
+      - tutorials
+      - news
+    right:
+      - search
+      - github
+      - lightswitch
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    search:
+      search: []
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/Exceret/lstrrr/
+      aria-label: GitHub
+    articles:
+      text: Articles
+      menu:
+        - text: purrrlike
+          href: articles/purrrlike.html

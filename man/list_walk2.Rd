@@ -12,7 +12,7 @@ list_walk2(x, y, .f, ...)
 Lists are traversed recursively. Non-list objects are treated as leaves.
 Data frames are not traversed and are treated as leaf values.}
 
-\item{y}{A nested list. Must have the same structure as \code{x}.}
+\item{y}{A nested list. Must have the same structure as \code{.x}.}
 
 \item{.f}{A function, formula, or function-like object coercible by
 \code{\link[rlang:as_function]{rlang::as_function()}}.

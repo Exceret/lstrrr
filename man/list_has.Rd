@@ -7,27 +7,54 @@
 list_has(x, path)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{path}{Character or integer path.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{path}{Character or integer vector giving the path to retrieve.
+
+For a character path, each component selects a named element at the current
+level. For an integer path, each component selects an element by position.
+Positional indices are one-based, following normal R indexing conventions.
+
+The path is evaluated from left to right. For example,
+\code{c("b", "y", "i")} means \code{x[["b"]][["y"]][["i"]]}.}
+}
+\value{
+A logical scalar:
+\itemize{
+\item \code{TRUE} if \code{path} exists in \code{x};
+\item \code{FALSE} otherwise.
+}
 }
 \description{
 Check whether a path exists in a nested list
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
     x = 1,
     y = list(i = 1, j = 2)
-  )
+  ),
+  unnamed = list(10, 20),
+  df = data.frame(z = 1:3)
 )
 
-list_has(x, c("b", "x")) # TRUE
-list_has(x, c("b", "y", "i")) # TRUE
-list_has(x, c("b", "y", "k")) # FALSE
-}
+list_has(x, c("b", "x"))
+list_has(x, c("b", "y", "i"))
+list_has(x, c("b", "y", "k"))
+
+# Integer paths use positional indices
+list_has(x, c(2L, 2L, 1L))
+
+# Empty path refers to `x` itself, always returns TRUE
+list_has(x, character(0))
+
+# Data frames are treated as leaves
+list_has(x, "df")
+list_has(x, c("df", "z")) # FALSE
 
 }
 \seealso{
@@ -35,6 +62,7 @@ Other lstrrr_core:
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
 \code{\link{list_get}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_path}()},
 \code{\link{list_set}()}
 }

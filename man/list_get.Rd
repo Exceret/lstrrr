@@ -7,28 +7,58 @@
 list_get(x, path, default = NULL)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{path}{Character or integer path.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
 
-\item{default}{Value returned if path does not exist.}
+\item{path}{Character or integer vector giving the path to retrieve.
+
+For a character path, each component selects a named element at the current
+level. For an integer path, each component selects an element by position.
+Positional indices are one-based, following normal R indexing conventions.
+
+The path is evaluated from left to right. For example,
+\code{c("b", "y", "i")} means \code{x[["b"]][["y"]][["i"]]}.}
+
+\item{default}{Value returned when the requested path does not exist or cannot
+be traversed.
+
+The default is \code{NULL}.}
+}
+\value{
+The value stored at \code{path}, or \code{default} if the path is missing or invalid.
 }
 \description{
 Get an element from a nested list by path
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
     x = 1,
     y = list(i = 1, j = 2)
-  )
+  ),
+  unnamed = list(10, 20),
+  df = data.frame(z = 1:3)
 )
 
-list_get(x, c("b", "x")) # 1
-list_get(x, c("b", "y", "i")) # 1
-}
+list_get(x, c("b", "x"))
+list_get(x, c("b", "y", "i"))
+
+# Integer paths use positional indices
+list_get(x, c(2L, 2L, 2L))
+
+# Missing paths return `default`
+list_get(x, c("b", "missing"), default = NA)
+
+# Empty path returns the original object
+list_get(x, character(0))
+
+# Data frames are treated as leaves
+list_get(x, "df")
+list_get(x, c("df", "z"), default = "not traversed")
+
 
 }
 \seealso{
@@ -36,6 +66,7 @@ Other lstrrr_core:
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
 \code{\link{list_has}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_path}()},
 \code{\link{list_set}()}
 }

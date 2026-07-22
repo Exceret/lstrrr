@@ -7,17 +7,32 @@
 list_set(x, path, value)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{path}{Character or integer path.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
 
-\item{value}{Value to set.}
+\item{path}{Character or integer vector giving the path to retrieve.
+
+For a character path, each component selects a named element at the current
+level. For an integer path, each component selects an element by position.
+Positional indices are one-based, following normal R indexing conventions.
+
+The path is evaluated from left to right. For example,
+\code{c("b", "y", "i")} means \code{x[["b"]][["y"]][["i"]]}.}
+
+\item{value}{Value to set at \code{path}.
+
+This value replaces the existing element located at \code{path}. It may be any R
+object.}
+}
+\value{
+A modified copy of \code{x} with \code{value} assigned at \code{path}.
 }
 \description{
 Set a nested element by path
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
@@ -25,29 +40,33 @@ x <- list(
     y = list(i = 1, j = 2)
   )
 )
+
 list_set(x, c("b", "x"), 2)
-# $a
-# [1] 1
-#
-# $b
-# $b$x
-# [1] 2 # <<< CHANGE
-#
-# $b$y
-# $b$y$i
-# [1] 1
-#
-# $b$y$j
-# [1] 2
-#
-}
+
+# Set a deeply nested value
+list_set(x, c("b", "y", "i"), 100)
+
+# Integer paths use positional indices
+list_set(x, c(2L, 2L, 2L), 200)
+
+# Empty path replaces the whole object
+list_set(x, character(0), "replacement")
+
+# The original object is unchanged unless reassigned
+x2 <- list_set(x, c("b", "x"), 2)
+x$b$x
+x2$b$x
+
 }
 \seealso{
+\code{\link[=list_get]{list_get()}}, \code{\link[=list_has]{list_has()}}
+
 Other lstrrr_core: 
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_path}()}
 }
 \concept{lstrrr_core}

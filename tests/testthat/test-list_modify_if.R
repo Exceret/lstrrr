@@ -19,22 +19,22 @@ test_that("list_modify_if modifies leaves satisfying predicate", {
     .p = function(val) is.numeric(val) && val > 2,
     .f = function(val) val * 2
   )
-  expect_identical(list_get(result, "a"), 1)         # unchanged (1 ≤ 2)
-  expect_identical(list_get(result, c("b", "x")), 2)  # unchanged (2 ≤ 2)
-  expect_identical(list_get(result, c("b", "y", "i")), 6)  # 3→6
-  expect_identical(list_get(result, c("b", "y", "j")), 8)  # 4→8
-  expect_identical(list_get(result, "c"), "text")     # unchanged (not numeric)
+  expect_identical(list_get(result, "a"), 1) # unchanged (1 ≤ 2)
+  expect_identical(list_get(result, c("b", "x")), 2) # unchanged (2 ≤ 2)
+  expect_identical(list_get(result, c("b", "y", "i")), 6) # 3→6
+  expect_identical(list_get(result, c("b", "y", "j")), 8) # 4→8
+  expect_identical(list_get(result, "c"), "text") # unchanged (not numeric)
 })
 
 test_that("list_modify_if returns same structure when nothing matches", {
-  result <- list_modify_if(x, .p = ~ FALSE, .f = ~ .x * 2)
+  result <- list_modify_if(x, .p = ~FALSE, .f = ~ .x * 2)
   expect_identical(result, x)
 })
 
 test_that("list_modify_if modifies all leaves when predicate always TRUE", {
   result <- list_modify_if(
     list(a = 1, b = list(c = 2)),
-    .p = ~ TRUE,
+    .p = ~TRUE,
     .f = ~ .x + 10
   )
   expect_identical(result, list(a = 11, b = list(c = 12)))
@@ -42,12 +42,12 @@ test_that("list_modify_if modifies all leaves when predicate always TRUE", {
 
 test_that("list_modify_if returns a new list (does not mutate original)", {
   orig <- list(a = 1, b = 2)
-  list_modify_if(orig, .p = ~ TRUE, .f = ~ .x + 1)
+  list_modify_if(orig, .p = ~TRUE, .f = ~ .x + 1)
   expect_identical(orig, list(a = 1, b = 2))
 })
 
 test_that("list_modify_if preserves list names", {
-  result <- list_modify_if(x, .p = ~ FALSE, .f = identity)
+  result <- list_modify_if(x, .p = ~FALSE, .f = identity)
   expect_named(result, c("a", "b", "c"))
   expect_named(result[["b"]], c("x", "y"))
   expect_named(result[["b"]][["y"]], c("i", "j"))
@@ -94,17 +94,17 @@ test_that("list_modify_if forwards ... to .f", {
 # isTRUE behavior --------------------------------------------------------------
 
 test_that("list_modify_if with NA predicate result does not modify", {
-  result <- list_modify_if(x, .p = ~ NA, .f = ~ .x * 2)
+  result <- list_modify_if(x, .p = ~NA, .f = ~ .x * 2)
   expect_identical(result, x)
 })
 
 test_that("list_modify_if with non-logical predicate result does not modify", {
-  result <- list_modify_if(x, .p = ~ "not_logical", .f = ~ .x * 2)
+  result <- list_modify_if(x, .p = ~"not_logical", .f = ~ .x * 2)
   expect_identical(result, x)
 })
 
 test_that("list_modify_if with NULL predicate result does not modify", {
-  result <- list_modify_if(x, .p = ~ NULL, .f = ~ .x * 2)
+  result <- list_modify_if(x, .p = ~NULL, .f = ~ .x * 2)
   expect_identical(result, x)
 })
 
@@ -128,12 +128,12 @@ test_that("list_modify_if does not recurse into data.frame", {
 # Edge cases -------------------------------------------------------------------
 
 test_that("list_modify_if on empty list returns empty list", {
-  result <- list_modify_if(list(), .p = ~ TRUE, .f = ~ .x)
+  result <- list_modify_if(list(), .p = ~TRUE, .f = ~.x)
   expect_identical(result, list())
 })
 
 test_that("list_modify_if on NULL returns NULL", {
-  result <- list_modify_if(NULL, .p = ~ TRUE, .f = ~ .x)
+  result <- list_modify_if(NULL, .p = ~TRUE, .f = ~.x)
   expect_null(result)
 })
 
@@ -150,7 +150,7 @@ test_that("list_modify_if handles NULL leaf values", {
 
 test_that("list_modify_if with deeply nested structure", {
   deep <- list(a = list(b = list(c = list(d = 1, e = 2))))
-  result <- list_modify_if(deep, .p = ~ .x == 1, .f = ~ 999)
+  result <- list_modify_if(deep, .p = ~ .x == 1, .f = ~999)
   expect_identical(list_get(result, c("a", "b", "c", "d")), 999)
   expect_identical(list_get(result, c("a", "b", "c", "e")), 2)
 })
@@ -219,7 +219,7 @@ test_that("list_modify_if preserves deep structure when partially modifying", {
 
 test_that("list_modify_if with only one leaf modified in deep tree", {
   deep <- list(a = list(b = 1, c = list(d = 2, e = 3)))
-  result <- list_modify_if(deep, .p = ~ .x == 2, .f = ~ 999)
+  result <- list_modify_if(deep, .p = ~ .x == 2, .f = ~999)
   expect_identical(list_get(result, c("a", "b")), 1)
   expect_identical(list_get(result, c("a", "c", "d")), 999)
   expect_identical(list_get(result, c("a", "c", "e")), 3)

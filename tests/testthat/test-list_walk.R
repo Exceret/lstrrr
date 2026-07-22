@@ -32,13 +32,22 @@ test_that("list_walk returns x invisibly", {
 
 test_that("list_walk supports formula .f", {
   out <- numeric()
-  list_walk(x, ~ { out <<- c(out, .x) })
+  list_walk(
+    x,
+    ~ {
+      out <<- c(out, .x)
+    }
+  )
   expect_setequal(out, c(1, 2, 3, 4))
 })
 
 test_that("list_walk forwards ... to .f", {
   out <- character()
-  list_walk(x, function(val, prefix) out <<- c(out, paste0(prefix, val)), prefix = "v:")
+  list_walk(
+    x,
+    function(val, prefix) out <<- c(out, paste0(prefix, val)),
+    prefix = "v:"
+  )
   expect_setequal(out, c("v:1", "v:2", "v:3", "v:4"))
 })
 
@@ -102,13 +111,24 @@ test_that("list_walk2 returns x invisibly", {
 
 test_that("list_walk2 supports formula .f", {
   out <- numeric()
-  list_walk2(x, x, ~ { out <<- c(out, .x + .y) })
+  list_walk2(
+    x,
+    x,
+    ~ {
+      out <<- c(out, .x + .y)
+    }
+  )
   expect_equal(out, c(2, 4, 6, 8))
 })
 
 test_that("list_walk2 forwards ... to .f", {
   out <- numeric()
-  list_walk2(x, x, function(a, b, mult) out <<- c(out, (a + b) * mult), mult = 10)
+  list_walk2(
+    x,
+    x,
+    function(a, b, mult) out <<- c(out, (a + b) * mult),
+    mult = 10
+  )
   expect_equal(out, c(20, 40, 60, 80))
 })
 
@@ -190,7 +210,12 @@ test_that("list_pwalk returns .l invisibly", {
 
 test_that("list_pwalk supports formula .f", {
   out <- numeric()
-  list_pwalk(list(x, x), ~ { out <<- c(out, .x + .y) })
+  list_pwalk(
+    list(x, x),
+    ~ {
+      out <<- c(out, .x + .y)
+    }
+  )
   expect_equal(out, c(2, 4, 6, 8))
 })
 
@@ -208,7 +233,9 @@ test_that("list_pwalk handles mismatched lengths (shorter gets NULL)", {
   a <- list(1, 2, 3)
   b <- list(10, 20)
   out <- list()
-  list_pwalk(list(a, b), function(x, y) out <<- c(out, list(list(x = x, y = y))))
+  list_pwalk(list(a, b), function(x, y) {
+    out <<- c(out, list(list(x = x, y = y)))
+  })
   expect_length(out, 3L)
   expect_equal(out[[3]], list(x = 3, y = NULL))
 })
@@ -216,7 +243,9 @@ test_that("list_pwalk handles mismatched lengths (shorter gets NULL)", {
 test_that("list_pwalk treats data.frame as leaf", {
   a <- list(df = iris[1:2, ], num = 1)
   out <- list()
-  list_pwalk(list(a, a), function(x, y) out <<- c(out, list(list(x = x, y = y))))
+  list_pwalk(list(a, a), function(x, y) {
+    out <<- c(out, list(list(x = x, y = y)))
+  })
   expect_length(out, 2L)
   expect_identical(out[[1]]$x, iris[1:2, ])
 })
@@ -225,7 +254,9 @@ test_that("list_pwalk with mixed list/non-list elements recurses where both are 
   a <- list(1, list(2, 3))
   b <- list(10, list(20, 30))
   out <- list()
-  list_pwalk(list(a, b), function(x, y) out <<- c(out, list(list(x = x, y = y))))
+  list_pwalk(list(a, b), function(x, y) {
+    out <<- c(out, list(list(x = x, y = y)))
+  })
   # a[[1]]=1 (non-list), b[[1]]=10 (non-list) → .f(1, 10)
   # a[[2]]=list(2,3) (list), b[[2]]=list(20,30) (list) → recurse:
   #   2, 20 → .f(2, 20); 3, 30 → .f(3, 30)
@@ -261,7 +292,9 @@ test_that("list_pwalk handles NULL leaf values", {
   a <- list(x = NULL, y = 1)
   b <- list(x = 2, y = NULL)
   out <- list()
-  list_pwalk(list(a, b), function(x, y) out <<- c(out, list(list(x = x, y = y))))
+  list_pwalk(list(a, b), function(x, y) {
+    out <<- c(out, list(list(x = x, y = y)))
+  })
   expect_length(out, 2L)
   expect_null(out[[1]]$x)
   expect_equal(out[[1]]$y, 2)

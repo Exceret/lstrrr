@@ -17,6 +17,7 @@ MIT + file LICENSE
 Useful links:
 \itemize{
   \item \url{https://github.com/Exceret/lstrrr}
+  \item \url{https://exceret.github.io/lstrrr/}
   \item Report bugs at \url{https://github.com/Exceret/lstrrr/issues}
 }
 

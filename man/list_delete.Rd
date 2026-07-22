@@ -7,15 +7,27 @@
 list_delete(x, path)
 }
 \arguments{
-\item{x}{A nested list.}
+\item{x}{A nested list to traverse.
 
-\item{path}{Character or integer path.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{path}{Character or integer vector giving the path to retrieve.
+
+For a character path, each component selects a named element at the current
+level. For an integer path, each component selects an element by position.
+Positional indices are one-based, following normal R indexing conventions.
+
+The path is evaluated from left to right. For example,
+\code{c("b", "y", "i")} means \code{x[["b"]][["y"]][["i"]]}.}
+}
+\value{
+A modified copy of \code{x} with the element at \code{path} removed.
 }
 \description{
 Delete a nested element by path
 }
 \examples{
-\donttest{
 x <- list(
   a = 1,
   b = list(
@@ -23,22 +35,26 @@ x <- list(
     y = list(i = 1, j = 2)
   )
 )
+
 list_delete(x, c("b", "y", "j"))
-# $a
-# [1] 1
-#
-# $b
-# $b$y
-# $b$y$i
-# [1] 1
-}
+
+# Delete by integer path
+list_delete(x, c(2L, 2L, 1L))
+
+# The original object is unchanged unless reassigned
+x2 <- list_delete(x, c("b", "x"))
+names(x$b)
+names(x2$b)
 
 }
 \seealso{
+\code{\link[=list_get]{list_get()}}, \code{\link[=list_has]{list_has()}}, \code{\link[=list_set]{list_set()}}
+
 Other lstrrr_core: 
 \code{\link{list_depth}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
+\code{\link{list_nleaf}()},
 \code{\link{list_path}()},
 \code{\link{list_set}()}
 }
