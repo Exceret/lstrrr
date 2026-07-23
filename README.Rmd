@@ -19,11 +19,14 @@ devtools::load_all()
 # lstrrr
 
 <!-- badges: start -->
-[![Project-Status:WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Project-Status:Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN-status](https://www.r-pkg.org/badges/version/lstrrr)](https://CRAN.R-project.org/package=lstrrr)
+[![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/Exceret/lstrrr)
 [![R-CMD-check](https://github.com/Exceret/lstrrr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Exceret/lstrrr/actions/workflows/R-CMD-check.yaml)
 [![Codecov-test-coverage](https://codecov.io/gh/Exceret/lstrrr/graph/badge.svg)](https://app.codecov.io/gh/Exceret/lstrrr)
+[![Dependencies](https://tinyverse.netlify.app/badge/lstrrr)](https://cran.r-project.org/package=lstrrr)
+
 <!-- badges: end -->
 
 lstrrr provides functional programming tools for working with deeply nested R lists — path-based access, recursive mapping/walking, conditional modification, and structure visualization. Motivation comes from [purrr](https://github.com/tidyverse/purrr)
@@ -53,13 +56,13 @@ x <- list(
 list_get(x, c("b", "y", "i"))
 
 # Recursive mapping
-list_map(x, ~ .x * 2)
+list_map(x, ~ .x * 2) |> str()
 
 # Flatten with path names
-list_flatten(x)
+list_flatten(x) |> str()
 
 # Conditional modification (only values > 2)
-list_modify_if(x, ~ is.numeric(.x) && .x > 2, ~ .x * 10)
+list_modify_if(x, ~ is.numeric(.x) && .x > 2, ~ .x * 10) |> str()
 
 # Tree visualization (requires ggplot2)
 # viz_list(x)
@@ -74,9 +77,9 @@ Let's see how they work differently. This is a code snippet from rlist:
 ```{r comparison_with_rlist}
 nums <- list(a = c(1, 2, 3), b = c(2, 3, 4), c = c(3, 4, 5))
 
-rlist::list.map(nums, c(min = min(.), max = max(.)))
-rlist::list.filter(nums, x ~ mean(x) >= 3)
-rlist::list.map(nums, f(x, i) ~ sum(x, i))
+rlist::list.map(nums, c(min = min(.), max = max(.))) |> str()
+rlist::list.filter(nums, x ~ mean(x) >= 3) |> str()
+rlist::list.map(nums, f(x, i) ~ sum(x, i)) |> str()
 ```
 
 If `nums` becomes a complex nested list, rlist may not work as expected.
@@ -100,7 +103,7 @@ try(rlist::list.map(nums, f(x, i) ~ sum(x, i)))
 Recursive mapping is the main difference between lstrrr and rlist. lstrrr views the list as a tree, and recursively applies the function to leaf nodes. 
 
 ```{r}
-list_map(nums, \(v) c(min = min(v), max = max(v)))
-list_find(nums, ~ mean(.x) >= 3)
-list_map(nums, sum)
+list_map(nums, \(v) c(min = min(v), max = max(v))) |> str()
+list_find(nums, ~ mean(.x) >= 3) |> str()
+list_map(nums, sum) |> str()
 ```

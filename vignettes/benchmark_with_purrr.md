@@ -1,4 +1,5 @@
     library(lstrrr)
+    data(sputnik_1)
 
 ## Map & Walk
 
@@ -28,27 +29,39 @@ difference of `lstrrr`.
     set.seed(123)
 
     bench_map <- microbenchmark::microbenchmark(
-      purrr = {
+      purrr_10 = {
         purrr::walk(files, \(x) slow_string_op(x))
       },
-      lstrrr = {
+      lstrrr_10 = {
         list_walk(files_list, \(x) slow_string_op(x))
+      },
+      purrr_50 = {
+        purrr::walk(files, \(x) slow_string_op(x, n = 50))
+      },
+      lstrrr_50 = {
+        list_walk(files_list, \(x) slow_string_op(x, n = 50))
+      },
+      purrr_100 = {
+        purrr::walk(files, \(x) slow_string_op(x, n = 100))
+      },
+      lstrrr_100 = {
+        list_walk(files_list, \(x) slow_string_op(x, n = 100))
       }
     )
     print(bench_map)
     #> Unit: milliseconds
-    #>    expr      min       lq     mean   median       uq       max neval
-    #>   purrr 2.987354 3.009674 3.079363 3.063402 3.141364  3.323898   100
-    #>  lstrrr 2.939991 2.973108 3.171761 3.025581 3.091127 16.854858   100
+    #>        expr       min        lq      mean    median        uq        max neval
+    #>    purrr_10  3.030297  3.091402  3.368821  3.112378  3.151750  15.287408   100
+    #>   lstrrr_10  2.953515  2.996233  3.025710  3.024970  3.047822   3.143753   100
+    #>    purrr_50 14.325471 14.485442 15.228383 14.598793 14.769506  27.229413   100
+    #>   lstrrr_50 14.233452 14.372943 15.108003 14.494130 14.615348  27.183190   100
+    #>   purrr_100 28.406875 28.751552 29.815807 28.959810 29.233874  41.509325   100
+    #>  lstrrr_100 28.361244 28.641291 31.515401 28.832363 29.113798 232.888763   100
 
     ggplot2::autoplot(bench_map) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 
 ![](benchmark_with_purrr_files/figure-markdown_strict/viz_map-1.png)
-
-I basically use C to implement the `map` like functions. However, the
-progress bar implemented on the C side cannot faithfully reproduce the
-progress bar from the `cli` package.
 
 ## Detect Depth
 
@@ -65,8 +78,8 @@ progress bar from the `cli` package.
     print(bench_depth)
     #> Unit: microseconds
     #>    expr      min       lq       mean    median       uq       max neval
-    #>   purrr 7211.146 7259.725 7563.13417 7298.2635 7569.488 12156.007   100
-    #>  lstrrr    4.101    4.871    7.40929    8.5975    9.328    17.065   100
+    #>   purrr 7296.421 7419.271 7837.80179 7711.7020 7784.662 12437.158   100
+    #>  lstrrr    4.046    4.935    7.86758    8.8935    9.759    17.014   100
 
     ggplot2::autoplot(bench_depth) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -87,9 +100,9 @@ progress bar from the `cli` package.
     )
     print(bench_assign)
     #> Unit: microseconds
-    #>    expr    min      lq     mean median      uq     max neval
-    #>   purrr 29.723 30.2075 31.72399 30.426 30.9415 109.790   100
-    #>  lstrrr  2.951  3.0705  3.63453  3.618  3.7400  18.889   100
+    #>    expr    min     lq     mean  median      uq     max neval
+    #>   purrr 31.869 32.361 34.53122 32.8930 33.6135 139.616   100
+    #>  lstrrr  2.949  3.115  4.00796  3.8315  4.3260  24.577   100
 
     ggplot2::autoplot(bench_assign) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -110,9 +123,9 @@ progress bar from the `cli` package.
     )
     print(bench_modify)
     #> Unit: microseconds
-    #>    expr    min      lq     mean median      uq     max neval
-    #>   purrr 51.567 52.0305 54.14667 52.428 53.2265 150.702   100
-    #>  lstrrr  2.743  2.8625  3.45416  3.390  3.5315  19.962   100
+    #>    expr    min     lq     mean median     uq     max neval
+    #>   purrr 54.518 55.319 58.06257 55.824 56.913 175.739   100
+    #>  lstrrr  2.663  2.873  3.67868  3.695  3.856  24.255   100
 
     ggplot2::autoplot(bench_modify) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -133,9 +146,9 @@ progress bar from the `cli` package.
     )
     print(bench_flatten)
     #> Unit: microseconds
-    #>    expr      min       lq       mean   median       uq      max neval
-    #>   purrr 1969.057 2010.741 2076.15503 2045.040 2136.417 2393.772   100
-    #>  lstrrr   41.485   46.212   56.07211   61.771   64.064  116.909   100
+    #>    expr      min        lq       mean    median       uq      max neval
+    #>   purrr 2101.440 2134.5865 2262.35417 2160.6170 2217.020 8619.089   100
+    #>  lstrrr   42.156   48.9525   59.35466   64.0395   67.471  136.861   100
 
     ggplot2::autoplot(bench_flatten) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -159,9 +172,9 @@ progress bar from the `cli` package.
     )
     print(bench_modify_list)
     #> Unit: microseconds
-    #>    expr      min       lq       mean   median       uq      max neval
-    #>   utils 1023.402 1030.880 1037.90338 1036.811 1040.970 1137.132   100
-    #>  lstrrr   27.387   28.599   31.99275   30.040   34.233   65.551   100
+    #>    expr      min        lq       mean   median        uq      max neval
+    #>   utils 1085.775 1115.3865 1185.65383 1140.528 1240.3135 1988.749   100
+    #>  lstrrr   27.497   29.1735   33.49651   31.573   37.2675   74.142   100
 
     ggplot2::autoplot(bench_modify_list) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
