@@ -4,6 +4,7 @@
 
 library(lstrrr)
 #> ✔ lstrrr v0.1.0 loaded
+data(sputnik_1)
 ```
 
 ## Map & Walk
@@ -39,18 +40,34 @@ slow_string_op <- function(x, n = 10) {
 set.seed(123)
 
 bench_map <- microbenchmark::microbenchmark(
-  purrr = {
+  purrr_10 = {
     purrr::walk(files, \(x) slow_string_op(x))
   },
-  lstrrr = {
+  lstrrr_10 = {
     list_walk(files_list, \(x) slow_string_op(x))
+  },
+  purrr_50 = {
+    purrr::walk(files, \(x) slow_string_op(x, n = 50))
+  },
+  lstrrr_50 = {
+    list_walk(files_list, \(x) slow_string_op(x, n = 50))
+  },
+  purrr_100 = {
+    purrr::walk(files, \(x) slow_string_op(x, n = 100))
+  },
+  lstrrr_100 = {
+    list_walk(files_list, \(x) slow_string_op(x, n = 100))
   }
 )
 print(bench_map)
 #> Unit: milliseconds
-#>    expr      min       lq     mean   median       uq       max neval
-#>   purrr 1.849509 1.887195 2.722950 1.923439 1.947339 60.978539   100
-#>  lstrrr 1.801768 1.861942 1.991639 1.883474 1.916113  6.167703   100
+#>        expr       min        lq      mean    median        uq       max neval
+#>    purrr_10  1.761258  1.838694  2.408443  1.872108  1.905579 54.435107   100
+#>   lstrrr_10  1.710228  1.774968  1.946225  1.806118  1.829876  6.173861   100
+#>    purrr_50  8.322156  8.590574  9.175828  8.747193  8.948872 13.516656   100
+#>   lstrrr_50  8.259544  8.533382  9.350731  8.655517  8.849798 15.321335   100
+#>   purrr_100 16.682627 17.166356 18.544562 17.386583 18.683235 35.270272   100
+#>  lstrrr_100 16.497082 17.035576 17.800679 17.189807 17.517527 30.718544   100
 ```
 
 ``` r
@@ -70,10 +87,6 @@ ggplot2::autoplot(bench_map) +
 
 ![](benchmark_with_purrr_files/figure-html/viz_map-1.png)
 
-I basically use C to implement the `map` like functions. However, the
-progress bar implemented on the C side cannot faithfully reproduce the
-progress bar from the `cli` package.
-
 ## Detect Depth
 
 ``` r
@@ -90,9 +103,9 @@ bench_depth <- microbenchmark::microbenchmark(
 )
 print(bench_depth)
 #> Unit: microseconds
-#>    expr      min        lq     mean   median       uq      max neval
-#>   purrr 4853.167 5012.8930 5352.577 5110.273 5333.503 8371.487   100
-#>  lstrrr    2.464    2.7045    5.034    4.642    6.044   46.279   100
+#>    expr      min        lq       mean   median       uq      max neval
+#>   purrr 4327.103 4387.1935 4673.24449 4443.334 4601.684 7851.910   100
+#>  lstrrr    2.088    2.3285    4.84954    4.986    5.822   50.562   100
 ```
 
 ``` r
@@ -119,9 +132,9 @@ bench_assign <- microbenchmark::microbenchmark(
 )
 print(bench_assign)
 #> Unit: microseconds
-#>    expr    min     lq    mean median      uq     max neval
-#>   purrr 18.828 19.549 24.3559 20.055 20.5655 397.799   100
-#>  lstrrr  1.873  2.043  2.4522  2.218  2.3880  20.661   100
+#>    expr    min     lq     mean  median      uq     max neval
+#>   purrr 16.480 16.946 21.80208 17.3285 18.2105 401.061   100
+#>  lstrrr  1.601  1.734  2.30799  1.8600  2.0890  26.844   100
 ```
 
 ``` r
@@ -148,9 +161,9 @@ bench_modify <- microbenchmark::microbenchmark(
 )
 print(bench_modify)
 #> Unit: microseconds
-#>    expr    min     lq     mean median      uq     max neval
-#>   purrr 33.109 33.985 36.71073 34.391 34.8420 202.720   100
-#>  lstrrr  1.773  1.903  2.25314  2.003  2.1635  19.539   100
+#>    expr    min     lq     mean  median      uq     max neval
+#>   purrr 28.647 29.332 32.26117 29.6875 30.4965 196.154   100
+#>  lstrrr  1.468  1.588  1.86693  1.6525  1.7965  15.472   100
 ```
 
 ``` r
@@ -177,9 +190,9 @@ bench_flatten <- microbenchmark::microbenchmark(
 )
 print(bench_flatten)
 #> Unit: microseconds
-#>    expr      min       lq       mean   median        uq      max neval
-#>   purrr 1108.262 1149.351 1255.17237 1204.574 1247.6575 4743.044   100
-#>  lstrrr   31.537   36.714   42.92412   42.082   46.7895  109.082   100
+#>    expr     min        lq       mean   median        uq        max neval
+#>   purrr 989.926 1054.7475 2396.02249 1109.536 1163.7995 128371.795   100
+#>  lstrrr  33.195   37.5855   45.29723   43.191   49.5155    104.327   100
 ```
 
 ``` r
@@ -209,9 +222,9 @@ bench_modify_list <- microbenchmark::microbenchmark(
 )
 print(bench_modify_list)
 #> Unit: microseconds
-#>    expr     min       lq      mean   median       uq      max neval
-#>   utils 746.465 763.2650 817.77742 771.4825 790.4505 3941.487   100
-#>  lstrrr  14.932  15.7585  17.74693  16.4945  18.0770   87.880   100
+#>    expr    min      lq      mean   median       uq      max neval
+#>   utils 624.83 663.963 744.73705 715.4195 754.5365 3296.623   100
+#>  lstrrr  16.17  17.014  18.97193  17.9700  19.5775   75.769   100
 ```
 
 ``` r
