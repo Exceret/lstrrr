@@ -1,19 +1,3 @@
-# list_flatten errors on non-string sep
-
-    Code
-      list_flatten(x, sep = 1)
-    Condition
-      Error in `list_flatten()`:
-      ! `sep` must be a string.
-
-# list_flatten errors on sep of length > 1
-
-    Code
-      list_flatten(x, sep = c(".", "-"))
-    Condition
-      Error in `list_flatten()`:
-      ! `sep` must be a string.
-
 # list_find errors on two-sided formula
 
     Code

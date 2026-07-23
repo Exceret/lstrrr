@@ -10,7 +10,8 @@ viz_list(
   show_path = FALSE,
   point_size = 3L,
   text_size = 3L,
-  line_width = 0.6
+  line_width = 0.6,
+  flip = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,12 @@ If \code{TRUE}, node labels show the full path and type.}
 
 \item{line_width}{Numeric scalar giving the width of edges passed to
 \code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}}.}
+
+\item{flip}{Logical scalar.
+
+If \code{TRUE}, the coordinate system is flipped so that the tree is drawn
+horizontally (depth on the x-axis) instead of vertically (depth on the
+y-axis). This is equivalent to calling \code{\link[ggplot2:coord_flip]{ggplot2::coord_flip()}}.}
 }
 \value{
 A \link[ggplot2:ggplot]{ggplot2::ggplot} object representing the nested list as a tree diagram.
@@ -82,6 +89,9 @@ viz_list(
   text_size = 3.5,
   line_width = 1
 )
+
+# Flip coordinates for horizontal layout
+viz_list(x, flip = TRUE)
 }
 
 }

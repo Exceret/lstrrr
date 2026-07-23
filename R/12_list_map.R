@@ -11,9 +11,9 @@
 #'
 #' @param ... Additional arguments passed to `.f`.
 #'
-#' @param .progress Whether to show a progress bar.
+#' @param .progress Whether to show a progress
 #'
-#'   Use TRUE to turn on a basic progress bar, use a string to give it a name
+#'   Use TRUE to turn on a basic progress, use a string to give it a name
 #'
 #' @return
 #' A list with the same nested structure as `.x`, where each leaf has been
@@ -49,47 +49,15 @@
 list_map <- function(.x, .f, ..., .progress = FALSE) {
   .f <- as_function(.f)
 
-  total <- if (.list_progress_enabled(.progress)) {
-    list_nleaf(.x)
-  } else {
-    0L
-  }
-
-  pb <- .list_progress_start(
-    .progress = .progress,
-    total = total
+  .Call(
+    "lstrrr_c_list_map",
+    .x,
+    .f,
+    list(...),
+    .progress,
+    parent.frame(),
+    PACKAGE = "lstrrr"
   )
-
-  on.exit(.list_progress_done(pb), add = TRUE)
-
-  .list_map_impl(
-    .x = .x,
-    .f = .f,
-    ...,
-    .pb = pb
-  )
-}
-
-.list_map_impl <- function(.x, .f, ..., .pb = NULL) {
-  if (is.list(.x) && !is.data.frame(.x)) {
-    out <- vector("list", length(.x))
-    names(out) <- names(.x)
-
-    for (i in seq_along(.x)) {
-      out[[i]] <- .list_map_impl(
-        .x = .x[[i]],
-        .f = .f,
-        ...,
-        .pb = .pb
-      )
-    }
-
-    return(out)
-  }
-
-  .list_progress_tick(.pb)
-
-  .f(.x, ...)
 }
 
 #' Map over leaves of two nested lists
@@ -127,48 +95,16 @@ list_map <- function(.x, .f, ..., .progress = FALSE) {
 list_map2 <- function(.x, .y, .f, ..., .progress = FALSE) {
   .f <- as_function(.f)
 
-  total <- if (.list_progress_enabled(.progress)) {
-    list_nleaf(.x)
-  } else {
-    0L
-  }
-
-  pb <- .list_progress_start(
-    .progress = .progress,
-    total = total
+  .Call(
+    "lstrrr_c_list_map2",
+    .x,
+    .y,
+    .f,
+    list(...),
+    .progress,
+    parent.frame(),
+    PACKAGE = "lstrrr"
   )
-
-  on.exit(.list_progress_done(pb), add = TRUE)
-
-  .list_map2_impl(.x, .y, .f, ..., .pb = pb)
-}
-
-.list_map2_impl <- function(.x, .y, .f, ..., .pb = NULL) {
-  if (is.list(.x) && !is.data.frame(.x) && is.list(.y) && !is.data.frame(.y)) {
-    n <- max(length(.x), length(.y))
-
-    out <- vector("list", n)
-
-    nx <- names(.x)
-    ny <- names(.y)
-
-    if (!is.null(nx)) {
-      names(out) <- nx
-    } else if (!is.null(ny)) {
-      names(out) <- ny
-    }
-
-    for (i in seq_len(n)) {
-      xi <- if (i <= length(.x)) .x[[i]] else NULL
-      yi <- if (i <= length(.y)) .y[[i]] else NULL
-      out[[i]] <- .list_map2_impl(xi, yi, .f, ..., .pb = .pb)
-    }
-
-    out
-  } else {
-    .list_progress_tick(.pb)
-    .f(.x, .y, ...)
-  }
 }
 
 #' Map over leaves of multiple nested lists
@@ -209,52 +145,15 @@ list_pmap <- function(.l, .f, ..., .progress = FALSE) {
     cli::cli_abort(c("x" = "`.l` must be a {.cls list}."))
   }
 
-  total <- if (.list_progress_enabled(.progress)) {
-    list_nleaf(.l[[1L]])
-  } else {
-    0L
-  }
-
-  pb <- .list_progress_start(
-    .progress = .progress,
-    total = total
+  .Call(
+    "lstrrr_c_list_pmap",
+    .l,
+    .f,
+    list(...),
+    .progress,
+    parent.frame(),
+    PACKAGE = "lstrrr"
   )
-
-  on.exit(.list_progress_done(pb), add = TRUE)
-
-  rec <- function(xs) {
-    are_lists <- vapply(
-      xs,
-      function(z) is.list(z) && !is.data.frame(z),
-      logical(1)
-    )
-
-    if (all(are_lists)) {
-      each_length <- lengths(xs)
-      n <- max(each_length)
-
-      out <- vector("list", n)
-
-      nms <- names(xs[[which.max(each_length)]])
-
-      if (!is.null(nms)) {
-        names(out) <- nms
-      }
-
-      for (i in seq_len(n)) {
-        out[[i]] <- rec(lapply(xs, function(z) {
-          if (i <= length(z)) z[[i]] else NULL
-        }))
-      }
-
-      out
-    } else {
-      .list_progress_tick(pb)
-      do.call(.f, c(xs, list(...)))
-    }
-  }
-
-  rec(.l)
 }
 
 #' Map over leaves with path (names)
@@ -314,87 +213,19 @@ list_imap <- function(
   .name = c("name", "path"),
   .progress = FALSE
 ) {
-  .name <- arg_match(.name)
+  .name <- rlang::arg_match(.name)
   .f <- as_function(.f)
 
-  total <- if (.list_progress_enabled(.progress)) {
-    list_nleaf(.x)
-  } else {
-    0L
-  }
-
-  pb <- .list_progress_start(
-    .progress = .progress,
-    total = total
+  .Call(
+    "lstrrr_c_list_imap",
+    .x,
+    .f,
+    list(...),
+    .name,
+    .progress,
+    parent.frame(),
+    PACKAGE = "lstrrr"
   )
-
-  on.exit(.list_progress_done(pb), add = TRUE)
-
-  if (.name == "path") {
-    list_imap_path(.x = .x, .f = .f, ..., .pb = pb)
-  } else {
-    list_imap_name(.x = .x, .f = .f, ..., .pb = pb)
-  }
-}
-
-list_imap_name <- function(.x, .f, ..., .name = character(0L), .pb = NULL) {
-  if (is.list(.x) && !is.data.frame(.x)) {
-    out <- vector("list", length(.x))
-    names(out) <- names(.x)
-
-    nms <- names(.x)
-
-    for (i in seq_along(.x)) {
-      key <- if (!is.null(nms) && nzchar(nms[[i]])) {
-        nms[[i]]
-      } else {
-        as.character(i)
-      }
-
-      out[[i]] <- list_imap_name(
-        .x[[i]],
-        .f,
-        ...,
-        .name = key,
-        .pb = .pb
-      )
-    }
-
-    out
-  } else {
-    .list_progress_tick(.pb)
-    .f(.x, .name, ...)
-  }
-}
-
-list_imap_path <- function(.x, .f, ..., .path = character(0L), .pb = NULL) {
-  if (is.list(.x) && !is.data.frame(.x)) {
-    out <- vector("list", length(.x))
-    names(out) <- names(.x)
-
-    nms <- names(.x)
-
-    for (i in seq_along(.x)) {
-      key <- if (!is.null(nms) && nzchar(nms[[i]])) {
-        nms[[i]]
-      } else {
-        as.character(i)
-      }
-
-      out[[i]] <- list_imap_path(
-        .x[[i]],
-        .f,
-        ...,
-        .path = c(.path, key),
-        .pb = .pb
-      )
-    }
-
-    out
-  } else {
-    .list_progress_tick(.pb)
-    .f(.x, .path, ...)
-  }
 }
 
 as_function <- function(.f, ...) {

@@ -37,9 +37,9 @@
 #'
 #'
 #' @export
-list_find <- function(x, .p) {
+list_find <- function(.x, .p) {
   .p <- as_function(.p)
-  flat <- list_flatten(x)
+  flat <- list_flatten(.x)
 
   keep <- vapply(flat, function(z) isTRUE(.p(z)), logical(1L))
   flat[keep]
@@ -47,9 +47,11 @@ list_find <- function(x, .p) {
 
 #' Flatten a nested list
 #'
-#' @param x A nested list.
-#' @param sep Separator used to join path names.
+#' @inheritParams list_map
+#' @param .sep Separator used to join path names.
+#'
+#' @family lstrrr-purrrlike
 #' @export
-list_flatten <- function(x, sep = ".") {
-  .Call("lstrrr_c_list_flatten", x, sep, PACKAGE = "lstrrr")
+list_flatten <- function(.x, .sep = ".") {
+  .Call("lstrrr_c_list_flatten", .x, .sep, PACKAGE = "lstrrr")
 }

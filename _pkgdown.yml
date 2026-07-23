@@ -3,12 +3,9 @@ template:
   bootstrap: 5
   light-switch: true
   bslib:
-    bootswatch: slate
+    bootswatch: flatly
     code_font: { google: "JetBrains Mono" }
     pkgdown-nav-height: 100px
-    bg: white
-    fg: black
-    primary: "#2c5f9b"
 
 reference:
   - title: lstrrr-core
@@ -22,6 +19,7 @@ reference:
       - list_get
       - list_has
       - list_set
+      - list_nleaf
 
   - title: purrr-like
     contents:
@@ -34,6 +32,7 @@ reference:
       - list_pwalk
       - list_walk
       - list_walk2
+      - list_iwalk
 
   - title: Utilities
     contents:
@@ -41,6 +40,10 @@ reference:
       - modify_list
       - list_stats
       - viz_list
+
+  - title: Data
+    contents:
+      - sputnik_1
 
 navbar:
   structure:
@@ -70,5 +73,9 @@ navbar:
     articles:
       text: Articles
       menu:
-        - text: purrrlike
-          href: articles/purrrlike.html
+        - text: Use lstrrr to do some purrr-like things
+          href: articles/do_purrrlike.html
+        - text: Utilities
+          href: articles/utilities.html
+        - text: Performance Benchmarking
+          href: articles/benchmark_with_purrr.html

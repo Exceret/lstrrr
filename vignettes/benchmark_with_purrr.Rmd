@@ -18,16 +18,16 @@ knitr::opts_chunk$set(
 library(lstrrr)
 ```
 
-Here, we will compare the performance of `lstrrr` and `purrr`.
+## Map & Walk
 
-```{r}
-setwd(usethis::proj_path())
+Here, we will use a simple example to illustrate the performance difference of `lstrrr`.
 
+```{r preparing_input}
 files <- list.files(all.files = TRUE, recursive = TRUE)
 files_list <- dir_listwise(files)
 ```
 
-```{r}
+```{r benchmarking_map}
 slow_string_op <- function(x, n = 10) {
   stopifnot(is.character(x))
 
@@ -45,25 +45,132 @@ slow_string_op <- function(x, n = 10) {
   out
 }
 
+set.seed(123)
 
-bench <- microbenchmark::microbenchmark(
+bench_map <- microbenchmark::microbenchmark(
   purrr = {
-    purrr::map(files, \(x) slow_string_op(x))
+    purrr::walk(files, \(x) slow_string_op(x))
   },
   lstrrr = {
-    list_map(files_list, \(x) slow_string_op(x))
-  },
-  purrr_pb = {
-    purrr::map(files, \(x) slow_string_op(x), .progress = TRUE)
-  },
-  lstrrr_pb = {
-    list_map(files_list, \(x) slow_string_op(x), .progress = TRUE)
+    list_walk(files_list, \(x) slow_string_op(x))
   }
 )
-print(bench)
+print(bench_map)
 ```
 
 
-```{r}
-ggplot2::autoplot(bench)
+```{r viz_map}
+ggplot2::autoplot(bench_map) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+I basically use C to implement the `map` like functions. However, the progress bar implemented on the C side cannot faithfully reproduce the progress bar from the `cli` package.
+
+## Detect Depth
+
+```{r benchmarking_depth}
+set.seed(124)
+
+bench_depth <- microbenchmark::microbenchmark(
+  purrr = {
+    purrr::pluck_depth(sputnik_1)
+  },
+  lstrrr = {
+    list_depth(sputnik_1)
+  }
+)
+print(bench_depth)
+```
+
+
+```{r viz_depth}
+ggplot2::autoplot(bench_depth) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+## Assignment
+
+```{r benchmarking_assign}
+set.seed(125)
+
+bench_assign <- microbenchmark::microbenchmark(
+  purrr = {
+    purrr::list_assign(sputnik_1, z = list(a = 1:5))
+  },
+  lstrrr = {
+    list_set(sputnik_1, c("z"), list(a = 1:5))
+  }
+)
+print(bench_assign)
+```
+
+```{r viz_assign}
+ggplot2::autoplot(bench_assign) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+## Modification
+
+```{r benchmarking_modify}
+set.seed(126)
+
+bench_modify <- microbenchmark::microbenchmark(
+  purrr = {
+    purrr::list_modify(sputnik_1, test_branches = list(null_leaf = 1:5))
+  },
+  lstrrr = {
+    list_set(sputnik_1, c("test_branches", "null_leaf"), 1:5)
+  }
+)
+print(bench_modify)
+```
+
+```{r viz_modify}
+ggplot2::autoplot(bench_modify) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+## Flatten
+
+```{r benchmarking_flatten}
+set.seed(127)
+
+bench_flatten <- microbenchmark::microbenchmark(
+  purrr = {
+    purrr::list_flatten(sputnik_1)
+  },
+  lstrrr = {
+    list_flatten(sputnik_1)
+  }
+)
+print(bench_flatten)
+```
+
+```{r viz_flatten}
+ggplot2::autoplot(bench_flatten) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+## modifyList
+
+```{r benchmarking_modify_list}
+set.seed(128)
+
+foo <- sputnik_1
+foo$test_branches$empty_branch$score <- 1e-256
+
+bench_modify_list <- microbenchmark::microbenchmark(
+  utils = {
+    utils::modifyList(sputnik_1, foo)
+  },
+  lstrrr = {
+    modify_list(sputnik_1, foo)
+  }
+)
+print(bench_modify_list)
+```
+
+```{r viz_modify_list}
+ggplot2::autoplot(bench_modify_list) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```

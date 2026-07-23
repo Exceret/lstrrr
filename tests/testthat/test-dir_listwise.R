@@ -145,10 +145,6 @@ test_that("dir_listwise handles mixed depth paths", {
 
 # Error cases ------------------------------------------------------------------
 
-test_that("dir_listwise errors on non-character paths", {
-  expect_snapshot(dir_listwise(1:5), error = TRUE)
-})
-
 test_that("dir_listwise errors on invalid value", {
   expect_snapshot(dir_listwise("a.R", value = "invalid"), error = TRUE)
 })

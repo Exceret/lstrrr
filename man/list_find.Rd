@@ -4,10 +4,10 @@
 \alias{list_find}
 \title{Find leaves satisfying predicate}
 \usage{
-list_find(x, .p)
+list_find(.x, .p)
 }
 \arguments{
-\item{x}{A nested list to traverse.
+\item{.x}{A nested list to traverse.
 
 Lists are traversed recursively. Non-list objects are treated as leaves.
 Data frames are not traversed and are treated as leaf values.}

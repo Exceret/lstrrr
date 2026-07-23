@@ -1,8 +1,11 @@
-#' Recursively Modify a List
+#' Modify a List with Another List
 #'
-#' A recursive version of [utils::modifyList()].
+#' A faster version of [utils::modifyList()].
 #'
-#' @inheritParams list_map
+#' @param x A nested list to traverse.
+#'
+#'   Lists are traversed recursively. Non-list objects are treated as leaves.
+#'   Data frames are not traversed and are treated as leaf values.
 #' @param val A named list whose components modify `x`.
 #' @param keep.null Logical. If `TRUE`, `NULL` values in `val` are kept.
 #'   If `FALSE`, `NULL` values remove corresponding components from `x`.

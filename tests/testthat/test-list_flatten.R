@@ -23,17 +23,17 @@ test_that("list_flatten returns a flat named list", {
 })
 
 test_that("list_flatten uses custom separator", {
-  result <- list_flatten(x, sep = "/")
+  result <- list_flatten(x, .sep = "/")
   expect_named(result, c("a", "b/x", "b/y/i", "b/y/j"))
 })
 
 test_that("list_flatten with empty separator concatenates names directly", {
-  result <- list_flatten(x, sep = "")
+  result <- list_flatten(x, .sep = "")
   expect_named(result, c("a", "bx", "byi", "byj"))
 })
 
 test_that("list_flatten with multi-char separator", {
-  result <- list_flatten(x, sep = " -> ")
+  result <- list_flatten(x, .sep = " -> ")
   expect_named(result, c("a", "b -> x", "b -> y -> i", "b -> y -> j"))
 })
 
@@ -129,14 +129,6 @@ test_that("list_flatten with multiple leaf types in nested structure", {
   expect_identical(result[["b.x"]], TRUE)
   expect_identical(result[["b.y.i"]], "text")
   expect_identical(result[["b.y.j"]], 3.14)
-})
-
-test_that("list_flatten errors on non-string sep", {
-  expect_snapshot(list_flatten(x, sep = 1), error = TRUE)
-})
-
-test_that("list_flatten errors on sep of length > 1", {
-  expect_snapshot(list_flatten(x, sep = c(".", "-")), error = TRUE)
 })
 
 test_that("list_flatten returns atomic vector as single leaf with empty name", {

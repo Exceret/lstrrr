@@ -70,3 +70,4 @@
 ^vignettes/articles/*_files$
 ^vignettes/articles$
 ^index_files$
+^data-raw$

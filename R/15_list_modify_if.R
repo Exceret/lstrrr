@@ -45,20 +45,20 @@
 #'
 #' @family lstrrr-purrrlike
 #' @export
-list_modify_if <- function(x, .p, .f, ...) {
+list_modify_if <- function(.x, .p, .f, ...) {
   .p <- as_function(.p)
   .f <- as_function(.f)
 
-  if (is.list(x) && !is.data.frame(x)) {
-    out <- vector("list", length(x))
-    names(out) <- names(x)
+  if (is.list(.x) && !is.data.frame(.x)) {
+    out <- vector("list", length(.x))
+    names(out) <- names(.x)
 
-    for (i in seq_along(x)) {
-      out[[i]] <- list_modify_if(x[[i]], .p, .f, ...)
+    for (i in seq_along(.x)) {
+      out[[i]] <- list_modify_if(.x[[i]], .p, .f, ...)
     }
 
     out
   } else {
-    if (isTRUE(.p(x))) .f(x, ...) else x
+    if (isTRUE(.p(.x))) .f(.x, ...) else .x
   }
 }

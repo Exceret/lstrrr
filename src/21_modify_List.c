@@ -36,7 +36,7 @@ static int is_valid_name(SEXP name)
 
 static R_xlen_t find_name(SEXP names, SEXP key)
 {
-    if (names == R_NilValue || key == NA_STRING)
+    if (names == R_NilValue || TYPEOF(names) != STRSXP || key == NA_STRING)
     {
         return -1;
     }
@@ -54,6 +54,49 @@ static R_xlen_t find_name(SEXP names, SEXP key)
         }
     }
     return -1;
+}
+
+static SEXP append_value(SEXP x, SEXP key, SEXP value, int has_key)
+{
+    R_xlen_t n = XLENGTH(x);
+    SEXP out = PROTECT(Rf_allocVector(VECSXP, n + 1));
+    SEXP old_names = Rf_getAttrib(x, R_NamesSymbol);
+    int make_names = has_key || old_names != R_NilValue;
+    SEXP out_names = R_NilValue;
+    if (make_names)
+    {
+        out_names = PROTECT(Rf_allocVector(STRSXP, n + 1));
+    }
+    SEXP blank = Rf_mkChar("");
+    for (R_xlen_t i = 0; i < n; i++)
+    {
+        SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
+        if (make_names)
+        {
+            if (old_names != R_NilValue && i < XLENGTH(old_names))
+            {
+                SET_STRING_ELT(out_names, i, STRING_ELT(old_names, i));
+            }
+            else
+            {
+                SET_STRING_ELT(out_names, i, blank);
+            }
+        }
+    }
+    SET_VECTOR_ELT(out, n, value);
+    if (make_names)
+    {
+        SET_STRING_ELT(out_names, n, has_key ? key : blank);
+        Rf_setAttrib(out, R_NamesSymbol, out_names);
+        UNPROTECT(1);
+    }
+    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
+    if (cls != R_NilValue)
+    {
+        Rf_setAttrib(out, R_ClassSymbol, cls);
+    }
+    UNPROTECT(1);
+    return out;
 }
 
 static SEXP shallow_copy_list(SEXP x)
@@ -78,30 +121,48 @@ static SEXP shallow_copy_list(SEXP x)
     return out;
 }
 
-static SEXP append_named(SEXP x, SEXP key, SEXP value)
+// static SEXP append_named(SEXP x, SEXP key, SEXP value)
+// {
+//     R_xlen_t n = XLENGTH(x);
+//     SEXP out = PROTECT(Rf_allocVector(VECSXP, n + 1));
+//     SEXP out_names = PROTECT(Rf_allocVector(STRSXP, n + 1));
+//     SEXP old_names = Rf_getAttrib(x, R_NamesSymbol);
+//     for (R_xlen_t i = 0; i < n; i++)
+//     {
+//         SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
+//         if (old_names != R_NilValue && i < XLENGTH(old_names))
+//         {
+//             SET_STRING_ELT(out_names, i, STRING_ELT(old_names, i));
+//         }
+//         else
+//         {
+//             SET_STRING_ELT(out_names, i, Rf_mkChar(""));
+//         }
+//     }
+//     SET_VECTOR_ELT(out, n, value);
+//     SET_STRING_ELT(out_names, n, key);
+//     Rf_setAttrib(out, R_NamesSymbol, out_names);
+//     UNPROTECT(2);
+//     return out;
+// }
+
+
+
+static int get_valid_name_at(SEXP names, R_xlen_t i, SEXP *key)
 {
-    R_xlen_t n = XLENGTH(x);
-    SEXP out = PROTECT(Rf_allocVector(VECSXP, n + 1));
-    SEXP out_names = PROTECT(Rf_allocVector(STRSXP, n + 1));
-    SEXP old_names = Rf_getAttrib(x, R_NamesSymbol);
-    for (R_xlen_t i = 0; i < n; i++)
+    if (names == R_NilValue || TYPEOF(names) != STRSXP || i >= XLENGTH(names))
     {
-        SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
-        if (old_names != R_NilValue && i < XLENGTH(old_names))
-        {
-            SET_STRING_ELT(out_names, i, STRING_ELT(old_names, i));
-        }
-        else
-        {
-            SET_STRING_ELT(out_names, i, Rf_mkChar(""));
-        }
+        return 0;
     }
-    SET_VECTOR_ELT(out, n, value);
-    SET_STRING_ELT(out_names, n, key);
-    Rf_setAttrib(out, R_NamesSymbol, out_names);
-    UNPROTECT(2);
-    return out;
+    SEXP nm = STRING_ELT(names, i);
+    if (!is_valid_name(nm))
+    {
+        return 0;
+    }
+    *key = nm;
+    return 1;
 }
+
 
 static SEXP remove_at(SEXP x, R_xlen_t idx)
 {
@@ -112,12 +173,13 @@ static SEXP remove_at(SEXP x, R_xlen_t idx)
     }
     SEXP out = PROTECT(Rf_allocVector(VECSXP, n - 1));
     SEXP old_names = Rf_getAttrib(x, R_NamesSymbol);
-    SEXP out_names = R_NilValue;
     int has_names = old_names != R_NilValue;
+    SEXP out_names = R_NilValue;
     if (has_names)
     {
         out_names = PROTECT(Rf_allocVector(STRSXP, n - 1));
     }
+    SEXP blank = Rf_mkChar("");
     R_xlen_t j = 0;
     for (R_xlen_t i = 0; i < n; i++)
     {
@@ -128,7 +190,14 @@ static SEXP remove_at(SEXP x, R_xlen_t idx)
         SET_VECTOR_ELT(out, j, VECTOR_ELT(x, i));
         if (has_names)
         {
-            SET_STRING_ELT(out_names, j, STRING_ELT(old_names, i));
+            if (i < XLENGTH(old_names))
+            {
+                SET_STRING_ELT(out_names, j, STRING_ELT(old_names, i));
+            }
+            else
+            {
+                SET_STRING_ELT(out_names, j, blank);
+            }
         }
         j++;
     }
@@ -136,6 +205,11 @@ static SEXP remove_at(SEXP x, R_xlen_t idx)
     {
         Rf_setAttrib(out, R_NamesSymbol, out_names);
         UNPROTECT(1);
+    }
+    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
+    if (cls != R_NilValue)
+    {
+        Rf_setAttrib(out, R_ClassSymbol, cls);
     }
     UNPROTECT(1);
     return out;
@@ -152,32 +226,34 @@ static SEXP modify_list_rec(SEXP x, SEXP val, int keep_null)
         Rf_error("`val` must be a list.");
     }
     SEXP val_names = Rf_getAttrib(val, R_NamesSymbol);
-    if (val_names == R_NilValue)
-    {
-        Rf_error("`val` must be a named list.");
-    }
-    if (XLENGTH(val_names) != XLENGTH(val))
-    {
-        Rf_error("Invalid names on `val`.");
-    }
-    SEXP out = PROTECT(shallow_copy_list(x));
+    SEXP out;
+    PROTECT_INDEX out_pi;
+    PROTECT_WITH_INDEX(out = shallow_copy_list(x), &out_pi);
     for (R_xlen_t i = 0; i < XLENGTH(val); i++)
     {
-        SEXP key = STRING_ELT(val_names, i);
-        if (!is_valid_name(key))
+        SEXP key = R_NilValue;
+        int has_key = get_valid_name_at(val_names, i, &key);
+        SEXP v = VECTOR_ELT(val, i);
+        /*
+         * 未命名元素：
+         * 不查找同名项，不覆盖，直接追加。
+         */
+        if (!has_key)
         {
-            Rf_error("All elements of `val` must be named.");
+            if (v == R_NilValue && !keep_null)
+            {
+                continue;
+            }
+            REPROTECT(out = append_value(out, key, v, 0), out_pi);
+            continue;
         }
         SEXP out_names = Rf_getAttrib(out, R_NamesSymbol);
         R_xlen_t pos = find_name(out_names, key);
-        SEXP v = VECTOR_ELT(val, i);
         if (v == R_NilValue && !keep_null)
         {
             if (pos >= 0)
             {
-                SEXP tmp = PROTECT(remove_at(out, pos));
-                UNPROTECT(1);
-                out = tmp;
+                REPROTECT(out = remove_at(out, pos), out_pi);
             }
             continue;
         }
@@ -187,7 +263,9 @@ static SEXP modify_list_rec(SEXP x, SEXP val, int keep_null)
             is_plain_list(v)
         )
         {
-            SEXP merged = PROTECT(modify_list_rec(VECTOR_ELT(out, pos), v, keep_null));
+            SEXP merged = PROTECT(
+                              modify_list_rec(VECTOR_ELT(out, pos), v, keep_null)
+                          );
             SET_VECTOR_ELT(out, pos, merged);
             UNPROTECT(1);
         }
@@ -199,16 +277,13 @@ static SEXP modify_list_rec(SEXP x, SEXP val, int keep_null)
             }
             else
             {
-                SEXP tmp = PROTECT(append_named(out, key, v));
-                UNPROTECT(1);
-                out = tmp;
+                REPROTECT(out = append_value(out, key, v, 1), out_pi);
             }
         }
     }
     UNPROTECT(1);
     return out;
 }
-
 SEXP lstrrr_c_modify_list(SEXP x, SEXP val, SEXP keep_null)
 {
     if (TYPEOF(keep_null) != LGLSXP || XLENGTH(keep_null) != 1)

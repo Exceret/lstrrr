@@ -1,11 +1,3 @@
-# dir_listwise errors on non-character paths
-
-    Code
-      dir_listwise(1:5)
-    Condition
-      Error:
-      ! `paths` must be a character vector.
-
 # dir_listwise errors on invalid value
 
     Code

@@ -4,10 +4,10 @@
 \alias{list_walk}
 \title{Walk over leaves of a nested list}
 \usage{
-list_walk(x, .f, ...)
+list_walk(.x, .f, ..., .progress = FALSE)
 }
 \arguments{
-\item{x}{A nested list to traverse.
+\item{.x}{A nested list to traverse.
 
 Lists are traversed recursively. Non-list objects are treated as leaves.
 Data frames are not traversed and are treated as leaf values.}
@@ -17,33 +17,48 @@ Data frames are not traversed and are treated as leaf values.}
 Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+
+\item{.progress}{Whether to show a progress
+
+Use TRUE to turn on a basic progress, use a string to give it a name}
 }
 \value{
-Invisibly returns \code{x}.
+Invisibly returns \code{.x}.
 }
 \description{
 Applies \code{.f} to each leaf of \code{x} for side effects.
 }
 \examples{
+\donttest{
 x <- list(
   a = 1,
   b = list(
-    x = 2,
-    y = list(i = 3, j = 4)
+    x = 1,
+    y = list(i = 1, j = 2)
   )
 )
-
-# Print each leaf
-list_walk(x, print)
-
-# Use additional arguments
-list_walk(x, \(value, prefix) message(prefix, value, "\n"), prefix = "value:")
-
+x2 <- list_map(x, function(x) x - 2)
+# $a
+# [1] -1
+#
+# $b
+# $b$x
+# [1] -1
+#
+# $b$y
+# $b$y$i
+# [1] -1
+#
+# $b$y$j
+# [1] 0
+}
 
 }
 \seealso{
 Other lstrrr-purrrlike: 
+\code{\link{list_flatten}()},
 \code{\link{list_imap}()},
+\code{\link{list_iwalk}()},
 \code{\link{list_map}()},
 \code{\link{list_map2}()},
 \code{\link{list_modify_if}()},

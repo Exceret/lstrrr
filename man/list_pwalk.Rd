@@ -4,7 +4,7 @@
 \alias{list_pwalk}
 \title{Walk over leaves of multiple nested lists}
 \usage{
-list_pwalk(.l, .f, ...)
+list_pwalk(.l, .f, ..., .progress = FALSE)
 }
 \arguments{
 \item{.l}{A list of nested lists.}
@@ -14,6 +14,10 @@ list_pwalk(.l, .f, ...)
 Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
+
+\item{.progress}{Whether to show a progress
+
+Use TRUE to turn on a basic progress, use a string to give it a name}
 }
 \value{
 Invisibly returns \code{.l}.
@@ -23,25 +27,36 @@ Applies \code{.f} to corresponding leaves of multiple nested lists
 for side effects.
 }
 \examples{
+\donttest{
 x <- list(
   a = 1,
   b = list(
-    x = 2,
-    y = list(i = 3, j = 4)
+    x = 1,
+    y = list(i = 1, j = 2)
   )
 )
+list_pmap(list(x,x,x), function(x,y,z) (x + y) *z)
+# $a
+# [1] 2
+#
+# $b
+# $b$x
+# [1] 2
+#
+# $b$y
+# $b$y$i
+# [1] 2
+#
+# $b$y$j
+# [1] 8
 
-# Print each leaf
-list_pwalk(.l = list(x, x, x, x), .f = function(x, y, z, w = 1) message((x + y) * z + w))
-# 3
-# 10
-# 21
-# 36
-
+}
 }
 \seealso{
 Other lstrrr-purrrlike: 
+\code{\link{list_flatten}()},
 \code{\link{list_imap}()},
+\code{\link{list_iwalk}()},
 \code{\link{list_map}()},
 \code{\link{list_map2}()},
 \code{\link{list_modify_if}()},

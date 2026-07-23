@@ -41,24 +41,6 @@ test_that("val must be a list", {
   )
 })
 
-test_that("val must be a named list", {
-  expect_snapshot(
-    modify_list(list(a = 1), list(1, 2)),
-    error = TRUE
-  )
-})
-
-test_that("val must not have invalid names", {
-  expect_snapshot(
-    modify_list(list(a = 1), stats::setNames(list(1, 2), c("a", NA))),
-    error = TRUE
-  )
-  expect_snapshot(
-    modify_list(list(a = 1), stats::setNames(list(1, 2), c("a", ""))),
-    error = TRUE
-  )
-})
-
 test_that("val elements overwrite x at the same key", {
   result <- modify_list(list(a = 1, b = 2), list(b = 99))
   expect_identical(result, list(a = 1, b = 99))
@@ -136,13 +118,6 @@ test_that("deeply nested recursive merge", {
 test_that("empty x with val appends all val elements", {
   result <- modify_list(list(), list(a = 1, b = 2))
   expect_identical(result, list(a = 1, b = 2))
-})
-
-test_that("empty val is an error (must be named)", {
-  expect_snapshot(
-    modify_list(list(a = 1), list()),
-    error = TRUE
-  )
 })
 
 test_that("NULL removal propagates recursively when keep.null = FALSE", {

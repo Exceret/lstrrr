@@ -20,9 +20,9 @@ Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{...}{Additional arguments passed to \code{.f}.}
 
-\item{.progress}{Whether to show a progress bar.
+\item{.progress}{Whether to show a progress
 
-Use TRUE to turn on a basic progress bar, use a string to give it a name}
+Use TRUE to turn on a basic progress, use a string to give it a name}
 }
 \value{
 A list with the same nested structure as \code{.x}, where each leaf has been
@@ -59,7 +59,9 @@ x2 <- list_map2(x, x, ~ {.x + .y})
 }
 \seealso{
 Other lstrrr-purrrlike: 
+\code{\link{list_flatten}()},
 \code{\link{list_imap}()},
+\code{\link{list_iwalk}()},
 \code{\link{list_map}()},
 \code{\link{list_modify_if}()},
 \code{\link{list_pmap}()},

@@ -122,6 +122,12 @@
 #' @param line_width Numeric scalar giving the width of edges passed to
 #'   [ggplot2::geom_segment()].
 #'
+#' @param flip Logical scalar.
+#'
+#'   If `TRUE`, the coordinate system is flipped so that the tree is drawn
+#'   horizontally (depth on the x-axis) instead of vertically (depth on the
+#'   y-axis). This is equivalent to calling [ggplot2::coord_flip()].
+#'
 #' @return
 #' A [ggplot2::ggplot] object representing the nested list as a tree diagram.
 #'
@@ -159,6 +165,9 @@
 #'   text_size = 3.5,
 #'   line_width = 1
 #' )
+#'
+#' # Flip coordinates for horizontal layout
+#' viz_list(x, flip = TRUE)
 #' }
 #'
 #' @seealso [list_stats()]
@@ -170,7 +179,8 @@ viz_list <- function(
   show_path = FALSE,
   point_size = 3L,
   text_size = 3L,
-  line_width = 0.6
+  line_width = 0.6,
+  flip = FALSE
 ) {
   check_installed("ggplot2")
 
@@ -203,7 +213,7 @@ viz_list <- function(
       data = nodes,
       ggplot2::aes(x = x, y = y, label = label),
       size = text_size,
-      vjust = -0.7,
+      vjust = -0.5,
       lineheight = 0.9
     ) +
     ggplot2::scale_y_continuous(
@@ -215,11 +225,5 @@ viz_list <- function(
       y = "Depth",
       color = "Type"
     ) +
-    ggplot2::theme_minimal(base_size = 12) +
-    ggplot2::theme(
-      panel.grid.major.x = ggplot2::element_blank(),
-      panel.grid.minor = ggplot2::element_blank(),
-      axis.text.x = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_blank()
-    )
+    ggplot2::theme_minimal(base_size = 12L)
 }

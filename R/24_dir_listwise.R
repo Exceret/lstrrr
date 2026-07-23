@@ -34,7 +34,11 @@ dir_listwise <- function(
   value <- match.arg(value)
 
   if (!is.character(paths)) {
-    stop("`paths` must be a character vector.", call. = FALSE)
+    cli::cli_abort(
+      "{.arg paths} must be a {.cls character vector}.",
+      call = caller_call(),
+      .frame = caller_env()
+    )
   }
 
   paths <- paths[!is.na(paths)]

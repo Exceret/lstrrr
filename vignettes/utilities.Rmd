@@ -1,0 +1,93 @@
+---
+title: "utilities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{utilities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+> This vignette shows the function utilities of `lstrrr`.
+
+```{r setup}
+library(lstrrr)
+```
+
+## TL;DR
+
+| Function              | Description                                        |
+|-----------------------|----------------------------------------------------|
+| `list_stats(x)`       | Convert a nested list to tree data (nodes + edges) |
+| `viz_list(x)`         | Visualize list structure as a tree diagram         |
+| `dir_listwise(paths)` | Convert file paths to a nested list                |
+| `modify_list(x, val)` | Recursively merge two lists                        |
+
+## modify_list
+
+`modify_list` is similar to `utils::modifyList`. In most cases, we can use `modify_list` to replace `utils::modifyList`.
+
+```{r}
+foo <- list(a = 1, b = list(c = "a", d = FALSE))
+bar <- list(e = 2, b = list(d = TRUE))
+```
+
+```{r}
+v1 <- modify_list(foo, bar)
+str(v1)
+v2 <- utils::modifyList(foo, bar)
+str(v2)
+
+identical(v1, v2)
+```
+
+The only difference is that `modify_list` keeps the unnamed elements.
+
+```{r}
+bar2 <- list(e = 2, b = list(d = TRUE), 3, data.frame())
+v3 <- modify_list(foo, bar2)
+str(v3)
+v4 <- utils::modifyList(foo, bar2)
+str(v4)
+
+identical(v3, v4)
+```
+
+## Make `list.files` Result into a List
+
+```{r}
+files <- list.files(".", recursive = TRUE, full.names = TRUE)
+head(files)
+
+files_list <- dir_listwise(files)
+cli::cli_alert_info("Class of files_list: {.cls {class(files_list)}}")
+```
+
+## Statistics for R list
+
+`list_stats()` is a function to get the statistics of a list. The result is a list containing 2 elements: `nodes` and `edges`.
+
+```{r}
+list_stats(foo)
+```
+
+## Visualize R list
+
+`viz_list()` is a function to visualize a list. The result is a `ggplot2` object.
+
+```{r}
+viz_list(foo)
+```
+
+It is useful to get a sense of the structure of a complex list.
+
+```{r,fig.width=6, fig.height=20,dpi =500,out.width="60%"}
+viz_list(sputnik_1, point_size = 1.5, text_size = 1L, line_width = 0.6) +
+  ggplot2::coord_flip()
+```

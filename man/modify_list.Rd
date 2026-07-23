@@ -2,7 +2,7 @@
 % Please edit documentation in R/21_modify_list.R
 \name{modify_list}
 \alias{modify_list}
-\title{Recursively Modify a List}
+\title{Modify a List with Another List}
 \usage{
 modify_list(x, val, keep.null = FALSE)
 }
@@ -21,7 +21,7 @@ If \code{FALSE}, \code{NULL} values remove corresponding components from \code{x
 A modified list.
 }
 \description{
-A recursive version of \code{\link[utils:modifyList]{utils::modifyList()}}.
+A faster version of \code{\link[utils:modifyList]{utils::modifyList()}}.
 }
 \examples{
 \donttest{

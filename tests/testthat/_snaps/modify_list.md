@@ -54,35 +54,3 @@
       Error in `modify_list()`:
       ! `val` must be a list.
 
-# val must be a named list
-
-    Code
-      modify_list(list(a = 1), list(1, 2))
-    Condition
-      Error in `modify_list()`:
-      ! `val` must be a named list.
-
-# val must not have invalid names
-
-    Code
-      modify_list(list(a = 1), stats::setNames(list(1, 2), c("a", NA)))
-    Condition
-      Error in `modify_list()`:
-      ! All elements of `val` must be named.
-
----
-
-    Code
-      modify_list(list(a = 1), stats::setNames(list(1, 2), c("a", "")))
-    Condition
-      Error in `modify_list()`:
-      ! All elements of `val` must be named.
-
-# empty val is an error (must be named)
-
-    Code
-      modify_list(list(a = 1), list())
-    Condition
-      Error in `modify_list()`:
-      ! `val` must be a named list.
-

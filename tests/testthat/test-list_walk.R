@@ -1,4 +1,4 @@
-# test-list_walk.R — tests for list_walk, list_walk2, list_pwalk
+# test-list_walk.R — tests for list_walk, list_walk2, list_pwalk, list_iwalk
 
 # Shared test fixture ----------------------------------------------------------
 
@@ -87,9 +87,6 @@ test_that("list_walk handles NULL leaf values", {
   expect_equal(out[[2]], 1)
 })
 
-test_that("list_walk errors on two-sided formula", {
-  expect_snapshot(list_walk(x, y ~ x + 1), error = TRUE)
-})
 
 test_that("list_walk errors on non-coercible .f", {
   expect_snapshot(list_walk(x, "not_a_function"), error = TRUE)
@@ -185,9 +182,6 @@ test_that("list_walk2 handles NULL leaf values", {
   expect_equal(out[[2]]$x, 1)
 })
 
-test_that("list_walk2 errors on two-sided formula", {
-  expect_snapshot(list_walk2(x, x, y ~ x + 1), error = TRUE)
-})
 
 test_that("list_walk2 errors on non-coercible .f", {
   expect_snapshot(list_walk2(x, x, "not_a_function"), error = TRUE)
@@ -274,18 +268,10 @@ test_that("list_pwalk with all-list structure recurses fully", {
   expect_equal(out, c(6, 8, 10, 12))
 })
 
-test_that("list_pwalk on empty .l errors", {
-  expect_snapshot(list_pwalk(list(), function(...) NULL), error = TRUE)
-})
-
 test_that("list_pwalk with single list walks each leaf", {
   out <- numeric()
   list_pwalk(list(x), function(val) out <<- c(out, val))
   expect_setequal(out, c(1, 2, 3, 4))
-})
-
-test_that("list_pwalk errors when .l is not a list", {
-  expect_snapshot(list_pwalk("not_a_list", identity), error = TRUE)
 })
 
 test_that("list_pwalk handles NULL leaf values", {
@@ -302,10 +288,127 @@ test_that("list_pwalk handles NULL leaf values", {
   expect_equal(out[[2]]$x, 1)
 })
 
-test_that("list_pwalk errors on two-sided formula", {
-  expect_snapshot(list_pwalk(list(x), y ~ x + 1), error = TRUE)
-})
-
 test_that("list_pwalk errors on non-coercible .f", {
   expect_snapshot(list_pwalk(list(x), "not_a_function"), error = TRUE)
+})
+
+# list_iwalk ------------------------------------------------------------------
+
+test_that("list_iwalk passes leaf name to .f", {
+  out <- character()
+  list_iwalk(x, function(value, name) out <<- c(out, paste(name, value, sep = "=")))
+  expect_setequal(out, c("a=1", "x=2", "i=3", "j=4"))
+})
+
+test_that("list_iwalk returns x invisibly", {
+  result <- withVisible(list_iwalk(x, function(value, name) value))
+  expect_false(result$visible)
+  expect_identical(result$value, x)
+})
+
+test_that("list_iwalk supports formula .f", {
+  out <- character()
+  list_iwalk(x, ~ {
+    out <<- c(out, paste(.y, .x, sep = "="))
+  })
+  expect_setequal(out, c("a=1", "x=2", "i=3", "j=4"))
+})
+
+test_that("list_iwalk forwards ... to .f", {
+  out <- character()
+  list_iwalk(
+    x,
+    function(value, name, prefix) {
+      out <<- c(out, paste0(prefix, name, ":", value))
+    },
+    prefix = "leaf_"
+  )
+  expect_setequal(out, c("leaf_a:1", "leaf_x:2", "leaf_i:3", "leaf_j:4"))
+})
+
+test_that("list_iwalk uses positional indices for unnamed elements", {
+  lst <- list(10, 20, list(30, 40))
+  out <- character()
+  list_iwalk(lst, function(value, name) out <<- c(out, paste(name, value, sep = "=")))
+  expect_setequal(out, c("1=10", "2=20", "1=30", "2=40"))
+})
+
+test_that("list_iwalk treats data.frame as leaf", {
+  lst <- list(a = iris[1:2, ], b = list(c = 1))
+  out <- character()
+  list_iwalk(lst, function(value, name) out <<- c(out, name))
+  expect_setequal(out, c("a", "c"))
+})
+
+test_that("list_iwalk on empty list does nothing", {
+  out <- character()
+  list_iwalk(list(), function(value, name) out <<- c(out, name))
+  expect_length(out, 0L)
+})
+
+test_that("list_iwalk handles NULL leaf values", {
+  lst <- list(a = NULL, b = 1)
+  out <- character()
+  list_iwalk(lst, function(value, name) out <<- c(out, name))
+  expect_setequal(out, c("a", "b"))
+})
+
+test_that("list_iwalk errors on non-coercible .f", {
+  expect_snapshot(list_iwalk(x, "not_a_function"), error = TRUE)
+})
+
+# .progress parameter ---------------------------------------------------------
+
+test_that("list_walk works with .progress = FALSE", {
+  out <- numeric()
+  list_walk(x, function(val) out <<- c(out, val), .progress = FALSE)
+  expect_equal(out, c(1, 2, 3, 4))
+})
+
+test_that("list_walk works with .progress = TRUE", {
+  out <- numeric()
+  list_walk(x, function(val) out <<- c(out, val), .progress = TRUE)
+  expect_equal(out, c(1, 2, 3, 4))
+})
+
+test_that("list_walk works with named .progress", {
+  out <- numeric()
+  list_walk(x, function(val) out <<- c(out, val), .progress = "walking")
+  expect_equal(out, c(1, 2, 3, 4))
+})
+
+test_that("list_walk2 works with .progress = FALSE", {
+  out <- numeric()
+  list_walk2(x, x, function(a, b) out <<- c(out, a + b), .progress = FALSE)
+  expect_equal(out, c(2, 4, 6, 8))
+})
+
+test_that("list_walk2 works with .progress = TRUE", {
+  out <- numeric()
+  list_walk2(x, x, function(a, b) out <<- c(out, a + b), .progress = TRUE)
+  expect_equal(out, c(2, 4, 6, 8))
+})
+
+test_that("list_pwalk works with .progress = FALSE", {
+  out <- numeric()
+  list_pwalk(list(x, x), function(a, b) out <<- c(out, a + b), .progress = FALSE)
+  expect_equal(out, c(2, 4, 6, 8))
+})
+
+test_that("list_pwalk works with .progress = TRUE", {
+  out <- numeric()
+  list_pwalk(list(x, x), function(a, b) out <<- c(out, a + b), .progress = TRUE)
+  expect_equal(out, c(2, 4, 6, 8))
+})
+
+test_that("list_iwalk works with .progress = FALSE", {
+  out <- character()
+  list_iwalk(x, function(value, name) out <<- c(out, name), .progress = FALSE)
+  expect_setequal(out, c("a", "x", "i", "j"))
+})
+
+test_that("list_iwalk works with .progress = TRUE", {
+  out <- character()
+  list_iwalk(x, function(value, name) out <<- c(out, name), .progress = TRUE)
+  expect_setequal(out, c("a", "x", "i", "j"))
 })

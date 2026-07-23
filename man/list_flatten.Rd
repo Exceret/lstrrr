@@ -4,13 +4,29 @@
 \alias{list_flatten}
 \title{Flatten a nested list}
 \usage{
-list_flatten(x, sep = ".")
+list_flatten(.x, .sep = ".")
 }
 \arguments{
-\item{x}{A nested list.}
+\item{.x}{A nested list to traverse.
 
-\item{sep}{Separator used to join path names.}
+Lists are traversed recursively. Non-list objects are treated as leaves.
+Data frames are not traversed and are treated as leaf values.}
+
+\item{.sep}{Separator used to join path names.}
 }
 \description{
 Flatten a nested list
 }
+\seealso{
+Other lstrrr-purrrlike: 
+\code{\link{list_imap}()},
+\code{\link{list_iwalk}()},
+\code{\link{list_map}()},
+\code{\link{list_map2}()},
+\code{\link{list_modify_if}()},
+\code{\link{list_pmap}()},
+\code{\link{list_pwalk}()},
+\code{\link{list_walk}()},
+\code{\link{list_walk2}()}
+}
+\concept{lstrrr-purrrlike}

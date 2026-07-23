@@ -4,10 +4,10 @@
 \alias{list_modify_if}
 \title{Modify leaves satisfying predicate}
 \usage{
-list_modify_if(x, .p, .f, ...)
+list_modify_if(.x, .p, .f, ...)
 }
 \arguments{
-\item{x}{A nested list to traverse.
+\item{.x}{A nested list to traverse.
 
 Lists are traversed recursively. Non-list objects are treated as leaves.
 Data frames are not traversed and are treated as leaf values.}
@@ -67,7 +67,9 @@ list_modify_if(x2, is.data.frame, \(value) transform(value, y = x * 2))
 }
 \seealso{
 Other lstrrr-purrrlike: 
+\code{\link{list_flatten}()},
 \code{\link{list_imap}()},
+\code{\link{list_iwalk}()},
 \code{\link{list_map}()},
 \code{\link{list_map2}()},
 \code{\link{list_pmap}()},
