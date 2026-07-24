@@ -35,7 +35,12 @@ list_walk2(.x, .y, .f, ..., .progress = FALSE)
 
   Whether to show a progress
 
-  Use TRUE to turn on a basic progress, use a string to give it a name
+  Use TRUE to turn on a basic progress, use a string to give it a name,
+  or use a list to customize the progress bar (see
+  [`?cli::cli_progress_bar`](https://cli.r-lib.org/reference/cli_progress_bar.html)
+  and
+  https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+  for details).
 
 ## Value
 
@@ -53,31 +58,3 @@ Other lstrrr-purrrlike:
 [`list_pmap()`](https://exceret.github.io/lstrrr/reference/list_pmap.md),
 [`list_pwalk()`](https://exceret.github.io/lstrrr/reference/list_pwalk.md),
 [`list_walk()`](https://exceret.github.io/lstrrr/reference/list_walk.md)
-
-## Examples
-
-``` r
-# \donttest{
-x <- list(
-  a = 1,
-  b = list(
-    x = 1,
-    y = list(i = 1, j = 2)
-  )
-)
-x2 <- list_map2(x, x, ~ {.x + .y})
-# $a
-# [1] 2
-#
-# $b
-# $b$x
-# [1] 2
-#
-# $b$y
-# $b$y$i
-# [1] 2
-#
-# $b$y$j
-# [1] 4
-# }
-```

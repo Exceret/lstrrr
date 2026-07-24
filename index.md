@@ -123,7 +123,7 @@ try(rlist::list.map(nums, f(x, i) ~ sum(x, i)))
 #> Error in sum(x, i) : invalid 'type' (list) of argument
 ```
 
-Recursive mapping is the main difference between lstrrr and rlist.
+**Recursive mapping is the main difference between lstrrr and rlist**.
 lstrrr views the list as a tree, and recursively applies the function to
 leaf nodes.
 

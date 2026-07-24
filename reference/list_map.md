@@ -31,7 +31,12 @@ list_map(.x, .f, ..., .progress = FALSE)
 
   Whether to show a progress
 
-  Use TRUE to turn on a basic progress, use a string to give it a name
+  Use TRUE to turn on a basic progress, use a string to give it a name,
+  or use a list to customize the progress bar (see
+  [`?cli::cli_progress_bar`](https://cli.r-lib.org/reference/cli_progress_bar.html)
+  and
+  https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+  for details).
 
 ## Value
 

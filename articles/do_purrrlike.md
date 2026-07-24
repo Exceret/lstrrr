@@ -1,11 +1,5 @@
 # Use lstrrr to do some purrr-like things
 
-``` r
-
-library(lstrrr)
-#> ✔ lstrrr v0.1.0 loaded
-```
-
 ## TL;DR
 
 ### Core Access
@@ -53,26 +47,21 @@ needs.
 `lstrrr` use vector to represent the path to the element,
 e.g. `c("a", "b", "c")`, which is similar to the `$` operator in R.
 
-``` r
-
-foo <- list(a = list(b = list(c = "a", d = FALSE)))
-```
+![](do_purrrlike_files/figure-html/foo.svg)
 
 ``` r
 
 list_get(foo, c("a", "b", "d"))
-#> [1] FALSE
 ```
+
+![](do_purrrlike_files/figure-html/list_get.svg)
 
 ``` r
 
 list_set(foo, c("a", "b", "d"), TRUE) |> str()
-#> List of 1
-#>  $ a:List of 1
-#>   ..$ b:List of 2
-#>   .. ..$ c: chr "a"
-#>   .. ..$ d: logi TRUE
 ```
+
+![](do_purrrlike_files/figure-html/list_set.svg)
 
 Other functions like `list_delete(x, path)`, `list_has(x, path)`,
 `list_depth(x)`, `list_path(x)` are self-explanatory.
@@ -84,8 +73,9 @@ Let’s use the build-in dataset `sputnik_1` as an example:
 ``` r
 
 list_nleaf(sputnik_1)
-#> [1] 104
 ```
+
+![](do_purrrlike_files/figure-html/list_nleaf.svg)
 
 You can use
 [`list_flatten()`](https://exceret.github.io/lstrrr/reference/list_flatten.md)
@@ -96,47 +86,40 @@ are not nested):
 
 v <- list_flatten(sputnik_1)
 head(v, 3)
-#> $meta.dataset
-#> [1] "sputnik_1"
-#> 
-#> $meta.title
-#> [1] "Sputnik 1 mission and spacecraft information"
-#> 
-#> $meta.description
-#> [1] "A nested list collecting structured historical, technical, orbital, and cultural information about Sputnik 1, the first artificial Earth satellite."
 ```
+
+![](do_purrrlike_files/figure-html/list_flatten.svg)
 
 ``` r
 
 cli::cli_alert_info("Class of v: {.cls {class(v)}}")
-#> ℹ Class of v: <list>
 cli::cli_alert_info("Length of v: {.val {length(v)}} (using {.fun length})")
-#> ℹ Length of v: 104 (using `length()`)
 cli::cli_alert_info(
   "Length of v: {.val {list_nleaf(v)}} (using {.fun list_nleaf})"
 )
-#> ℹ Length of v: 104 (using `list_nleaf()`)
 ```
+
+![](do_purrrlike_files/figure-html/list_flatten_info.svg)
 
 The names of the elements are the dot-separated paths to the elements:
 
 ``` r
 
 head(names(v))
-#> [1] "meta.dataset"     "meta.title"       "meta.description" "meta.language"   
-#> [5] "meta.created"     "meta.sources"
 ```
 
+![](do_purrrlike_files/figure-html/list_flatten_names.svg)
+
 Separation symbols can be customized. Generally I don’t recommend using
-`_`, because it’s a common separator in names.
+`_` as purrr does, because it’s a common separator in names.
 
 ``` r
 
 v2 <- list_flatten(sputnik_1, "$")
 head(names(v2))
-#> [1] "meta$dataset"     "meta$title"       "meta$description" "meta$language"   
-#> [5] "meta$created"     "meta$sources"
 ```
+
+![](do_purrrlike_files/figure-html/dollar_sep.svg)
 
 **Recursive mapping is the main difference between
 [`lstrrr::list_flatten()`](https://exceret.github.io/lstrrr/reference/list_flatten.md)
@@ -150,27 +133,20 @@ itself).
 
 v3 <- purrr::list_flatten(sputnik_1, is_node = is.list)
 head(v, 3)
-#> $meta.dataset
-#> [1] "sputnik_1"
-#> 
-#> $meta.title
-#> [1] "Sputnik 1 mission and spacecraft information"
-#> 
-#> $meta.description
-#> [1] "A nested list collecting structured historical, technical, orbital, and cultural information about Sputnik 1, the first artificial Earth satellite."
 ```
+
+![](do_purrrlike_files/figure-html/purrr_list_flatten.svg)
 
 ``` r
 
 cli::cli_alert_info("Class of v3: {.cls {class(v3)}}")
-#> ℹ Class of v3: <list>
 cli::cli_alert_info("Length of v3: {.val {length(v3)}} (using {.fun length})")
-#> ℹ Length of v3: 40 (using `length()`)
 cli::cli_alert_info(
   "Length of v3: {.val {list_nleaf(v3)}} (using {.fun list_nleaf})"
 )
-#> ℹ Length of v3: 109 (using `list_nleaf()`)
 ```
+
+![](do_purrrlike_files/figure-html/purrr_list_flatten_info.svg)
 
 ## Functional Programming
 
@@ -183,49 +159,52 @@ function name.
 foo <- list(a = 1, b = list(c = "a", d = FALSE))
 
 list_map(foo, \(x) typeof(x)) |> str()
-#> List of 2
-#>  $ a: chr "double"
-#>  $ b:List of 2
-#>   ..$ c: chr "character"
-#>   ..$ d: chr "logical"
 ```
+
+![](do_purrrlike_files/figure-html/list_map.svg)
 
 ``` r
 
 list_imap(foo, ~ paste(.y, ":", .x)) |> str()
-#> List of 2
-#>  $ a: chr "a : 1"
-#>  $ b:List of 2
-#>   ..$ c: chr "c : a"
-#>   ..$ d: chr "d : FALSE"
 ```
+
+![](do_purrrlike_files/figure-html/list_imap.svg)
+
+If you want to map over multiple lists, make sure the lists have the
+same structure.
 
 ``` r
 
 list_walk2(foo, foo, ~ message(paste0(.x, .y)))
-#> 11
-#> aa
-#> FALSEFALSE
 ```
+
+![](do_purrrlike_files/figure-html/list_walk2.svg)
 
 ``` r
 
 list_pwalk(
   list(foo, foo, foo),
   \(x, y, z) {
-    message(paste0(x, y, z))
     Sys.sleep(0.5)
   },
   .progress = "pwalk"
 )
-#> ⠋ pwalk 0/3 (  0%)   ⠙ pwalk 1/3 ( 33%)
-#> 111
-#> ⠹ pwalk 2/3 ( 67%)
-#> aaa
-#> ⠸ pwalk 3/3 (100%)
-#> FALSEFALSEFALSE
-#> ✔ pwalk 3/3 (100%)
 ```
+
+![](do_purrrlike_files/figure-html/list_pwalk.svg)
+
+Customize the progress bar:
+
+``` r
+
+list_walk(
+  sputnik_1,
+  ~ Sys.sleep(0.05),
+  .progress = list(name = "foo", type = "download")
+)
+```
+
+![](do_purrrlike_files/figure-html/list_walk.svg)
 
 [`list_find()`](https://exceret.github.io/lstrrr/reference/list_find.md)
 is used to find elements that satisfy a predicate. Please note that the
@@ -234,16 +213,16 @@ result is a list with only 1 level.
 ``` r
 
 list_find(foo, ~ is.character(.x)) |> str()
-#> List of 1
-#>  $ b.c: chr "a"
 ```
+
+![](do_purrrlike_files/figure-html/list_find.svg)
+
+`list_modify_if` is used to modify elements that satisfy a predicate.
+The structure of the list is preserved.
 
 ``` r
 
 list_modify_if(foo, is.logical, ~ !.x) |> str()
-#> List of 2
-#>  $ a: num 1
-#>  $ b:List of 2
-#>   ..$ c: chr "a"
-#>   ..$ d: logi TRUE
 ```
+
+![](do_purrrlike_files/figure-html/list_modify_if.svg)

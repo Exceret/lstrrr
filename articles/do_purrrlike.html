@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Use lstrrr to do some purrr-like things • lstrrr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
@@ -66,8 +71,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Use lstrrr to do some purrr-like things</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Use lstrrr to do some purrr-like things</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/Exceret/lstrrr/blob/main/vignettes/do_purrrlike.Rmd" class="external-link"><code>vignettes/do_purrrlike.Rmd</code></a></small>
@@ -76,9 +80,6 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Exceret/lstrrr" class="external-link">lstrrr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lstrrr</span> v0.1.0 loaded</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="tldr">TL;DR<a class="anchor" aria-label="anchor" href="#tldr"></a>
 </h2>
@@ -211,18 +212,13 @@ functions for handling lists, which can be used alongside
 <p><code>lstrrr</code> use vector to represent the path to the element,
 e.g. <code>c("a", "b", "c")</code>, which is similar to the
 <code>$</code> operator in R.</p>
+<p><img src="do_purrrlike_files/figure-html/foo.svg" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_get.html">list_get</a></span><span class="op">(</span><span class="va">foo</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_get.svg" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>c <span class="op">=</span> <span class="st">"a"</span>, d <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_get.html">list_get</a></span><span class="op">(</span><span class="va">foo</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_set.html">list_set</a></span><span class="op">(</span><span class="va">foo</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ a:List of 1</span></span>
-<span><span class="co">#&gt;   ..$ b:List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ c: chr "a"</span></span>
-<span><span class="co">#&gt;   .. ..$ d: logi TRUE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_set.html">list_set</a></span><span class="op">(</span><span class="va">foo</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"d"</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_set.svg" class="r-plt" alt="" width="700"></p>
 <p>Other functions like <code>list_delete(x, path)</code>,
 <code>list_has(x, path)</code>, <code>list_depth(x)</code>,
 <code>list_path(x)</code> are self-explanatory.</p>
@@ -232,69 +228,50 @@ e.g. <code>c("a", "b", "c")</code>, which is similar to the
 </h2>
 <p>Let’s use the build-in dataset <code>sputnik_1</code> as an
 example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_nleaf.html">list_nleaf</a></span><span class="op">(</span><span class="va">sputnik_1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 104</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_nleaf.html">list_nleaf</a></span><span class="op">(</span><span class="va">sputnik_1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_nleaf.svg" class="r-plt" alt="" width="700"></p>
 <p>You can use <code><a href="../reference/list_flatten.html">list_flatten()</a></code> to flatten a nested list into
 a flattened list (the elements of the list are not nested):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/list_flatten.html">list_flatten</a></span><span class="op">(</span><span class="va">sputnik_1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $meta.dataset</span></span>
-<span><span class="co">#&gt; [1] "sputnik_1"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $meta.title</span></span>
-<span><span class="co">#&gt; [1] "Sputnik 1 mission and spacecraft information"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $meta.description</span></span>
-<span><span class="co">#&gt; [1] "A nested list collecting structured historical, technical, orbital, and cultural information about Sputnik 1, the first artificial Earth satellite."</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_flatten.svg" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Class of v: {.cls {class(v)}}"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Class of v: <span style="color: #0000BB;">&lt;list&gt;</span></span></span>
 <span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Length of v: {.val {length(v)}} (using {.fun length})"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Length of v: <span style="color: #0000BB;">104</span> (using `length()`)</span></span>
 <span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Length of v: {.val {list_nleaf(v)}} (using {.fun list_nleaf})"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Length of v: <span style="color: #0000BB;">104</span> (using `list_nleaf()`)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_flatten_info.svg" class="r-plt" alt="" width="700"></p>
 <p>The names of the elements are the dot-separated paths to the
 elements:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "meta.dataset"     "meta.title"       "meta.description" "meta.language"   </span></span>
-<span><span class="co">#&gt; [5] "meta.created"     "meta.sources"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_flatten_names.svg" class="r-plt" alt="" width="700"></p>
 <p>Separation symbols can be customized. Generally I don’t recommend
-using <code>_</code>, because it’s a common separator in names.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+using <code>_</code> as purrr does, because it’s a common separator in
+names.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/list_flatten.html">list_flatten</a></span><span class="op">(</span><span class="va">sputnik_1</span>, <span class="st">"$"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "meta$dataset"     "meta$title"       "meta$description" "meta$language"   </span></span>
-<span><span class="co">#&gt; [5] "meta$created"     "meta$sources"</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/dollar_sep.svg" class="r-plt" alt="" width="700"></p>
 <p><strong>Recursive mapping is the main difference between
 <code><a href="../reference/list_flatten.html">lstrrr::list_flatten()</a></code> and
 <code><a href="https://purrr.tidyverse.org/reference/list_flatten.html" class="external-link">purrr::list_flatten()</a></code>.</strong>, the former will flatten
 all levels of the list, while the latter will flatten the second level
 of the list (the first level is the list itself).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">v3</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/list_flatten.html" class="external-link">list_flatten</a></span><span class="op">(</span><span class="va">sputnik_1</span>, is_node <span class="op">=</span> <span class="va">is.list</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $meta.dataset</span></span>
-<span><span class="co">#&gt; [1] "sputnik_1"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $meta.title</span></span>
-<span><span class="co">#&gt; [1] "Sputnik 1 mission and spacecraft information"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $meta.description</span></span>
-<span><span class="co">#&gt; [1] "A nested list collecting structured historical, technical, orbital, and cultural information about Sputnik 1, the first artificial Earth satellite."</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">v</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/purrr_list_flatten.svg" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Class of v3: {.cls {class(v3)}}"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Class of v3: <span style="color: #0000BB;">&lt;list&gt;</span></span></span>
 <span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Length of v3: {.val {length(v3)}} (using {.fun length})"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Length of v3: <span style="color: #0000BB;">40</span> (using `length()`)</span></span>
 <span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Length of v3: {.val {list_nleaf(v3)}} (using {.fun list_nleaf})"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Length of v3: <span style="color: #0000BB;">109</span> (using `list_nleaf()`)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/purrr_list_flatten_info.svg" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="functional-programming">Functional Programming<a class="anchor" aria-label="anchor" href="#functional-programming"></a>
@@ -302,56 +279,46 @@ of the list (the first level is the list itself).</p>
 <p>lstrrr provides a set of functions that are similar to
 <code>purrr</code>’s, but for handling nested lists. Just use
 <code>list_*</code> as the prefix of the function name.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>c <span class="op">=</span> <span class="st">"a"</span>, d <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/list_map.html">list_map</a></span><span class="op">(</span><span class="va">foo</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/typeof.html" class="external-link">typeof</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ a: chr "double"</span></span>
-<span><span class="co">#&gt;  $ b:List of 2</span></span>
-<span><span class="co">#&gt;   ..$ c: chr "character"</span></span>
-<span><span class="co">#&gt;   ..$ d: chr "logical"</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/list_map.html">list_map</a></span><span class="op">(</span><span class="va">foo</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/typeof.html" class="external-link">typeof</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_map.svg" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_imap.html">list_imap</a></span><span class="op">(</span><span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">":"</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_imap.svg" class="r-plt" alt="" width="700"></p>
+<p>If you want to map over multiple lists, make sure the lists have the
+same structure.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_walk2.html">list_walk2</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">.y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_walk2.svg" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_imap.html">list_imap</a></span><span class="op">(</span><span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">.y</span>, <span class="st">":"</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ a: chr "a : 1"</span></span>
-<span><span class="co">#&gt;  $ b:List of 2</span></span>
-<span><span class="co">#&gt;   ..$ c: chr "c : a"</span></span>
-<span><span class="co">#&gt;   ..$ d: chr "d : FALSE"</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_walk2.html">list_walk2</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">.y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 11</span></span>
-<span><span class="co">#&gt; aa</span></span>
-<span><span class="co">#&gt; FALSEFALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/list_pwalk.html">list_pwalk</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">foo</span>, <span class="va">foo</span><span class="op">)</span>,</span>
 <span>  \<span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  .progress <span class="op">=</span> <span class="st">"pwalk"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; ⠋ pwalk 0/3 (  0%)   ⠙ pwalk 1/3 ( 33%)</span></span>
-<span><span class="co">#&gt; 111</span></span>
-<span><span class="co">#&gt; ⠹ pwalk 2/3 ( 67%)</span></span>
-<span><span class="co">#&gt; aaa</span></span>
-<span><span class="co">#&gt; ⠸ pwalk 3/3 (100%)</span></span>
-<span><span class="co">#&gt; FALSEFALSEFALSE</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> pwalk 3/3 (100%)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_pwalk.svg" class="r-plt" alt="" width="700"></p>
+<p>Customize the progress bar:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_walk.html">list_walk</a></span><span class="op">(</span></span>
+<span>  <span class="va">sputnik_1</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>  .progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"foo"</span>, type <span class="op">=</span> <span class="st">"download"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_walk.svg" class="r-plt" alt="" width="700"></p>
 <p><code><a href="../reference/list_find.html">list_find()</a></code> is used to find elements that satisfy a
 predicate. Please note that the result is a list with only 1 level.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_find.html">list_find</a></span><span class="op">(</span><span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_find.svg" class="r-plt" alt="" width="700"></p>
+<p><code>list_modify_if</code> is used to modify elements that satisfy a
+predicate. The structure of the list is preserved.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_find.html">list_find</a></span><span class="op">(</span><span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ b.c: chr "a"</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_modify_if.html">list_modify_if</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">is.logical</span>, <span class="op">~</span> <span class="op">!</span><span class="va">.x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ a: num 1</span></span>
-<span><span class="co">#&gt;  $ b:List of 2</span></span>
-<span><span class="co">#&gt;   ..$ c: chr "a"</span></span>
-<span><span class="co">#&gt;   ..$ d: logi TRUE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_modify_if.html">list_modify_if</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">is.logical</span>, <span class="op">~</span> <span class="op">!</span><span class="va">.x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_modify_if.svg" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -1,7 +1,6 @@
 # Convert a Nested List to Tree Data
 
-Creates a tree-style visualization of the structure of a nested list
-using ggplot2.
+Convert a Nested List to Tree Data
 
 ## Usage
 

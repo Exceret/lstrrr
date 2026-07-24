@@ -31,7 +31,12 @@ list_iwalk(.x, .f, ..., .progress = FALSE)
 
   Whether to show a progress
 
-  Use TRUE to turn on a basic progress, use a string to give it a name
+  Use TRUE to turn on a basic progress, use a string to give it a name,
+  or use a list to customize the progress bar (see
+  [`?cli::cli_progress_bar`](https://cli.r-lib.org/reference/cli_progress_bar.html)
+  and
+  https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+  for details).
 
 ## Value
 
@@ -49,120 +54,3 @@ Other lstrrr-purrrlike:
 [`list_pwalk()`](https://exceret.github.io/lstrrr/reference/list_pwalk.md),
 [`list_walk()`](https://exceret.github.io/lstrrr/reference/list_walk.md),
 [`list_walk2()`](https://exceret.github.io/lstrrr/reference/list_walk2.md)
-
-## Examples
-
-``` r
-# \donttest{
-x <- list(
-  a = 1,
-  b = list(
-    x = 2,
-    y = list(i = 3, j = 4)
-  ),
-  unnamed = list(5, z = 6)
-)
-
-# Pass only the leaf name or positional index
-list_imap(x, \(value, name) paste(name, value, sep = " = "))
-#> $a
-#> [1] "a = 1"
-#> 
-#> $b
-#> $b$x
-#> [1] "x = 2"
-#> 
-#> $b$y
-#> $b$y$i
-#> [1] "i = 3"
-#> 
-#> $b$y$j
-#> [1] "j = 4"
-#> 
-#> 
-#> 
-#> $unnamed
-#> $unnamed[[1]]
-#> [1] "1 = 5"
-#> 
-#> $unnamed$z
-#> [1] "z = 6"
-#> 
-#> 
-
-# Pass the full path to each leaf
-list_imap(
-  x,
-  \(value, path) paste(paste(path, collapse = "."), value, sep = " = "),
-  .name = "path"
-)
-#> $a
-#> [1] "a = 1"
-#> 
-#> $b
-#> $b$x
-#> [1] "b.x = 2"
-#> 
-#> $b$y
-#> $b$y$i
-#> [1] "b.y.i = 3"
-#> 
-#> $b$y$j
-#> [1] "b.y.j = 4"
-#> 
-#> 
-#> 
-#> $unnamed
-#> $unnamed[[1]]
-#> [1] "unnamed.1 = 5"
-#> 
-#> $unnamed$z
-#> [1] "unnamed.z = 6"
-#> 
-#> 
-
-# Additional arguments are forwarded to `.f`
-list_imap(
-  x,
-  \(value, name, prefix) paste0(prefix, name, ": ", value),
-  prefix = "leaf_"
-)
-#> $a
-#> [1] "leaf_a: 1"
-#> 
-#> $b
-#> $b$x
-#> [1] "leaf_x: 2"
-#> 
-#> $b$y
-#> $b$y$i
-#> [1] "leaf_i: 3"
-#> 
-#> $b$y$j
-#> [1] "leaf_j: 4"
-#> 
-#> 
-#> 
-#> $unnamed
-#> $unnamed[[1]]
-#> [1] "leaf_1: 5"
-#> 
-#> $unnamed$z
-#> [1] "leaf_z: 6"
-#> 
-#> 
-
-# Data frames are treated as leaves
-x2 <- list(a = data.frame(x = 1:3), b = list(c = 1))
-list_imap(x2, \(value, path) path, .name = "path")
-#> $a
-#> [1] "a"
-#> 
-#> $b
-#> $b$c
-#> [1] "b" "c"
-#> 
-#> 
-
-# }
-```

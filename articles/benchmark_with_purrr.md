@@ -61,13 +61,13 @@ bench_map <- microbenchmark::microbenchmark(
 )
 print(bench_map)
 #> Unit: milliseconds
-#>        expr       min        lq      mean    median        uq       max neval
-#>    purrr_10  1.761258  1.838694  2.408443  1.872108  1.905579 54.435107   100
-#>   lstrrr_10  1.710228  1.774968  1.946225  1.806118  1.829876  6.173861   100
-#>    purrr_50  8.322156  8.590574  9.175828  8.747193  8.948872 13.516656   100
-#>   lstrrr_50  8.259544  8.533382  9.350731  8.655517  8.849798 15.321335   100
-#>   purrr_100 16.682627 17.166356 18.544562 17.386583 18.683235 35.270272   100
-#>  lstrrr_100 16.497082 17.035576 17.800679 17.189807 17.517527 30.718544   100
+#>        expr       min        lq      mean    median        uq      max neval
+#>    purrr_10  3.410271  3.545301  4.297314  3.605756  3.669977 53.54569   100
+#>   lstrrr_10  3.362640  3.458302  3.745305  3.517645  3.576458  8.76341   100
+#>    purrr_50 16.314968 16.993607 18.035075 17.201381 17.527140 22.46480   100
+#>   lstrrr_50 15.859661 16.865977 17.834599 17.047002 17.291966 25.91676   100
+#>   purrr_100 32.662474 34.014725 36.356021 34.439687 38.208565 92.70551   100
+#>  lstrrr_100 32.849042 33.870586 35.940210 34.406588 38.078162 46.77079   100
 ```
 
 ``` r
@@ -104,8 +104,8 @@ bench_depth <- microbenchmark::microbenchmark(
 print(bench_depth)
 #> Unit: microseconds
 #>    expr      min        lq       mean   median       uq      max neval
-#>   purrr 4327.103 4387.1935 4673.24449 4443.334 4601.684 7851.910   100
-#>  lstrrr    2.088    2.3285    4.84954    4.986    5.822   50.562   100
+#>   purrr 3803.545 3911.0955 4241.79746 4036.647 4126.601 7117.593   100
+#>  lstrrr    1.973    2.1985    4.79397    4.722    5.809   37.466   100
 ```
 
 ``` r
@@ -132,9 +132,9 @@ bench_assign <- microbenchmark::microbenchmark(
 )
 print(bench_assign)
 #> Unit: microseconds
-#>    expr    min     lq     mean  median      uq     max neval
-#>   purrr 16.480 16.946 21.80208 17.3285 18.2105 401.061   100
-#>  lstrrr  1.601  1.734  2.30799  1.8600  2.0890  26.844   100
+#>    expr    min      lq     mean median     uq     max neval
+#>   purrr 14.772 15.0575 19.00410 15.378 15.899 332.064   100
+#>  lstrrr  1.462  1.6080  1.96052  1.722  1.857  22.904   100
 ```
 
 ``` r
@@ -161,9 +161,9 @@ bench_modify <- microbenchmark::microbenchmark(
 )
 print(bench_modify)
 #> Unit: microseconds
-#>    expr    min     lq     mean  median      uq     max neval
-#>   purrr 28.647 29.332 32.26117 29.6875 30.4965 196.154   100
-#>  lstrrr  1.468  1.588  1.86693  1.6525  1.7965  15.472   100
+#>    expr    min      lq     mean  median      uq     max neval
+#>   purrr 25.568 26.4195 28.87368 26.8300 27.5010 177.634   100
+#>  lstrrr  1.372  1.5020  1.77978  1.5675  1.7625  16.534   100
 ```
 
 ``` r
@@ -190,9 +190,9 @@ bench_flatten <- microbenchmark::microbenchmark(
 )
 print(bench_flatten)
 #> Unit: microseconds
-#>    expr     min        lq       mean   median        uq        max neval
-#>   purrr 989.926 1054.7475 2396.02249 1109.536 1163.7995 128371.795   100
-#>  lstrrr  33.195   37.5855   45.29723   43.191   49.5155    104.327   100
+#>    expr     min      lq      mean   median       uq      max neval
+#>   purrr 864.655 891.926 972.54582 922.4765 967.9045 3706.761   100
+#>  lstrrr  24.977  29.644  33.35854  31.4470  35.6530   91.887   100
 ```
 
 ``` r
@@ -222,9 +222,9 @@ bench_modify_list <- microbenchmark::microbenchmark(
 )
 print(bench_modify_list)
 #> Unit: microseconds
-#>    expr    min      lq      mean   median       uq      max neval
-#>   utils 624.83 663.963 744.73705 715.4195 754.5365 3296.623   100
-#>  lstrrr  16.17  17.014  18.97193  17.9700  19.5775   75.769   100
+#>    expr     min       lq      mean  median       uq      max neval
+#>   utils 589.677 599.5165 645.96378 610.533 625.7655 3431.082   100
+#>  lstrrr  12.659  13.5500  15.17506  14.161  15.0720   84.285   100
 ```
 
 ``` r
@@ -234,3 +234,54 @@ ggplot2::autoplot(bench_modify_list) +
 ```
 
 ![](benchmark_with_purrr_files/figure-html/viz_modify_list-1.png)
+
+## Parallel Computation
+
+Most of logic is in C implementation, so the acceleration is not that
+obvious.
+
+``` r
+
+set.seed(129)
+mirai::daemons(3L)
+crate <- purrr::in_parallel(
+  \(x) {
+    slow_string_op(x, n = 10)
+  },
+  slow_string_op = slow_string_op
+)
+fn <- function(x) {
+  slow_string_op(x, n = 10)
+}
+
+bench_parallel <- microbenchmark::microbenchmark(
+  lstrrr_parallel = {
+    list_map(files_list, crate)
+  },
+  lstrrr = {
+    list_map(files_list, fn)
+  },
+  purrr = {
+    purrr::map(files, fn)
+  },
+  purrr_parallel = {
+    purrr::map(files, crate)
+  }
+)
+mirai::daemons(0L)
+print(bench_parallel)
+#> Unit: milliseconds
+#>             expr      min       lq     mean   median       uq      max neval
+#>  lstrrr_parallel 3.543438 3.600383 3.887280 3.643948 3.707522 12.08487   100
+#>           lstrrr 3.339055 3.392650 3.521817 3.426360 3.472002 10.98174   100
+#>            purrr 3.372594 3.443064 3.799679 3.480295 3.556849 13.29755   100
+#>   purrr_parallel 8.411927 8.887134 9.381990 9.181231 9.453261 12.97562   100
+```
+
+``` r
+
+ggplot2::autoplot(bench_parallel) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
+![](benchmark_with_purrr_files/figure-html/viz_parallel-1.png)
