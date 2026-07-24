@@ -185,3 +185,43 @@ print(bench_modify_list)
 ggplot2::autoplot(bench_modify_list) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
+
+## Parallel Computation
+
+Most of logic is in C implementation, so the acceleration is not that obvious.
+
+```{r benchmarking_parallel}
+set.seed(129)
+mirai::daemons(3L)
+crate <- purrr::in_parallel(
+  \(x) {
+    slow_string_op(x, n = 10)
+  },
+  slow_string_op = slow_string_op
+)
+fn <- function(x) {
+  slow_string_op(x, n = 10)
+}
+
+bench_parallel <- microbenchmark::microbenchmark(
+  lstrrr_parallel = {
+    list_map(files_list, crate)
+  },
+  lstrrr = {
+    list_map(files_list, fn)
+  },
+  purrr = {
+    purrr::map(files, fn)
+  },
+  purrr_parallel = {
+    purrr::map(files, crate)
+  }
+)
+mirai::daemons(0L)
+print(bench_parallel)
+```
+
+```{r viz_parallel}
+ggplot2::autoplot(bench_parallel) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```

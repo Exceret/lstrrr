@@ -22,11 +22,10 @@ Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{.progress}{Whether to show a progress
 
-Use TRUE to turn on a basic progress, use a string to give it a name}
-}
-\value{
-A list with the same nested structure as \code{.x}, where each leaf has been
-replaced by the result of calling \code{.f} on that leaf.
+Use TRUE to turn on a basic progress, use a string to give it a name,
+or use a list to customize the progress bar (see \code{?cli::cli_progress_bar}
+and https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+for details).}
 }
 \description{
 Map over leaves of two nested lists

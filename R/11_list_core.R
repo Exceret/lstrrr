@@ -58,7 +58,7 @@ list_get <- function(x, path, default = NULL) {
 
 #' Check whether a path exists in a nested list
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #' @family lstrrr_core
 #' @return
 #' A logical scalar:
@@ -98,7 +98,7 @@ list_has <- function(x, path) {
 
 #' Compute nested list depth
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #' @family lstrrr_core
 #' @return
 #' An integer scalar giving the maximum depth of `x`.
@@ -137,7 +137,7 @@ list_depth <- function(x) {
 
 #' Get all leaf paths in a nested list
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #' @family lstrrr_core
 #' @seealso [list_get()], [list_has()]
 #' @return
@@ -180,7 +180,7 @@ list_path <- function(x) {
 
 #' Set a nested element by path
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #' @param value Value to set at `path`.
 #'
 #'   This value replaces the existing element located at `path`. It may be any R
@@ -223,7 +223,7 @@ list_set <- function(x, path, value) {
 
 #' Delete a nested element by path
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #' @family lstrrr_core
 #' @return
 #' A modified copy of `x` with the element at `path` removed.
@@ -259,7 +259,7 @@ list_delete <- function(x, path) {
 #'
 #' Count the number of leaf nodes in a nested list.
 #'
-#' @inherit list_get
+#' @inheritParams list_get
 #'
 #' @return A numeric scalar. Integer when possible, double for very large counts.
 #'

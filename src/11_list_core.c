@@ -1,10 +1,13 @@
-#include <R.h>
-#include <Rinternals.h>
+#include "lstrrr.h"
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
 
-static int is_data_frame(SEXP x)
+/* -------------------------------------------------------------------------- */
+/* shared helpers (declared in lstrrr.h)                                      */
+/* -------------------------------------------------------------------------- */
+
+int is_data_frame(SEXP x)
 {
     SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
     if (cls == R_NilValue) return 0;
@@ -18,10 +21,39 @@ static int is_data_frame(SEXP x)
     return 0;
 }
 
-static int is_plain_list(SEXP x)
+int is_plain_list(SEXP x)
 {
     return TYPEOF(x) == VECSXP && !is_data_frame(x);
 }
+
+SEXP shallow_copy_list(SEXP x)
+{
+    R_xlen_t n = is_plain_list(x) ? XLENGTH(x) : 0;
+    SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
+    for (R_xlen_t i = 0; i < n; i++)
+    {
+        SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
+    }
+    if (is_plain_list(x))
+    {
+        SEXP names = Rf_getAttrib(x, R_NamesSymbol);
+        if (names != R_NilValue)
+        {
+            Rf_setAttrib(out, R_NamesSymbol, names);
+        }
+    }
+    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
+    if (cls != R_NilValue)
+    {
+        Rf_setAttrib(out, R_ClassSymbol, cls);
+    }
+    UNPROTECT(1);
+    return out;
+}
+
+/* -------------------------------------------------------------------------- */
+/* local helpers                                                              */
+/* -------------------------------------------------------------------------- */
 
 static int path_is_string(SEXP path)
 {
@@ -316,26 +348,6 @@ SEXP lstrrr_c_list_flatten(SEXP x, SEXP sep_)
     return out;
 }
 
-
-static SEXP shallow_copy_list(SEXP x)
-{
-    R_xlen_t n = is_plain_list(x) ? XLENGTH(x) : 0;
-    SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
-    for (R_xlen_t i = 0; i < n; i++)
-    {
-        SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
-    }
-    if (is_plain_list(x))
-    {
-        SEXP names = Rf_getAttrib(x, R_NamesSymbol);
-        if (names != R_NilValue)
-        {
-            Rf_setAttrib(out, R_NamesSymbol, names);
-        }
-    }
-    UNPROTECT(1);
-    return out;
-}
 
 static SEXP append_to_list(SEXP x, SEXP key, SEXP value)
 {

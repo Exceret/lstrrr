@@ -20,47 +20,16 @@ Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{.progress}{Whether to show a progress
 
-Use TRUE to turn on a basic progress, use a string to give it a name}
+Use TRUE to turn on a basic progress, use a string to give it a name,
+or use a list to customize the progress bar (see \code{?cli::cli_progress_bar}
+and https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+for details).}
 }
 \value{
 Invisibly returns \code{.x}.
 }
 \description{
 Applies \code{.f} to corresponding leaves of \code{.x} and \code{.y} for side effects.
-}
-\examples{
-\donttest{
-x <- list(
-  a = 1,
-  b = list(
-    x = 2,
-    y = list(i = 3, j = 4)
-  ),
-  unnamed = list(5, z = 6)
-)
-
-# Pass only the leaf name or positional index
-list_imap(x, \(value, name) paste(name, value, sep = " = "))
-
-# Pass the full path to each leaf
-list_imap(
-  x,
-  \(value, path) paste(paste(path, collapse = "."), value, sep = " = "),
-  .name = "path"
-)
-
-# Additional arguments are forwarded to `.f`
-list_imap(
-  x,
-  \(value, name, prefix) paste0(prefix, name, ": ", value),
-  prefix = "leaf_"
-)
-
-# Data frames are treated as leaves
-x2 <- list(a = data.frame(x = 1:3), b = list(c = 1))
-list_imap(x2, \(value, path) path, .name = "path")
-
-}
 }
 \seealso{
 Other lstrrr-purrrlike: 

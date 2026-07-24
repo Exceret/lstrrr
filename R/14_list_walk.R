@@ -2,7 +2,7 @@
 #'
 #' Applies `.f` to each leaf of `x` for side effects.
 #'
-#' @inherit list_map
+#' @inheritParams list_map
 #'
 #' @return Invisibly returns `.x`.
 #' @family lstrrr-purrrlike
@@ -16,7 +16,7 @@ list_walk <- function(.x, .f, ..., .progress = FALSE) {
 #'
 #' Applies `.f` to corresponding leaves of `.x` and `.y` for side effects.
 #'
-#' @inherit list_map2
+#' @inheritParams list_map2
 #'
 #' @return Invisibly returns `.x`.
 #' @family lstrrr-purrrlike
@@ -31,7 +31,7 @@ list_walk2 <- function(.x, .y, .f, ..., .progress = FALSE) {
 #' Applies `.f` to corresponding leaves of multiple nested lists
 #' for side effects.
 #'
-#' @inherit list_pmap
+#' @inheritParams list_pmap
 #'
 #' @return Invisibly returns `.l`.
 #' @family lstrrr-purrrlike
@@ -45,7 +45,7 @@ list_pwalk <- function(.l, .f, ..., .progress = FALSE) {
 #'
 #' Applies `.f` to corresponding leaves of `.x` and `.y` for side effects.
 #'
-#' @inherit list_imap
+#' @inheritParams list_imap
 #'
 #' @return Invisibly returns `.x`.
 #' @family lstrrr-purrrlike

@@ -13,7 +13,10 @@
 #'
 #' @param .progress Whether to show a progress
 #'
-#'   Use TRUE to turn on a basic progress, use a string to give it a name
+#'   Use TRUE to turn on a basic progress, use a string to give it a name,
+#'   or use a list to customize the progress bar (see `?cli::cli_progress_bar`
+#'   and https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+#'   for details).
 #'
 #' @return
 #' A list with the same nested structure as `.x`, where each leaf has been
@@ -62,7 +65,7 @@ list_map <- function(.x, .f, ..., .progress = FALSE) {
 
 #' Map over leaves of two nested lists
 #'
-#' @inherit list_map
+#' @inheritParams list_map
 #' @param .y A nested list. Must have the same structure as `.x`.
 #'
 #' @family lstrrr-purrrlike
@@ -109,7 +112,7 @@ list_map2 <- function(.x, .y, .f, ..., .progress = FALSE) {
 
 #' Map over leaves of multiple nested lists
 #'
-#' @inherit list_map
+#' @inheritParams list_map
 #' @param .l A list of nested lists.
 #' @examples
 #' \donttest{
@@ -158,7 +161,7 @@ list_pmap <- function(.l, .f, ..., .progress = FALSE) {
 
 #' Map over leaves with path (names)
 #'
-#' @inherit list_map
+#' @inheritParams list_map
 #' @param .name A character scalar controlling what identifier is passed to
 #'   `.f`.
 #'

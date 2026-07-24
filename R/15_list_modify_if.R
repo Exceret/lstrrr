@@ -1,7 +1,7 @@
 #' Modify leaves satisfying predicate
 #'
 #' @inheritParams list_map
-#' @inherit list_find
+#' @inheritParams list_find
 #'
 #' @return
 #' A nested list with the same structure and names as `x`, where leaves

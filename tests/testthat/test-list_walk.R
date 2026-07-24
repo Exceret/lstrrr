@@ -296,7 +296,9 @@ test_that("list_pwalk errors on non-coercible .f", {
 
 test_that("list_iwalk passes leaf name to .f", {
   out <- character()
-  list_iwalk(x, function(value, name) out <<- c(out, paste(name, value, sep = "=")))
+  list_iwalk(x, function(value, name) {
+    out <<- c(out, paste(name, value, sep = "="))
+  })
   expect_setequal(out, c("a=1", "x=2", "i=3", "j=4"))
 })
 
@@ -308,9 +310,12 @@ test_that("list_iwalk returns x invisibly", {
 
 test_that("list_iwalk supports formula .f", {
   out <- character()
-  list_iwalk(x, ~ {
-    out <<- c(out, paste(.y, .x, sep = "="))
-  })
+  list_iwalk(
+    x,
+    ~ {
+      out <<- c(out, paste(.y, .x, sep = "="))
+    }
+  )
   expect_setequal(out, c("a=1", "x=2", "i=3", "j=4"))
 })
 
@@ -329,7 +334,9 @@ test_that("list_iwalk forwards ... to .f", {
 test_that("list_iwalk uses positional indices for unnamed elements", {
   lst <- list(10, 20, list(30, 40))
   out <- character()
-  list_iwalk(lst, function(value, name) out <<- c(out, paste(name, value, sep = "=")))
+  list_iwalk(lst, function(value, name) {
+    out <<- c(out, paste(name, value, sep = "="))
+  })
   expect_setequal(out, c("1=10", "2=20", "1=30", "2=40"))
 })
 
@@ -391,7 +398,11 @@ test_that("list_walk2 works with .progress = TRUE", {
 
 test_that("list_pwalk works with .progress = FALSE", {
   out <- numeric()
-  list_pwalk(list(x, x), function(a, b) out <<- c(out, a + b), .progress = FALSE)
+  list_pwalk(
+    list(x, x),
+    function(a, b) out <<- c(out, a + b),
+    .progress = FALSE
+  )
   expect_equal(out, c(2, 4, 6, 8))
 })
 

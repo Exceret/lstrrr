@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 devtools::load_all()
 ```
 
-# lstrrr
+# lstrrr  <a href="https://exceret.github.io/lstrrr/"><img src="man/figures/logo.png" align="right" height="139" alt="lstrrr website" /></a>
 
 <!-- badges: start -->
 [![Project-Status:Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -100,7 +100,7 @@ try(rlist::list.filter(nums, x ~ mean(x) >= 3))
 try(rlist::list.map(nums, f(x, i) ~ sum(x, i)))
 ```
 
-Recursive mapping is the main difference between lstrrr and rlist. lstrrr views the list as a tree, and recursively applies the function to leaf nodes. 
+**Recursive mapping is the main difference between lstrrr and rlist**. lstrrr views the list as a tree, and recursively applies the function to leaf nodes. 
 
 ```{r}
 list_map(nums, \(v) c(min = min(v), max = max(v))) |> str()

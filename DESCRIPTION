@@ -15,9 +15,12 @@ Imports:
     cli,
     rlang
 Suggests:
+    asciicast,
+    carrier,
     ggplot2,
     knitr,
     microbenchmark,
+    mirai,
     purrr,
     rlist,
     rmarkdown,
@@ -30,3 +33,4 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 LazyData: true
+LinkingTo: cli

@@ -120,7 +120,7 @@
 
 #' Convert a Nested List to Tree Data
 #'
-#' @inherit viz_list
+#' @inheritParams viz_list
 #'
 #' @return
 #' A list with two data frames:

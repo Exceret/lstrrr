@@ -10,12 +10,34 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  asciicast_at = "all",
+  asciicast_cpp11_linkingto = "[[cpp11::linking_to(\"cli\")]]"
 )
-```
-
-```{r setup}
-library(lstrrr)
+asciicast::init_knitr_engine(
+  echo = TRUE,
+  echo_input = FALSE,
+  startup = quote({
+    library(lstrrr)
+    data(sputnik_1)
+    options(cli.progress_show_after = 0)
+    options(cli.progress_clear = FALSE)
+    options(cli.progress_format_iterator = NULL)
+    options(cli.progress_format_iterator_nototal = NULL)
+    options(cli.progress_format_tasks = NULL)
+    options(cli.progress_format_tasks_nototal = NULL)
+    options(cli.progress_format_download = NULL)
+    options(cli.progress_format_download_nototal = NULL)
+  })
+)
+options(cli.progress_show_after = 0)
+options(cli.progress_clear = FALSE)
+options(cli.progress_format_iterator = NULL)
+options(cli.progress_format_iterator_nototal = NULL)
+options(cli.progress_format_tasks = NULL)
+options(cli.progress_format_tasks_nototal = NULL)
+options(cli.progress_format_download = NULL)
+options(cli.progress_format_download_nototal = NULL)
 ```
 
 ## TL;DR
@@ -60,15 +82,15 @@ lstrrr is designed to be a [purrr](https://github.com/tidyverse/purrr)-like pack
 
 `lstrrr` use vector to represent the path to the element, e.g. `c("a", "b", "c")`, which is similar to the `$` operator in R.
 
-```{r}
+```{asciicast,foo, echo = FALSE}
 foo <- list(a = list(b = list(c = "a", d = FALSE)))
 ```
 
-```{r}
+```{asciicast,list_get}
 list_get(foo, c("a", "b", "d"))
 ```
 
-```{r}
+```{asciicast,list_set}
 list_set(foo, c("a", "b", "d"), TRUE) |> str()
 ```
 
@@ -78,18 +100,18 @@ Other functions like `list_delete(x, path)`, `list_has(x, path)`, `list_depth(x)
 
 Let's use the build-in dataset `sputnik_1` as an example:
 
-```{r}
+```{asciicast,list_nleaf}
 list_nleaf(sputnik_1)
 ```
 
 You can use `list_flatten()` to flatten a nested list into a flattened list (the elements of the list are not nested):
 
-```{r}
+```{asciicast,list_flatten}
 v <- list_flatten(sputnik_1)
 head(v, 3)
 ```
 
-```{r}
+```{asciicast,list_flatten_info}
 cli::cli_alert_info("Class of v: {.cls {class(v)}}")
 cli::cli_alert_info("Length of v: {.val {length(v)}} (using {.fun length})")
 cli::cli_alert_info(
@@ -99,25 +121,25 @@ cli::cli_alert_info(
 
 The names of the elements are the dot-separated paths to the elements:
 
-```{r}
+```{asciicast,list_flatten_names}
 head(names(v))
 ```
 
-Separation symbols can be customized. Generally I don't recommend using `_`, because it's a common separator in names.
+Separation symbols can be customized. Generally I don't recommend using `_` as purrr does, because it's a common separator in names.
 
-```{r}
+```{asciicast,dollar_sep}
 v2 <- list_flatten(sputnik_1, "$")
 head(names(v2))
 ```
 
 **Recursive mapping is the main difference between `lstrrr::list_flatten()` and `purrr::list_flatten()`.**, the former will flatten all levels of the list, while the latter will flatten the second level of the list (the first level is the list itself).
 
-```{r}
+```{asciicast,purrr_list_flatten}
 v3 <- purrr::list_flatten(sputnik_1, is_node = is.list)
 head(v, 3)
 ```
 
-```{r}
+```{asciicast,purrr_list_flatten_info}
 cli::cli_alert_info("Class of v3: {.cls {class(v3)}}")
 cli::cli_alert_info("Length of v3: {.val {length(v3)}} (using {.fun length})")
 cli::cli_alert_info(
@@ -130,37 +152,50 @@ cli::cli_alert_info(
 
 lstrrr provides a set of functions that are similar to `purrr`'s, but for handling nested lists. Just use `list_*` as the prefix of the function name.
 
-```{r}
+```{asciicast,list_map}
 foo <- list(a = 1, b = list(c = "a", d = FALSE))
 
 list_map(foo, \(x) typeof(x)) |> str()
 ```
 
-```{r}
+```{asciicast,list_imap}
 list_imap(foo, ~ paste(.y, ":", .x)) |> str()
 ```
 
-```{r}
+If you want to map over multiple lists, make sure the lists have the same structure.
+
+```{asciicast,list_walk2}
 list_walk2(foo, foo, ~ message(paste0(.x, .y)))
 ```
 
-```{r}
+```{asciicast,list_pwalk, cache = TRUE}
 list_pwalk(
   list(foo, foo, foo),
   \(x, y, z) {
-    message(paste0(x, y, z))
     Sys.sleep(0.5)
   },
   .progress = "pwalk"
 )
 ```
 
+Customize the progress bar:
+
+```{asciicast,list_walk, cache = TRUE}
+list_walk(
+  sputnik_1,
+  ~ Sys.sleep(0.05),
+  .progress = list(name = "foo", type = "download")
+)
+```
+
 `list_find()` is used to find elements that satisfy a predicate. Please note that the result is a list with only 1 level.
 
-```{r}
+```{asciicast,list_find}
 list_find(foo, ~ is.character(.x)) |> str()
 ```
 
-```{r}
+`list_modify_if` is used to modify elements that satisfy a predicate. The structure of the list is preserved.
+
+```{asciicast,list_modify_if}
 list_modify_if(foo, is.logical, ~ !.x) |> str()
 ```

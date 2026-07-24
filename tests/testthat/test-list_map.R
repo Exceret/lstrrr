@@ -104,8 +104,12 @@ test_that("list_map2 handles different-length lists", {
   a <- list(x = 1, y = list(z = 2))
   b <- list(x = 10)
   out <- list_map2(a, b, function(v1, v2) {
-    if (is.null(v1)) return("v1-missing")
-    if (is.null(v2)) return("v2-missing")
+    if (is.null(v1)) {
+      return("v1-missing")
+    }
+    if (is.null(v2)) {
+      return("v2-missing")
+    }
     v1 + v2
   })
   expect_identical(out, list(x = 11, y = "v2-missing"))
@@ -186,8 +190,12 @@ test_that("list_pmap handles different-length sub-lists", {
   a <- list(x = 1, y = list(z = 2))
   b <- list(x = 10)
   out <- list_pmap(list(a, b), function(v1, v2) {
-    if (is.null(v1)) return("v1-missing")
-    if (is.null(v2)) return("v2-missing")
+    if (is.null(v1)) {
+      return("v1-missing")
+    }
+    if (is.null(v2)) {
+      return("v2-missing")
+    }
     v1 + v2
   })
   expect_identical(out, list(x = 11, y = "v2-missing"))

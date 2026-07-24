@@ -44,8 +44,7 @@ If no nodes or edges are produced, empty data frames with the same column
 structure are returned.
 }
 \description{
-Creates a tree-style visualization of the structure of a nested list using
-ggplot2.
+Convert a Nested List to Tree Data
 }
 \examples{
 x <- list(

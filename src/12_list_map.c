@@ -1,35 +1,16 @@
-#include <R.h>
-#include <Rinternals.h>
+#include "lstrrr.h"
 #include <R_ext/Rdynload.h>
 #include <R_ext/Print.h>
 #include <R_ext/Utils.h>
+#include <cli/progress.h>
 
 #include <string.h>
 #include <limits.h>
 #include <stdio.h>
 
-static int is_data_frame(SEXP x)
-{
-    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
-    if (cls == R_NilValue) return 0;
-    for (R_xlen_t i = 0; i < XLENGTH(cls); i++)
-    {
-        if (strcmp(CHAR(STRING_ELT(cls, i)), "data.frame") == 0)
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-static int nleaf_is_plain_list(SEXP x)
-{
-    return TYPEOF(x) == VECSXP && !is_data_frame(x);
-}
-
 static R_xlen_t nleaf_rec(SEXP x)
 {
-    if (!nleaf_is_plain_list(x))
+    if (!is_plain_list(x))
     {
         return 1;
     }
@@ -58,25 +39,18 @@ SEXP lstrrr_c_list_nleaf(SEXP x)
 }
 
 /* -------------------------------------------------------------------------- */
-/* spinner progress                                                           */
+/* cli progress                                                               */
 /* -------------------------------------------------------------------------- */
 
 typedef struct
 {
     int enabled;
-    const char *name;
+    SEXP bar;
     R_xlen_t total;
     R_xlen_t current;
     R_xlen_t seen;
-    int frame;
-} spinner_t;
-
-static const char *spinner_frames[] =
-{
-    "\xE2\xA0\x8B", "\xE2\xA0\x99", "\xE2\xA0\xB9", "\xE2\xA0\xB8",
-    "\xE2\xA0\xBC", "\xE2\xA0\xB4", "\xE2\xA0\xA6", "\xE2\xA0\xA7",
-    "\xE2\xA0\x87", "\xE2\xA0\x8F"
-};
+    int protect_count;
+} progress_t;
 
 static int progress_enabled(SEXP progress)
 {
@@ -86,81 +60,183 @@ static int progress_enabled(SEXP progress)
     {
         return 1;
     }
-    if (TYPEOF(progress) == STRSXP)
+    if (TYPEOF(progress) == STRSXP &&
+            XLENGTH(progress) == 1 &&
+            STRING_ELT(progress, 0) != NA_STRING)
+    {
+        return 1;
+    }
+    if (TYPEOF(progress) == VECSXP)
     {
         return 1;
     }
     return 0;
 }
 
-static const char *progress_name(SEXP progress, const char *default_name)
+static int chr_nonempty(SEXP x)
 {
-    if (TYPEOF(progress) == STRSXP &&
-            XLENGTH(progress) == 1 &&
-            STRING_ELT(progress, 0) != NA_STRING &&
-            strlen(CHAR(STRING_ELT(progress, 0))) > 0)
-    {
-        return CHAR(STRING_ELT(progress, 0));
-    }
-    return default_name;
+    return x != NA_STRING && strlen(CHAR(x)) > 0;
 }
 
-static void spinner_render(spinner_t *pb, int done)
+static int named_list_has(SEXP x, const char *key)
 {
-    if (!pb->enabled)
+    if (TYPEOF(x) != VECSXP)
     {
-        return;
+        return 0;
     }
-    double pct = 100.0;
-    if (pb->total > 0)
+    SEXP nms = Rf_getAttrib(x, R_NamesSymbol);
+    if (nms == R_NilValue)
     {
-        pct = 100.0 * ((double) pb->current / (double) pb->total);
-        if (pct > 100.0)
+        return 0;
+    }
+    for (R_xlen_t i = 0; i < XLENGTH(x); i++)
+    {
+        SEXP nm = STRING_ELT(nms, i);
+        if (nm == NA_STRING)
         {
-            pct = 100.0;
+            continue;
+        }
+        if (strcmp(CHAR(nm), key) == 0)
+        {
+            return 1;
         }
     }
-    const char *mark;
-    if (done)
-    {
-        mark = "\033[32m\xE2\x9C\x94\033[0m";
-    }
-    else
-    {
-        mark = spinner_frames[pb->frame % 10];
-    }
-    Rprintf(
-        "\r%s %s %.0f/%.0f (%3.0f%%)   ",
-        mark,
-        pb->name,
-        (double) pb->current,
-        (double) pb->total,
-        pct
-    );
-    if (done)
-    {
-        Rprintf("\n");
-    }
-    R_FlushConsole();
+    return 0;
 }
 
-static void spinner_init(
-    spinner_t *pb,
+static R_xlen_t named_list_count_named(SEXP x)
+{
+    if (TYPEOF(x) != VECSXP)
+    {
+        return 0;
+    }
+    SEXP nms = Rf_getAttrib(x, R_NamesSymbol);
+    if (nms == R_NilValue)
+    {
+        return 0;
+    }
+    R_xlen_t total = 0;
+    for (R_xlen_t i = 0; i < XLENGTH(x); i++)
+    {
+        SEXP nm = STRING_ELT(nms, i);
+        if (nm != NA_STRING && strlen(CHAR(nm)) > 0)
+        {
+            total++;
+        }
+    }
+    return total;
+}
+
+static SEXP progress_make_config(SEXP progress, const char *default_name)
+{
+    int is_config = TYPEOF(progress) == VECSXP;
+    int has_user_name = is_config && named_list_has(progress, "name");
+    int has_user_type = is_config && named_list_has(progress, "type");
+    int has_user_clear = is_config && named_list_has(progress, "clear");
+    int has_user_auto = is_config && named_list_has(progress, "auto_terminate");
+    int add_name = 0;
+    if (!is_config &&
+            TYPEOF(progress) == STRSXP &&
+            XLENGTH(progress) == 1 &&
+            chr_nonempty(STRING_ELT(progress, 0)))
+    {
+        add_name = 1;
+    }
+    else if (!has_user_name &&
+             default_name != NULL &&
+             strlen(default_name) > 0)
+    {
+        add_name = 1;
+    }
+    int add_type = !has_user_type;
+    int add_clear = !has_user_clear;
+    int add_auto = !has_user_auto;
+    R_xlen_t user_n = is_config ? named_list_count_named(progress) : 0;
+    R_xlen_t n = user_n + add_name + add_type + add_clear + add_auto;
+    SEXP config = PROTECT(Rf_allocVector(VECSXP, n));
+    SEXP nms = PROTECT(Rf_allocVector(STRSXP, n));
+    R_xlen_t j = 0;
+    if (is_config)
+    {
+        SEXP user_names = Rf_getAttrib(progress, R_NamesSymbol);
+        if (user_names != R_NilValue)
+        {
+            for (R_xlen_t i = 0; i < XLENGTH(progress); i++)
+            {
+                SEXP nm = STRING_ELT(user_names, i);
+                if (nm == NA_STRING || strlen(CHAR(nm)) == 0)
+                {
+                    continue;
+                }
+                SET_VECTOR_ELT(config, j, VECTOR_ELT(progress, i));
+                SET_STRING_ELT(nms, j, nm);
+                j++;
+            }
+        }
+    }
+    if (add_name)
+    {
+        if (!is_config &&
+                TYPEOF(progress) == STRSXP &&
+                XLENGTH(progress) == 1 &&
+                chr_nonempty(STRING_ELT(progress, 0)))
+        {
+            SET_VECTOR_ELT(config, j, Rf_ScalarString(STRING_ELT(progress, 0)));
+        }
+        else
+        {
+            SET_VECTOR_ELT(config, j, Rf_mkString(default_name));
+        }
+        SET_STRING_ELT(nms, j, Rf_mkChar("name"));
+        j++;
+    }
+    if (add_type)
+    {
+        SET_VECTOR_ELT(config, j, Rf_mkString("iterator"));
+        SET_STRING_ELT(nms, j, Rf_mkChar("type"));
+        j++;
+    }
+    if (add_clear)
+    {
+        SET_VECTOR_ELT(config, j, Rf_ScalarLogical(1));
+        SET_STRING_ELT(nms, j, Rf_mkChar("clear"));
+        j++;
+    }
+    if (add_auto)
+    {
+        SET_VECTOR_ELT(config, j, Rf_ScalarLogical(0));
+        SET_STRING_ELT(nms, j, Rf_mkChar("auto_terminate"));
+        j++;
+    }
+    Rf_setAttrib(config, R_NamesSymbol, nms);
+    UNPROTECT(2);
+    return config;
+}
+
+static void progress_init(
+    progress_t *pb,
     SEXP progress,
     R_xlen_t total,
     const char *default_name
 )
 {
     pb->enabled = progress_enabled(progress) && total > 0;
-    pb->name = progress_name(progress, default_name);
+    pb->bar = R_NilValue;
     pb->total = total;
     pb->current = 0;
     pb->seen = 0;
-    pb->frame = 0;
-    spinner_render(pb, 0);
+    pb->protect_count = 0;
+    if (!pb->enabled)
+    {
+        return;
+    }
+    SEXP config = PROTECT(progress_make_config(progress, default_name));
+    pb->bar = PROTECT(cli_progress_bar((double) total, config));
+    pb->protect_count = 1;
+    UNPROTECT(1);
 }
 
-static void spinner_tick(spinner_t *pb)
+static void progress_tick(progress_t *pb)
 {
     pb->seen++;
     if (pb->seen % 128 == 0)
@@ -172,18 +248,36 @@ static void spinner_tick(spinner_t *pb)
         return;
     }
     pb->current++;
-    pb->frame++;
-    spinner_render(pb, 0);
+    double current = (double) pb->current;
+    if (pb->current > pb->total)
+    {
+        current = (double) pb->total;
+    }
+    if (CLI_SHOULD_TICK)
+    {
+        cli_progress_set(pb->bar, current);
+    }
 }
 
-static void spinner_done(spinner_t *pb)
+static void progress_done(progress_t *pb)
 {
     if (!pb->enabled)
     {
         return;
     }
-    pb->current = pb->total;
-    spinner_render(pb, 1);
+    cli_progress_update(
+        pb->bar,
+        (double) pb->total,
+        -1.0,
+        1
+    );
+    cli_progress_done(pb->bar);
+    if (pb->protect_count > 0)
+    {
+        UNPROTECT(pb->protect_count);
+        pb->protect_count = 0;
+    }
+    pb->bar = R_NilValue;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -298,9 +392,9 @@ static SEXP path_append(SEXP path, SEXP key)
 /* list_map                                                                   */
 /* -------------------------------------------------------------------------- */
 
-static SEXP rec_map(SEXP x, SEXP f, SEXP dots, SEXP env, spinner_t *pb)
+static SEXP rec_map(SEXP x, SEXP f, SEXP dots, SEXP env, progress_t *pb)
 {
-    if (nleaf_is_plain_list(x))
+    if (is_plain_list(x))
     {
         R_xlen_t n = XLENGTH(x);
         SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
@@ -314,7 +408,7 @@ static SEXP rec_map(SEXP x, SEXP f, SEXP dots, SEXP env, spinner_t *pb)
         UNPROTECT(1);
         return out;
     }
-    spinner_tick(pb);
+    progress_tick(pb);
     SEXP call = make_call1(f, x, dots);
     SEXP ans = PROTECT(Rf_eval(call, env));
     UNPROTECT(2);
@@ -329,10 +423,10 @@ SEXP lstrrr_c_list_map(
     SEXP env
 )
 {
-    spinner_t pb;
-    spinner_init(&pb, progress, nleaf_rec(x), "Task");
+    progress_t pb;
+    progress_init(&pb, progress, nleaf_rec(x), "");
     SEXP out = PROTECT(rec_map(x, f, dots, env, &pb));
-    spinner_done(&pb);
+    progress_done(&pb);
     UNPROTECT(1);
     return out;
 }
@@ -347,10 +441,10 @@ static SEXP rec_map2(
     SEXP f,
     SEXP dots,
     SEXP env,
-    spinner_t *pb
+    progress_t *pb
 )
 {
-    if (nleaf_is_plain_list(x) && nleaf_is_plain_list(y))
+    if (is_plain_list(x) && is_plain_list(y))
     {
         R_xlen_t nx = XLENGTH(x);
         R_xlen_t ny = XLENGTH(y);
@@ -377,7 +471,7 @@ static SEXP rec_map2(
         UNPROTECT(1);
         return out;
     }
-    spinner_tick(pb);
+    progress_tick(pb);
     SEXP call = make_call2(f, x, y, dots);
     SEXP ans = PROTECT(Rf_eval(call, env));
     UNPROTECT(2);
@@ -393,10 +487,10 @@ SEXP lstrrr_c_list_map2(
     SEXP env
 )
 {
-    spinner_t pb;
-    spinner_init(&pb, progress, nleaf_rec(x), "map2");
+    progress_t pb;
+    progress_init(&pb, progress, nleaf_rec(x), "");
     SEXP out = PROTECT(rec_map2(x, y, f, dots, env, &pb));
-    spinner_done(&pb);
+    progress_done(&pb);
     UNPROTECT(1);
     return out;
 }
@@ -409,7 +503,7 @@ static int all_plain_lists(SEXP xs)
 {
     for (R_xlen_t i = 0; i < XLENGTH(xs); i++)
     {
-        if (!nleaf_is_plain_list(VECTOR_ELT(xs, i)))
+        if (!is_plain_list(VECTOR_ELT(xs, i)))
         {
             return 0;
         }
@@ -417,7 +511,7 @@ static int all_plain_lists(SEXP xs)
     return 1;
 }
 
-static SEXP rec_pmap(SEXP xs, SEXP f, SEXP dots, SEXP env, spinner_t *pb)
+static SEXP rec_pmap(SEXP xs, SEXP f, SEXP dots, SEXP env, progress_t *pb)
 {
     R_xlen_t k = XLENGTH(xs);
     if (k == 0)
@@ -462,7 +556,7 @@ static SEXP rec_pmap(SEXP xs, SEXP f, SEXP dots, SEXP env, spinner_t *pb)
         UNPROTECT(1);
         return out;
     }
-    spinner_tick(pb);
+    progress_tick(pb);
     SEXP call = make_call_values(f, xs, 1, dots);
     SEXP ans = PROTECT(Rf_eval(call, env));
     UNPROTECT(2);
@@ -485,10 +579,10 @@ SEXP lstrrr_c_list_pmap(
     {
         Rf_error("`.l` must contain at least one element.");
     }
-    spinner_t pb;
-    spinner_init(&pb, progress, nleaf_rec(VECTOR_ELT(xs, 0)), "pmap");
+    progress_t pb;
+    progress_init(&pb, progress, nleaf_rec(VECTOR_ELT(xs, 0)), "");
     SEXP out = PROTECT(rec_pmap(xs, f, dots, env, &pb));
-    spinner_done(&pb);
+    progress_done(&pb);
     UNPROTECT(1);
     return out;
 }
@@ -502,12 +596,12 @@ static SEXP rec_imap(
     SEXP f,
     SEXP dots,
     SEXP env,
-    spinner_t *pb,
+    progress_t *pb,
     SEXP id,
     int use_path
 )
 {
-    if (nleaf_is_plain_list(x))
+    if (is_plain_list(x))
     {
         R_xlen_t n = XLENGTH(x);
         SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
@@ -537,7 +631,7 @@ static SEXP rec_imap(
         UNPROTECT(1);
         return out;
     }
-    spinner_tick(pb);
+    progress_tick(pb);
     SEXP call = make_call2(f, x, id, dots);
     SEXP ans = PROTECT(Rf_eval(call, env));
     UNPROTECT(2);
@@ -560,13 +654,13 @@ SEXP lstrrr_c_list_imap(
     {
         use_path = 1;
     }
-    spinner_t pb;
-    spinner_init(&pb, progress, nleaf_rec(x), use_path ? "imap-path" : "imap");
+    progress_t pb;
+    progress_init(&pb, progress, nleaf_rec(x), "");
     SEXP id = PROTECT(Rf_allocVector(STRSXP, 0));
     SEXP out = PROTECT(
                    rec_imap(x, f, dots, env, &pb, id, use_path)
                );
-    spinner_done(&pb);
+    progress_done(&pb);
     UNPROTECT(2);
     return out;
 }

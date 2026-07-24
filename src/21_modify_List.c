@@ -1,28 +1,5 @@
-#include <R.h>
-#include <Rinternals.h>
+#include "lstrrr.h"
 #include <string.h>
-
-static int is_data_frame(SEXP x)
-{
-    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
-    if (cls == R_NilValue)
-    {
-        return 0;
-    }
-    for (R_xlen_t i = 0; i < XLENGTH(cls); i++)
-    {
-        if (strcmp(CHAR(STRING_ELT(cls, i)), "data.frame") == 0)
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-static int is_plain_list(SEXP x)
-{
-    return TYPEOF(x) == VECSXP && !is_data_frame(x);
-}
 
 static int is_valid_name(SEXP name)
 {
@@ -89,28 +66,6 @@ static SEXP append_value(SEXP x, SEXP key, SEXP value, int has_key)
         SET_STRING_ELT(out_names, n, has_key ? key : blank);
         Rf_setAttrib(out, R_NamesSymbol, out_names);
         UNPROTECT(1);
-    }
-    SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
-    if (cls != R_NilValue)
-    {
-        Rf_setAttrib(out, R_ClassSymbol, cls);
-    }
-    UNPROTECT(1);
-    return out;
-}
-
-static SEXP shallow_copy_list(SEXP x)
-{
-    R_xlen_t n = XLENGTH(x);
-    SEXP out = PROTECT(Rf_allocVector(VECSXP, n));
-    for (R_xlen_t i = 0; i < n; i++)
-    {
-        SET_VECTOR_ELT(out, i, VECTOR_ELT(x, i));
-    }
-    SEXP names = Rf_getAttrib(x, R_NamesSymbol);
-    if (names != R_NilValue)
-    {
-        Rf_setAttrib(out, R_NamesSymbol, names);
     }
     SEXP cls = Rf_getAttrib(x, R_ClassSymbol);
     if (cls != R_NilValue)

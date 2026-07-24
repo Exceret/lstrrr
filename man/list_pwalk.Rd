@@ -17,7 +17,10 @@ Additional arguments supplied through \code{...} are passed on to \code{.f}.}
 
 \item{.progress}{Whether to show a progress
 
-Use TRUE to turn on a basic progress, use a string to give it a name}
+Use TRUE to turn on a basic progress, use a string to give it a name,
+or use a list to customize the progress bar (see \code{?cli::cli_progress_bar}
+and https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+for details).}
 }
 \value{
 Invisibly returns \code{.l}.
@@ -25,32 +28,6 @@ Invisibly returns \code{.l}.
 \description{
 Applies \code{.f} to corresponding leaves of multiple nested lists
 for side effects.
-}
-\examples{
-\donttest{
-x <- list(
-  a = 1,
-  b = list(
-    x = 1,
-    y = list(i = 1, j = 2)
-  )
-)
-list_pmap(list(x,x,x), function(x,y,z) (x + y) *z)
-# $a
-# [1] 2
-#
-# $b
-# $b$x
-# [1] 2
-#
-# $b$y
-# $b$y$i
-# [1] 2
-#
-# $b$y$j
-# [1] 8
-
-}
 }
 \seealso{
 Other lstrrr-purrrlike: 

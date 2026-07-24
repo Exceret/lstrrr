@@ -29,7 +29,10 @@ Must be one of:
 
 \item{.progress}{Whether to show a progress
 
-Use TRUE to turn on a basic progress, use a string to give it a name}
+Use TRUE to turn on a basic progress, use a string to give it a name,
+or use a list to customize the progress bar (see \code{?cli::cli_progress_bar}
+and https://cli.r-lib.org/articles/progress-advanced.html#cli_progress_bar
+for details).}
 }
 \value{
 A list with the same nested structure as \code{.x}, where each leaf has been

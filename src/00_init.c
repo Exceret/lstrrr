@@ -1,5 +1,4 @@
-#include <R.h>
-#include <Rinternals.h>
+#include "lstrrr.h"
 #include <R_ext/Rdynload.h>
 
 SEXP lstrrr_c_modify_list(SEXP x, SEXP val, SEXP keep_null);
