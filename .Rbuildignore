@@ -71,3 +71,5 @@
 ^vignettes/articles$
 ^index_files$
 ^data-raw$
+
+markdown_strict/

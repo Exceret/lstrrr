@@ -61,6 +61,7 @@ list_has(x, c("df", "z")) # FALSE
 Other lstrrr_core: 
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
+\code{\link{list_find_value}()},
 \code{\link{list_get}()},
 \code{\link{list_nleaf}()},
 \code{\link{list_path}()},

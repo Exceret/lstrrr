@@ -34,6 +34,14 @@
 <td><code>list_path(x)</code></td>
 <td>Get paths to all leaf nodes</td>
 </tr>
+<tr>
+<td><code>list_nleaf(x)</code></td>
+<td>Count leaf nodes</td>
+</tr>
+<tr>
+<td><code>list_find_value(x, val)</code></td>
+<td>Find paths where value matches</td>
+</tr>
 </tbody>
 </table>
 
@@ -247,6 +255,21 @@ note that the result is a list with only 1 level.
     list_find(foo, ~ is.character(.x)) |> str()
 
 ![](do_purrrlike_files/figure-markdown_strict//list_find.svg)
+
+`list_find_value()` is used to find all paths where the element is
+identical to a given value. Unlike `list_find()`, which matches by
+predicate, `list_find_value()` matches by value using `identical()`
+semantics.
+
+    x <- list(
+      a = 1,
+      b = list(c = 2, d = list(e = 1)),
+      list(1)
+    )
+
+    list_find_value(x, 1) |> str()
+
+![](do_purrrlike_files/figure-markdown_strict//list_find_value.svg)
 
 `list_modify_if` is used to modify elements that satisfy a predicate.
 The structure of the list is preserved.

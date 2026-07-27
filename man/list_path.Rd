@@ -54,6 +54,7 @@ list_path(list(a = data.frame(x = 1:3), b = list(c = 1)))
 Other lstrrr_core: 
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
+\code{\link{list_find_value}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
 \code{\link{list_nleaf}()},

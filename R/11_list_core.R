@@ -274,3 +274,28 @@ list_delete <- function(x, path) {
 list_nleaf <- function(x) {
   .Call("lstrrr_c_list_nleaf", x, PACKAGE = "lstrrr")
 }
+
+
+#' Find Paths Containing a Given Value
+#'
+#' Traverse a nested list and return all paths whose element is identical
+#' to `value`.
+#'
+#' @inheritParams list_get
+#' @param value Value to find.
+#'
+#' @return A list of character vectors, or `NULL` if no match is found.
+#'
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(c = 2, d = list(e = 1)),
+#'   list(1)
+#' )
+#'
+#' list_find_value(x, 1)
+#' @family lstrrr_core
+#' @export
+list_find_value <- function(x, value) {
+  .Call("lstrrr_c_list_find_val", x, value, PACKAGE = "lstrrr")
+}

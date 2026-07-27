@@ -16,6 +16,7 @@ reference:
       - list_delete
       - list_depth
       - list_find
+      - list_find_value
       - list_get
       - list_has
       - list_set

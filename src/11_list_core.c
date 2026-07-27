@@ -534,3 +534,170 @@ SEXP lstrrr_c_list_delete(SEXP x, SEXP path)
     return R_NilValue;
 }
 
+/*
+ * R identical() default-like flags:
+ *
+ * num.eq = TRUE
+ * single.NA = TRUE
+ * attrib.as.set = TRUE
+ * ignore.bytecode = TRUE
+ * ignore.environment = FALSE
+ * ignore.srcref = TRUE
+ * extptr.as.ref = FALSE
+ *
+ * 1 + 2 + 4 + 8 + 32 = 47
+ */
+#define LSTRRR_IDENTICAL_FLAGS 47
+
+typedef struct
+{
+    SEXP data;
+    R_xlen_t size;
+    R_xlen_t capacity;
+    int protect_count;
+} list_find_val_builder;
+
+static int list_find_val_equal(SEXP x, SEXP value)
+{
+    return R_compute_identical(x, value, LSTRRR_IDENTICAL_FLAGS);
+}
+
+static void list_find_val_builder_init(list_find_val_builder *b)
+{
+    b->capacity = 64;
+    b->size = 0;
+    b->data = PROTECT(Rf_allocVector(VECSXP, b->capacity));
+    b->protect_count = 1;
+}
+
+static void list_find_val_builder_grow(list_find_val_builder *b)
+{
+    R_xlen_t new_capacity = b->capacity * 2;
+
+    SEXP new_data = PROTECT(Rf_allocVector(VECSXP, new_capacity));
+
+    for (R_xlen_t i = 0; i < b->size; i++)
+    {
+        SET_VECTOR_ELT(new_data, i, VECTOR_ELT(b->data, i));
+    }
+
+    b->data = new_data;
+    b->capacity = new_capacity;
+    b->protect_count++;
+}
+
+static void list_find_val_builder_push(list_find_val_builder *b, SEXP path)
+{
+    if (b->size >= b->capacity)
+    {
+        list_find_val_builder_grow(b);
+    }
+
+    SET_VECTOR_ELT(b->data, b->size, path);
+    b->size++;
+}
+
+static SEXP list_find_val_index_key(R_xlen_t i)
+{
+    char buf[64];
+
+    snprintf(buf, sizeof(buf), "%lld", (long long) i + 1);
+
+    return Rf_mkChar(buf);
+}
+
+static SEXP list_find_val_child_key(SEXP names, R_xlen_t i)
+{
+    if (names != R_NilValue && i < XLENGTH(names))
+    {
+        SEXP key = STRING_ELT(names, i);
+
+        if (key != NA_STRING && strlen(CHAR(key)) > 0)
+        {
+            return key;
+        }
+    }
+
+    return list_find_val_index_key(i);
+}
+
+static SEXP list_find_val_path_push(SEXP path, SEXP key)
+{
+    R_xlen_t n = XLENGTH(path);
+
+    SEXP out = PROTECT(Rf_allocVector(STRSXP, n + 1));
+
+    for (R_xlen_t i = 0; i < n; i++)
+    {
+        SET_STRING_ELT(out, i, STRING_ELT(path, i));
+    }
+
+    SET_STRING_ELT(out, n, key);
+
+    UNPROTECT(1);
+    return out;
+}
+
+static void list_find_val_walk(SEXP x, SEXP value, SEXP path, list_find_val_builder *b)
+{
+    if (!is_plain_list(x))
+    {
+        return;
+    }
+
+    SEXP names = Rf_getAttrib(x, R_NamesSymbol);
+
+    for (R_xlen_t i = 0; i < XLENGTH(x); i++)
+    {
+        SEXP child = VECTOR_ELT(x, i);
+        SEXP key = list_find_val_child_key(names, i);
+
+        SEXP child_path = PROTECT(list_find_val_path_push(path, key));
+
+        /*
+         * Compare every list element, including intermediate list nodes.
+         */
+        if (list_find_val_equal(child, value))
+        {
+            list_find_val_builder_push(b, child_path);
+        }
+
+        if (is_plain_list(child))
+        {
+            list_find_val_walk(child, value, child_path, b);
+        }
+
+        UNPROTECT(1);
+    }
+}
+
+SEXP lstrrr_c_list_find_val(SEXP x, SEXP value)
+{
+    if (!is_plain_list(x))
+    {
+        Rf_error("`x` must be a list.");
+    }
+
+    list_find_val_builder b;
+    list_find_val_builder_init(&b);
+
+    SEXP root = PROTECT(Rf_allocVector(STRSXP, 0));
+
+    list_find_val_walk(x, value, root, &b);
+
+    if (b.size == 0)
+    {
+        UNPROTECT(b.protect_count + 1);
+        return R_NilValue;
+    }
+
+    SEXP out = PROTECT(Rf_allocVector(VECSXP, b.size));
+
+    for (R_xlen_t i = 0; i < b.size; i++)
+    {
+        SET_VECTOR_ELT(out, i, VECTOR_ELT(b.data, i));
+    }
+
+    UNPROTECT(b.protect_count + 2);
+    return out;
+}

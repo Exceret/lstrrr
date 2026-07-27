@@ -1,5 +1,5 @@
 # test-list_core.R — tests for list_get, list_has, list_depth, list_path,
-# list_set, list_delete
+# list_set, list_delete, list_nleaf, list_find_value
 
 # Shared test fixture ----------------------------------------------------------
 
@@ -377,4 +377,118 @@ test_that("list_set a deleted key restores it", {
   deleted <- list_delete(x, c("b", "y", "j"))
   restored <- list_set(deleted, c("b", "y", "j"), 999)
   expect_identical(list_get(restored, c("b", "y", "j")), 999)
+})
+
+# list_nleaf -------------------------------------------------------------------
+
+test_that("list_nleaf counts leaves correctly", {
+  expect_identical(list_nleaf(x), 4L)
+  expect_identical(list_nleaf(list()), 0L)
+  expect_identical(list_nleaf(list(a = 1, b = 2)), 2L)
+})
+
+test_that("list_nleaf handles deeply nested lists", {
+  deep <- list(a = list(b = list(c = 1, d = 2)))
+  expect_identical(list_nleaf(deep), 2L)
+})
+
+# list_find_value --------------------------------------------------------------
+
+test_that("list_find_value finds matching values", {
+  x <- list(
+    a = 1,
+    b = list(c = 2, d = list(e = 1)),
+    list(1)
+  )
+
+  paths <- list_find_value(x, 1)
+  expect_type(paths, "list")
+  expect_length(paths, 3L)
+  expect_identical(paths[[1]], "a")
+  expect_identical(paths[[2]], c("b", "d", "e"))
+  expect_identical(paths[[3]], c("3", "1"))
+})
+
+test_that("list_find_value returns NULL when no match found", {
+  x <- list(a = 1, b = list(c = 2))
+  expect_null(list_find_value(x, 999))
+})
+
+test_that("list_find_value returns NULL for empty list", {
+  expect_null(list_find_value(list(), 1))
+})
+
+test_that("list_find_value matches intermediate list nodes", {
+  inner <- list(x = 1)
+  x <- list(a = inner, b = 2)
+
+  paths <- list_find_value(x, inner)
+  expect_length(paths, 1L)
+  expect_identical(paths[[1]], "a")
+})
+
+test_that("list_find_value uses identical() semantics", {
+  x <- list(a = 1L, b = 1)
+
+  paths <- list_find_value(x, 1L)
+  expect_length(paths, 1L)
+  expect_identical(paths[[1]], "a")
+})
+
+test_that("list_find_value works with character values", {
+  x <- list(a = "hello", b = list(c = "hello", d = "world"))
+
+  paths <- list_find_value(x, "hello")
+  expect_length(paths, 2L)
+  expect_identical(paths[[1]], "a")
+  expect_identical(paths[[2]], c("b", "c"))
+})
+
+test_that("list_find_value works with NULL values", {
+  x <- list(a = NULL, b = list(c = NULL))
+
+  paths <- list_find_value(x, NULL)
+  expect_length(paths, 2L)
+  expect_identical(paths[[1]], "a")
+  expect_identical(paths[[2]], c("b", "c"))
+})
+
+test_that("list_find_value works with logical values", {
+  x <- list(a = TRUE, b = list(c = FALSE, d = TRUE))
+
+  paths <- list_find_value(x, TRUE)
+  expect_length(paths, 2L)
+  expect_identical(paths[[1]], "a")
+  expect_identical(paths[[2]], c("b", "d"))
+})
+
+test_that("list_find_value uses character keys for unnamed elements", {
+  x <- list(list(1, list(1, 2)))
+
+  paths <- list_find_value(x, 1)
+  expect_length(paths, 2L)
+  expect_identical(paths[[1]], c("1", "1"))
+  expect_identical(paths[[2]], c("1", "2", "1"))
+})
+
+test_that("list_find_value finds multiple matches at same depth", {
+  x <- list(a = 1, b = 1, c = list(d = 1))
+
+  paths <- list_find_value(x, 1)
+  expect_length(paths, 3L)
+})
+
+test_that("list_find_value handles deeply nested matches", {
+  deep <- list(a = list(b = list(c = list(d = "target"))))
+  paths <- list_find_value(deep, "target")
+  expect_length(paths, 1L)
+  expect_identical(paths[[1]], c("a", "b", "c", "d"))
+})
+
+test_that("list_find_value errors when x is not a list", {
+  expect_snapshot(list_find_value(1:5, 1), error = TRUE)
+})
+
+test_that("list_find_value errors when x is a data.frame", {
+  expect_snapshot(list_find_value(data.frame(a = 1:3), 1), error = TRUE)
 })

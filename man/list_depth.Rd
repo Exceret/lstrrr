@@ -49,6 +49,7 @@ list_depth(x) # 1
 \seealso{
 Other lstrrr_core: 
 \code{\link{list_delete}()},
+\code{\link{list_find_value}()},
 \code{\link{list_get}()},
 \code{\link{list_has}()},
 \code{\link{list_nleaf}()},

@@ -65,6 +65,7 @@ list_get(x, c("df", "z"), default = "not traversed")
 Other lstrrr_core: 
 \code{\link{list_delete}()},
 \code{\link{list_depth}()},
+\code{\link{list_find_value}()},
 \code{\link{list_has}()},
 \code{\link{list_nleaf}()},
 \code{\link{list_path}()},
