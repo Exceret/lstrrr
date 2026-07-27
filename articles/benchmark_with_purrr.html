@@ -135,12 +135,12 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_map</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
 <span><span class="co">#&gt;        expr       min        lq      mean    median        uq       max neval</span></span>
-<span><span class="co">#&gt;    purrr_10  4.386583  4.498742  5.308452  4.532184  4.580127 58.562837   100</span></span>
-<span><span class="co">#&gt;   lstrrr_10  4.278536  4.402751  4.617510  4.433165  4.466600  9.249905   100</span></span>
-<span><span class="co">#&gt;    purrr_50 20.818977 21.397637 23.069671 21.593987 21.882532 77.460625   100</span></span>
-<span><span class="co">#&gt;   lstrrr_50 20.899197 21.250135 22.159566 21.383241 21.523437 26.321512   100</span></span>
-<span><span class="co">#&gt;   purrr_100 41.876719 42.727721 44.747534 43.009698 47.136634 57.044835   100</span></span>
-<span><span class="co">#&gt;  lstrrr_100 41.465815 42.610461 44.749231 43.146925 46.959363 50.534691   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    purrr_10  4.413098  4.519794  5.335495  4.551298  4.587898 58.925036   100</span></span>
+<span><span class="co">#&gt;   lstrrr_10  4.326203  4.428137  4.651793  4.450660  4.485107  9.434403   100</span></span>
+<span><span class="co">#&gt;    purrr_50 20.953109 21.478680 23.209162 21.640026 22.104470 78.207777   100</span></span>
+<span><span class="co">#&gt;   lstrrr_50 21.026992 21.405317 22.379381 21.529590 21.777024 31.584365   100</span></span>
+<span><span class="co">#&gt;   purrr_100 42.170527 42.909332 44.953505 43.247391 47.422455 56.037036   100</span></span>
+<span><span class="co">#&gt;  lstrrr_100 41.726338 42.903599 45.035032 43.325865 47.320591 49.573573   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_map</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
@@ -171,9 +171,9 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_depth</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: microseconds</span></span>
-<span><span class="co">#&gt;    expr      min        lq       mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;   purrr 4957.287 5012.0360 5309.19611 5073.457 5244.338 8439.396   100</span></span>
-<span><span class="co">#&gt;  lstrrr    2.188    2.3375    4.94177    4.744    6.036   42.903   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    expr      min        lq       mean    median        uq      max neval</span></span>
+<span><span class="co">#&gt;   purrr 4930.619 4999.6695 5288.52755 5056.2840 5246.5280 7985.417   100</span></span>
+<span><span class="co">#&gt;  lstrrr    2.189    2.3915    5.51545    5.6385    7.1365   48.328   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_depth</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -195,9 +195,9 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_assign</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: microseconds</span></span>
-<span><span class="co">#&gt;    expr    min      lq     mean  median      uq     max neval</span></span>
-<span><span class="co">#&gt;   purrr 19.181 19.6170 23.84828 19.9765 21.1745 335.235   100</span></span>
-<span><span class="co">#&gt;  lstrrr  1.897  2.0355  2.36511  2.1780  2.3115  16.964   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    expr    min      lq     mean median      uq     max neval</span></span>
+<span><span class="co">#&gt;   purrr 19.210 19.6860 24.01126 19.929 21.1455 356.272   100</span></span>
+<span><span class="co">#&gt;  lstrrr  1.884  2.0185  2.40193  2.182  2.3695  18.410   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_assign</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -219,9 +219,9 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_modify</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: microseconds</span></span>
-<span><span class="co">#&gt;    expr    min      lq     mean  median     uq     max neval</span></span>
-<span><span class="co">#&gt;   purrr 33.544 34.5885 39.69775 38.5295 39.387 178.738   100</span></span>
-<span><span class="co">#&gt;  lstrrr  1.749  1.9515  2.26416  2.1075  2.322  14.445   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    expr    min     lq     mean  median      uq     max neval</span></span>
+<span><span class="co">#&gt;   purrr 33.806 34.139 38.63983 34.6805 37.0215 176.941   100</span></span>
+<span><span class="co">#&gt;  lstrrr  1.703  1.872  2.31700  2.0245  2.3050  14.125   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_modify</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -243,9 +243,9 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_flatten</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: microseconds</span></span>
-<span><span class="co">#&gt;    expr      min        lq      mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;   purrr 1154.116 1206.8905 1284.2418 1251.312 1287.039 4033.056   100</span></span>
-<span><span class="co">#&gt;  lstrrr   30.163   35.3225   42.3614   42.610   46.854   95.566   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    expr      min       lq       mean    median        uq      max neval</span></span>
+<span><span class="co">#&gt;   purrr 1147.875 1193.362 1280.77041 1238.8065 1288.0700 4022.542   100</span></span>
+<span><span class="co">#&gt;  lstrrr   30.659   35.386   42.44384   41.5735   46.6325  101.952   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_flatten</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -270,9 +270,9 @@ difference of <code>lstrrr</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_modify_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: microseconds</span></span>
-<span><span class="co">#&gt;    expr     min       lq      mean   median       uq      max neval</span></span>
-<span><span class="co">#&gt;   utils 692.182 721.5445 769.88172 733.4005 758.1820 3478.448   100</span></span>
-<span><span class="co">#&gt;  lstrrr  16.263  17.1975  19.50171  18.5010  19.6955   81.100   100</span></span></code></pre></div>
+<span><span class="co">#&gt;    expr     min      lq      mean   median       uq      max neval</span></span>
+<span><span class="co">#&gt;   utils 688.225 712.428 774.88010 726.3845 767.0370 3488.774   100</span></span>
+<span><span class="co">#&gt;  lstrrr  16.285  17.095  19.30276  18.1090  20.0385   78.015   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_modify_list</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -314,10 +314,10 @@ obvious.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bench_parallel</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unit: milliseconds</span></span>
 <span><span class="co">#&gt;             expr      min       lq      mean    median        uq      max neval</span></span>
-<span><span class="co">#&gt;  lstrrr_parallel 4.560180 4.658508  4.926311  4.700740  4.774752 12.78571   100</span></span>
-<span><span class="co">#&gt;           lstrrr 4.333456 4.407796  4.665749  4.456909  4.511870 10.95009   100</span></span>
-<span><span class="co">#&gt;            purrr 4.399958 4.467871  4.668472  4.507328  4.591276 11.12772   100</span></span>
-<span><span class="co">#&gt;   purrr_parallel 8.820234 9.982046 10.535187 10.339956 10.878160 15.62690   100</span></span></code></pre></div>
+<span><span class="co">#&gt;  lstrrr_parallel 4.609078 4.686935  4.951242  4.733194  4.810773 11.52125   100</span></span>
+<span><span class="co">#&gt;           lstrrr 4.342726 4.431280  4.707231  4.490182  4.533817 11.57224   100</span></span>
+<span><span class="co">#&gt;            purrr 4.434767 4.507450  4.722065  4.558922  4.631694 11.22545   100</span></span>
+<span><span class="co">#&gt;   purrr_parallel 9.252839 9.783129 10.397968 10.134358 10.629319 15.57657   100</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">bench_parallel</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
