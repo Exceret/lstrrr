@@ -18,6 +18,10 @@
   which makes output of
   [`list.files()`](https://rdrr.io/r/base/list.files.html) into a nested
   list
+- Added
+  [`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md),
+  which finds all paths in a nested list whose element is identical to a
+  given value.
 - [`list_map()`](https://exceret.github.io/lstrrr/reference/list_map.md),
   [`list_map2()`](https://exceret.github.io/lstrrr/reference/list_map2.md),
   [`list_imap()`](https://exceret.github.io/lstrrr/reference/list_imap.md),

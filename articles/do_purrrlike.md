@@ -4,14 +4,16 @@
 
 ### Core Access
 
-| Function                   | Description                 |
-|----------------------------|-----------------------------|
-| `list_get(x, path)`        | Read an element by path     |
-| `list_set(x, path, value)` | Set an element by path      |
-| `list_delete(x, path)`     | Delete an element by path   |
-| `list_has(x, path)`        | Check if a path exists      |
-| `list_depth(x)`            | Compute nesting depth       |
-| `list_path(x)`             | Get paths to all leaf nodes |
+| Function                   | Description                    |
+|----------------------------|--------------------------------|
+| `list_get(x, path)`        | Read an element by path        |
+| `list_set(x, path, value)` | Set an element by path         |
+| `list_delete(x, path)`     | Delete an element by path      |
+| `list_has(x, path)`        | Check if a path exists         |
+| `list_depth(x)`            | Compute nesting depth          |
+| `list_path(x)`             | Get paths to all leaf nodes    |
+| `list_nleaf(x)`            | Count leaf nodes               |
+| `list_find_value(x, val)`  | Find paths where value matches |
 
 ### Map & Walk
 
@@ -216,6 +218,28 @@ list_find(foo, ~ is.character(.x)) |> str()
 ```
 
 ![](do_purrrlike_files/figure-html/list_find.svg)
+
+[`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
+is used to find all paths where the element is identical to a given
+value. Unlike
+[`list_find()`](https://exceret.github.io/lstrrr/reference/list_find.md),
+which matches by predicate,
+[`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
+matches by value using
+[`identical()`](https://rdrr.io/r/base/identical.html) semantics.
+
+``` r
+
+x <- list(
+  a = 1,
+  b = list(c = 2, d = list(e = 1)),
+  list(1)
+)
+
+list_find_value(x, 1) |> str()
+```
+
+![](do_purrrlike_files/figure-html/list_find_value.svg)
 
 `list_modify_if` is used to modify elements that satisfy a predicate.
 The structure of the list is preserved.

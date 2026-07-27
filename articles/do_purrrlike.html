@@ -116,6 +116,14 @@
 <td><code>list_path(x)</code></td>
 <td>Get paths to all leaf nodes</td>
 </tr>
+<tr class="odd">
+<td><code>list_nleaf(x)</code></td>
+<td>Count leaf nodes</td>
+</tr>
+<tr class="even">
+<td><code>list_find_value(x, val)</code></td>
+<td>Find paths where value matches</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -314,9 +322,22 @@ predicate. Please note that the result is a list with only 1 level.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/list_find.html">list_find</a></span><span class="op">(</span><span class="va">foo</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="do_purrrlike_files/figure-html/list_find.svg" class="r-plt" alt="" width="700"></p>
+<p><code><a href="../reference/list_find_value.html">list_find_value()</a></code> is used to find all paths where the
+element is identical to a given value. Unlike <code><a href="../reference/list_find.html">list_find()</a></code>,
+which matches by predicate, <code><a href="../reference/list_find_value.html">list_find_value()</a></code> matches by
+value using <code><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical()</a></code> semantics.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  a <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">2</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>e <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/list_find_value.html">list_find_value</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_find_value.svg" class="r-plt" alt="" width="700"></p>
 <p><code>list_modify_if</code> is used to modify elements that satisfy a
 predicate. The structure of the list is preserved.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/list_modify_if.html">list_modify_if</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">is.logical</span>, <span class="op">~</span> <span class="op">!</span><span class="va">.x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="do_purrrlike_files/figure-html/list_modify_if.svg" class="r-plt" alt="" width="700"></p>
 </div>

@@ -42,6 +42,7 @@ A logical scalar:
 Other lstrrr_core:
 [`list_delete()`](https://exceret.github.io/lstrrr/reference/list_delete.md),
 [`list_depth()`](https://exceret.github.io/lstrrr/reference/list_depth.md),
+[`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md),
 [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md),
 [`list_nleaf()`](https://exceret.github.io/lstrrr/reference/list_nleaf.md),
 [`list_path()`](https://exceret.github.io/lstrrr/reference/list_path.md),

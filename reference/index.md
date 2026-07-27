@@ -12,6 +12,8 @@ Basic functions for list manipulation.
   : Compute nested list depth
 - [`list_find()`](https://exceret.github.io/lstrrr/reference/list_find.md)
   : Find leaves satisfying predicate
+- [`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
+  : Find Paths Containing a Given Value
 - [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md)
   : Get an element from a nested list by path
 - [`list_has()`](https://exceret.github.io/lstrrr/reference/list_has.md)

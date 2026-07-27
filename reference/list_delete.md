@@ -41,6 +41,7 @@ A modified copy of `x` with the element at `path` removed.
 
 Other lstrrr_core:
 [`list_depth()`](https://exceret.github.io/lstrrr/reference/list_depth.md),
+[`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md),
 [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md),
 [`list_has()`](https://exceret.github.io/lstrrr/reference/list_has.md),
 [`list_nleaf()`](https://exceret.github.io/lstrrr/reference/list_nleaf.md),
