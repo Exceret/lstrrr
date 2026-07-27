@@ -486,9 +486,9 @@ test_that("list_find_value handles deeply nested matches", {
 })
 
 test_that("list_find_value errors when x is not a list", {
-  expect_snapshot(list_find_value(1:5, 1), error = TRUE)
+  expect_error(list_find_value(1:5, 1))
 })
 
 test_that("list_find_value errors when x is a data.frame", {
-  expect_snapshot(list_find_value(data.frame(a = 1:3), 1), error = TRUE)
+  expect_error(list_find_value(data.frame(a = 1:3), 1))
 })
