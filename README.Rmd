@@ -6,7 +6,8 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r}
+#| include = FALSE
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -44,7 +45,8 @@ pak::pak("Exceret/lstrrr")
 
 Use it just like `purrr`
 
-```{r example}
+```{r}
+#| label = "example"
 library(lstrrr)
 
 x <- list(
@@ -74,7 +76,8 @@ A similar project is [rlist](https://github.com/renkun-ken/rlist), but it is not
 
 Let's see how they work differently. This is a code snippet from rlist:
 
-```{r comparison_with_rlist}
+```{r}
+#| label = "comparison_with_rlist"
 nums <- list(a = c(1, 2, 3), b = c(2, 3, 4), c = c(3, 4, 5))
 
 rlist::list.map(nums, c(min = min(.), max = max(.))) |> str()
@@ -107,3 +110,5 @@ list_map(nums, \(v) c(min = min(v), max = max(v))) |> str()
 list_find(nums, ~ mean(.x) >= 3) |> str()
 list_map(nums, sum) |> str()
 ```
+
+To see more examples, click [here](https://exceret.github.io/lstrrr/index.html)

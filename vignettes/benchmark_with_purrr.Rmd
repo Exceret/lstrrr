@@ -7,14 +7,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include = FALSE
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r}
+#| label = "setup"
 library(lstrrr)
 data(sputnik_1)
 ```
@@ -23,12 +25,14 @@ data(sputnik_1)
 
 Here, we will use a simple example to illustrate the performance difference of `lstrrr`.
 
-```{r preparing_input}
+```{r}
+#| label = "preparing_input"
 files <- list.files(all.files = TRUE, recursive = TRUE)
 files_list <- dir_listwise(files)
 ```
 
-```{r benchmarking_map}
+```{r}
+#| label = "benchmarking_map"
 slow_string_op <- function(x, n = 10) {
   stopifnot(is.character(x))
 
@@ -72,14 +76,16 @@ print(bench_map)
 ```
 
 
-```{r viz_map}
+```{r}
+#| label = "viz_map"
 ggplot2::autoplot(bench_map) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
 ## Detect Depth
 
-```{r benchmarking_depth}
+```{r}
+#| label = "benchmarking_depth"
 set.seed(124)
 
 bench_depth <- microbenchmark::microbenchmark(
@@ -94,14 +100,16 @@ print(bench_depth)
 ```
 
 
-```{r viz_depth}
+```{r}
+#| label = "viz_depth"
 ggplot2::autoplot(bench_depth) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
 ## Assignment
 
-```{r benchmarking_assign}
+```{r}
+#| label = "benchmarking_assign"
 set.seed(125)
 
 bench_assign <- microbenchmark::microbenchmark(
@@ -115,14 +123,16 @@ bench_assign <- microbenchmark::microbenchmark(
 print(bench_assign)
 ```
 
-```{r viz_assign}
+```{r}
+#| label = "viz_assign"
 ggplot2::autoplot(bench_assign) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
 ## Modification
 
-```{r benchmarking_modify}
+```{r}
+#| label = "benchmarking_modify"
 set.seed(126)
 
 bench_modify <- microbenchmark::microbenchmark(
@@ -136,14 +146,16 @@ bench_modify <- microbenchmark::microbenchmark(
 print(bench_modify)
 ```
 
-```{r viz_modify}
+```{r}
+#| label = "viz_modify"
 ggplot2::autoplot(bench_modify) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
 ## Flatten
 
-```{r benchmarking_flatten}
+```{r}
+#| label = "benchmarking_flatten"
 set.seed(127)
 
 bench_flatten <- microbenchmark::microbenchmark(
@@ -157,14 +169,16 @@ bench_flatten <- microbenchmark::microbenchmark(
 print(bench_flatten)
 ```
 
-```{r viz_flatten}
+```{r}
+#| label = "viz_flatten"
 ggplot2::autoplot(bench_flatten) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
 ## modifyList
 
-```{r benchmarking_modify_list}
+```{r}
+#| label = "benchmarking_modify_list"
 set.seed(128)
 
 foo <- sputnik_1
@@ -181,7 +195,8 @@ bench_modify_list <- microbenchmark::microbenchmark(
 print(bench_modify_list)
 ```
 
-```{r viz_modify_list}
+```{r}
+#| label = "viz_modify_list"
 ggplot2::autoplot(bench_modify_list) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
@@ -190,7 +205,8 @@ ggplot2::autoplot(bench_modify_list) +
 
 Most of logic is in C implementation, so the acceleration is not that obvious.
 
-```{r benchmarking_parallel}
+```{r}
+#| label = "benchmarking_parallel"
 set.seed(129)
 mirai::daemons(3L)
 crate <- purrr::in_parallel(
@@ -221,7 +237,8 @@ mirai::daemons(0L)
 print(bench_parallel)
 ```
 
-```{r viz_parallel}
+```{r}
+#| label = "viz_parallel"
 ggplot2::autoplot(bench_parallel) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```

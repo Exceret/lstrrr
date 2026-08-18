@@ -7,7 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include = FALSE
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,7 +17,8 @@ knitr::opts_chunk$set(
 
 > This vignette shows the function utilities of `lstrrr`.
 
-```{r setup}
+```{r}
+#| label = "setup"
 library(lstrrr)
 ```
 
@@ -87,7 +89,11 @@ viz_list(foo)
 
 It is useful to get a sense of the structure of a complex list.
 
-```{r,fig.width=6, fig.height=20,dpi =500,out.width="60%"}
+```{r}
+#| fig.width = 6,
+#| fig.height = 20,
+#| dpi = 400,
+#| out.width = "60%"
 viz_list(sputnik_1, point_size = 1.5, text_size = 1L, line_width = 0.6) +
   ggplot2::coord_flip()
 ```

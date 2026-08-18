@@ -166,3 +166,6 @@ list_map(nums, sum) |> str()
 #>   ..$ e: num 15
 #>   ..$ f: num 18
 ```
+
+To see more examples, click
+[here](https://exceret.github.io/lstrrr/index.html)

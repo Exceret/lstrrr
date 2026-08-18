@@ -1,6 +1,7 @@
 > This vignette shows the function utilities of `lstrrr`.
 
     library(lstrrr)
+    #> ✔ lstrrr v0.1.0 loaded
 
 ## TL;DR
 

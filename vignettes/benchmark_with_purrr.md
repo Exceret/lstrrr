@@ -51,15 +51,22 @@ difference of `lstrrr`.
     print(bench_map)
     #> Unit: milliseconds
     #>        expr       min        lq      mean    median        uq       max neval
-    #>    purrr_10  3.323728  3.364545  3.514765  3.396914  3.419538  14.14159   100
-    #>   lstrrr_10  3.270054  3.308309  3.447193  3.336969  3.362311  13.85424   100
-    #>    purrr_50 15.905605 16.017874 16.513380 16.186982 16.271546  27.86884   100
-    #>   lstrrr_50 15.809607 15.935830 16.317077 16.117632 16.204460  27.21909   100
-    #>   purrr_100 31.672615 31.906179 33.050140 32.276707 32.380160  43.15841   100
-    #>  lstrrr_100 31.605593 31.772404 35.419516 32.160251 32.362977 236.18867   100
+    #>    purrr_10  63.92014  64.53322  66.76019  64.77784  65.25634  88.29130   100
+    #>   lstrrr_10  63.77310  64.39355  67.07866  64.63867  65.19368  83.91031   100
+    #>    purrr_50 314.36159 316.10404 328.59784 327.99516 330.39642 508.49412   100
+    #>   lstrrr_50 313.04120 315.51708 326.88509 327.49779 329.60165 502.00026   100
+    #>   purrr_100 637.59407 643.94502 657.62831 646.52496 655.32082 827.41176   100
+    #>  lstrrr_100 638.14487 643.21034 655.76381 645.37794 655.92782 828.65521   100
 
     ggplot2::autoplot(bench_map) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+    #> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+    #> ℹ Please use tidy evaluation idioms with `aes()`.
+    #> ℹ See also `vignette("ggplot2-in-packages")` for more information.
+    #> ℹ The deprecated feature was likely used in the microbenchmark package.
+    #>   Please report the issue at <]8;;https://github.com/joshuaulrich/microbenchmark/issues/https://github.com/joshuaulrich/microbenchmark/issues/]8;;>.
+    #> This warning is displayed once per session.
+    #> Call ]8;;x-r-run:lifecycle::last_lifecycle_warnings()lifecycle::last_lifecycle_warnings()]8;; to see where this warning was generated.
 
 ![](benchmark_with_purrr_files/figure-markdown_strict/viz_map-1.png)
 
@@ -77,9 +84,9 @@ difference of `lstrrr`.
     )
     print(bench_depth)
     #> Unit: microseconds
-    #>    expr      min        lq       mean    median       uq       max neval
-    #>   purrr 7180.645 7216.0595 7500.97872 7242.6550 7387.149 11898.469   100
-    #>  lstrrr    4.312    5.1105    7.56294    8.8075    9.353    17.828   100
+    #>    expr      min        lq       mean   median        uq       max neval
+    #>   purrr 7197.361 7313.7890 7718.24555 7667.909 7747.4575 11516.752   100
+    #>  lstrrr    3.425    4.1185    6.75471    7.081    7.8715    45.134   100
 
     ggplot2::autoplot(bench_depth) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -101,8 +108,8 @@ difference of `lstrrr`.
     print(bench_assign)
     #> Unit: microseconds
     #>    expr    min      lq     mean  median      uq     max neval
-    #>   purrr 29.915 30.2225 31.65427 30.4380 30.7360 111.328   100
-    #>  lstrrr  3.081  3.1770  3.83690  3.6855  4.0135  20.415   100
+    #>   purrr 29.950 30.4760 38.55727 30.8155 31.4275 740.738   100
+    #>  lstrrr  2.876  3.0015  3.71832  3.5645  3.8135  22.410   100
 
     ggplot2::autoplot(bench_assign) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -123,9 +130,9 @@ difference of `lstrrr`.
     )
     print(bench_modify)
     #> Unit: microseconds
-    #>    expr    min      lq     mean  median     uq     max neval
-    #>   purrr 51.351 51.9215 53.88568 52.2765 52.901 142.864   100
-    #>  lstrrr  2.825  3.0080  3.67424  3.6195  3.726  19.871   100
+    #>    expr    min      lq     mean  median      uq     max neval
+    #>   purrr 51.343 52.1605 60.59294 52.5965 53.6925 766.258   100
+    #>  lstrrr  2.545  2.7575  3.46058  3.3680  3.6385  20.016   100
 
     ggplot2::autoplot(bench_modify) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -146,9 +153,9 @@ difference of `lstrrr`.
     )
     print(bench_flatten)
     #> Unit: microseconds
-    #>    expr      min        lq      mean    median       uq      max neval
-    #>   purrr 1970.300 2002.4970 2085.5240 2073.8000 2143.013 2900.669   100
-    #>  lstrrr   41.657   45.6975   55.1192   60.2365   62.323  105.663   100
+    #>    expr      min        lq       mean   median        uq      max neval
+    #>   purrr 1936.932 1960.5290 2004.69740 1978.434 2005.0440 2943.459   100
+    #>  lstrrr   40.132   44.1445   54.20226   57.492   60.8045  140.011   100
 
     ggplot2::autoplot(bench_flatten) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -172,9 +179,9 @@ difference of `lstrrr`.
     )
     print(bench_modify_list)
     #> Unit: microseconds
-    #>    expr      min       lq       mean    median       uq      max neval
-    #>   utils 1021.369 1030.055 1038.75312 1036.0830 1041.894 1128.324   100
-    #>  lstrrr   27.765   29.108   32.30914   32.0745   34.568   64.743   100
+    #>    expr      min        lq       mean    median       uq      max neval
+    #>   utils 1026.769 1040.2145 1097.67455 1060.8155 1160.995 1240.813   100
+    #>  lstrrr   25.091   26.5555   29.89041   28.5655   32.128   61.228   100
 
     ggplot2::autoplot(bench_modify_list) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
@@ -216,10 +223,10 @@ obvious.
     print(bench_parallel)
     #> Unit: milliseconds
     #>             expr      min       lq     mean   median       uq       max neval
-    #>  lstrrr_parallel 3.180860 3.214758 3.505192 3.246692 3.284975 15.338705   100
-    #>           lstrrr 3.338676 3.366277 3.423986 3.405443 3.448899  3.784324   100
-    #>            purrr 3.399585 3.437874 3.626854 3.468427 3.520160 16.012374   100
-    #>   purrr_parallel 2.387677 2.493289 2.759666 2.551584 2.658171  7.437025   100
+    #>  lstrrr_parallel 64.96656 65.84421 69.33340 66.32144 67.26616 120.29294   100
+    #>           lstrrr 64.44888 65.42523 67.62151 65.83208 66.55539  91.31965   100
+    #>            purrr 64.90323 65.56885 70.85160 66.10310 67.41804 266.71648   100
+    #>   purrr_parallel 38.79189 40.93625 43.43435 42.72623 44.02974  66.44452   100
 
     ggplot2::autoplot(bench_parallel) +
       ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
