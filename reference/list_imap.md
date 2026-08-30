@@ -57,6 +57,7 @@ replaced by the result of calling `.f` on that leaf.
 ## See also
 
 Other lstrrr-purrrlike:
+[`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md),
 [`list_flatten()`](https://exceret.github.io/lstrrr/reference/list_flatten.md),
 [`list_iwalk()`](https://exceret.github.io/lstrrr/reference/list_iwalk.md),
 [`list_map()`](https://exceret.github.io/lstrrr/reference/list_map.md),

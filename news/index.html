@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lstrrr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,14 +44,35 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.1" id="lstrrr-011-2026-08-30">lstrrr 0.1.1 (2026-08-30)<a class="anchor" aria-label="anchor" href="#lstrrr-011-2026-08-30"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-1">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-1"></a></h3>
+<ul><li>Added <code><a href="../reference/list_filter.html">list_filter()</a></code>, which keeps leaves satisfying a predicate and replaces the others with <code>NULL</code>, preserving the original nested structure.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-1-1">TESTING<a class="anchor" aria-label="anchor" href="#testing-0-1-1"></a></h3>
+<ul><li>Added comprehensive tests for <code><a href="../reference/list_filter.html">list_filter()</a></code>, covering predicate matching, structure preservation, <code><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE()</a></code> semantics, edge cases, and error handling.</li>
+<li>Incorporated benchmark tests between lstrrr and rrapply.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-1-1">DOCUMENTATION<a class="anchor" aria-label="anchor" href="#documentation-0-1-1"></a></h3>
+<ul><li>Added <code><a href="../reference/list_filter.html">list_filter()</a></code> with an example to the <code>do_purrrlike</code> vignette.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="lstrrr-010-2026-07-21">lstrrr 0.1.0 (2026-07-21)<a class="anchor" aria-label="anchor" href="#lstrrr-010-2026-07-21"></a></h2>
 <div class="section level3">
 <h3 id="testing-0-1-0">TESTING<a class="anchor" aria-label="anchor" href="#testing-0-1-0"></a></h3>
 <ul><li>Incorporate tests for all functions</li>
+<li>Added tests for <code><a href="../reference/list_find_value.html">list_find_value()</a></code> and <code><a href="../reference/list_nleaf.html">list_nleaf()</a></code>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-1-0">DOCUMENTATION<a class="anchor" aria-label="anchor" href="#documentation-0-1-0"></a></h3>
 <ul><li>Updated documentation for all functions, including code examples and parameters descriptions</li>
+<li>Added <code><a href="../reference/list_find_value.html">list_find_value()</a></code> with an example to the <code>do_purrrlike</code> vignette</li>
+<li>Updated the pkgdown reference index (<code>_pkgdown.yml</code>) to include <code><a href="../reference/list_find_value.html">list_find_value()</a></code>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-1-0">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>

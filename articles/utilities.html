@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lstrrr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
 </blockquote>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Exceret/lstrrr" class="external-link">lstrrr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lstrrr</span> v0.1.0 loaded</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lstrrr</span> v0.1.1 loaded</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="tldr">TL;DR<a class="anchor" aria-label="anchor" href="#tldr"></a>
 </h2>
@@ -180,12 +180,12 @@ unnamed elements.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"."</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "./benchmark_with_purrr_files/figure-markdown_strict/viz_assign-1.png"     </span></span>
-<span><span class="co">#&gt; [2] "./benchmark_with_purrr_files/figure-markdown_strict/viz_depth-1.png"      </span></span>
-<span><span class="co">#&gt; [3] "./benchmark_with_purrr_files/figure-markdown_strict/viz_flatten-1.png"    </span></span>
-<span><span class="co">#&gt; [4] "./benchmark_with_purrr_files/figure-markdown_strict/viz_map-1.png"        </span></span>
-<span><span class="co">#&gt; [5] "./benchmark_with_purrr_files/figure-markdown_strict/viz_modify_list-1.png"</span></span>
-<span><span class="co">#&gt; [6] "./benchmark_with_purrr_files/figure-markdown_strict/viz_modify-1.png"</span></span>
+<span><span class="co">#&gt; [1] "./benchmark.md"                                                             </span></span>
+<span><span class="co">#&gt; [2] "./benchmark.Rmd"                                                            </span></span>
+<span><span class="co">#&gt; [3] "./do_purrrlike_cache/html/__packages"                                       </span></span>
+<span><span class="co">#&gt; [4] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.cast" </span></span>
+<span><span class="co">#&gt; [5] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.RData"</span></span>
+<span><span class="co">#&gt; [6] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.rdb"</span></span>
 <span></span>
 <span><span class="va">files_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dir_listwise.html">dir_listwise</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span></span>
 <span><span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli_alert_info</a></span><span class="op">(</span><span class="st">"Class of files_list: {.cls {class(files_list)}}"</span><span class="op">)</span></span>

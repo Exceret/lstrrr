@@ -241,6 +241,21 @@ list_find_value(x, 1) |> str()
 
 ![](do_purrrlike_files/figure-html/list_find_value.svg)
 
+[`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md)
+is used to filter leaves that satisfy a predicate. Unlike
+[`list_find()`](https://exceret.github.io/lstrrr/reference/list_find.md),
+which returns a flat list of matches,
+[`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md)
+keeps the original nested structure and replaces non-matching leaves
+with `NULL`.
+
+``` r
+
+list_filter(foo, is.numeric) |> str()
+```
+
+![](do_purrrlike_files/figure-html/list_filter.svg)
+
 `list_modify_if` is used to modify elements that satisfy a predicate.
 The structure of the list is preserved.
 

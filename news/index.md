@@ -1,15 +1,48 @@
 # Changelog
 
+## lstrrr 0.1.1 (2026-08-30)
+
+### NEW FEATURES
+
+- Added
+  [`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md),
+  which keeps leaves satisfying a predicate and replaces the others with
+  `NULL`, preserving the original nested structure.
+
+### TESTING
+
+- Added comprehensive tests for
+  [`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md),
+  covering predicate matching, structure preservation,
+  [`isTRUE()`](https://rdrr.io/r/base/Logic.html) semantics, edge cases,
+  and error handling.
+- Incorporated benchmark tests between lstrrr and rrapply.
+
+### DOCUMENTATION
+
+- Added
+  [`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md)
+  with an example to the `do_purrrlike` vignette.
+
 ## lstrrr 0.1.0 (2026-07-21)
 
 ### TESTING
 
 - Incorporate tests for all functions
+- Added tests for
+  [`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
+  and
+  [`list_nleaf()`](https://exceret.github.io/lstrrr/reference/list_nleaf.md)
 
 ### DOCUMENTATION
 
 - Updated documentation for all functions, including code examples and
   parameters descriptions
+- Added
+  [`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
+  with an example to the `do_purrrlike` vignette
+- Updated the pkgdown reference index (`_pkgdown.yml`) to include
+  [`list_find_value()`](https://exceret.github.io/lstrrr/reference/list_find_value.md)
 
 ### NEW FEATURES
 

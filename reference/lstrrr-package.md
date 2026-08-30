@@ -19,3 +19,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Yuxi Yang <15364051195@163.com>
+
+Authors:
+
+- Yuxi Yang <15364051195@163.com>

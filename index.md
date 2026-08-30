@@ -157,3 +157,76 @@ list_map(nums, sum) |> str()
 #>   ..$ e: num 15
 #>   ..$ f: num 18
 ```
+
+------------------------------------------------------------------------
+
+Another similar project is
+[rrapply](https://github.com/JorisChau/rrapply/), which also provide
+list recursion in R.
+
+``` r
+
+dat <- list(
+  user = list(
+    name = "alice",
+    age = 20,
+    scores = list(
+      math = 80,
+      english = 90
+    )
+  ),
+  status = "active"
+)
+```
+
+``` r
+
+result1 <- rrapply(
+  dat,
+  f = function(x) x + 5,
+  classes = "numeric",
+  condition = function(x) x >= 80
+)
+str(result1)
+#> List of 2
+#>  $ user  :List of 3
+#>   ..$ name  : chr "alice"
+#>   ..$ age   : num 20
+#>   ..$ scores:List of 2
+#>   .. ..$ math   : num 85
+#>   .. ..$ english: num 95
+#>  $ status: chr "active"
+```
+
+``` r
+
+result2 <- list_modify_if(dat, ~ is.numeric(.x) & .x >= 80, ~ .x + 5)
+str(result2)
+#> List of 2
+#>  $ user  :List of 3
+#>   ..$ name  : chr "alice"
+#>   ..$ age   : num 20
+#>   ..$ scores:List of 2
+#>   .. ..$ math   : num 85
+#>   .. ..$ english: num 95
+#>  $ status: chr "active"
+```
+
+The differences between `lstrrr` and `rrapply` are as follows:
+
+1.  `lstrrr` follows the design philosophy of
+    [purrr](https://github.com/tidyverse/purrr), whereas `rrapply` is
+    based on base R’s [`rapply()`](https://rdrr.io/r/base/rapply.html).
+2.  lstrrr provides a native progress bar similar to the one in purrr
+    (using [cli](https://github.com/r-lib/cli) C API).
+3.  lstrrr provides several basic functions for working with nested
+    lists, such as
+    [`list_set()`](https://exceret.github.io/lstrrr/reference/list_set.md),
+    [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md),
+    and
+    [`list_nleaf()`](https://exceret.github.io/lstrrr/reference/list_nleaf.md).
+
+------------------------------------------------------------------------
+
+To see more examples, click
+[here](https://exceret.github.io/lstrrr/index.html)

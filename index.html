@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">lstrrr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,6 +211,56 @@
 <span><span class="co">#&gt;  $ d:List of 2</span></span>
 <span><span class="co">#&gt;   ..$ e: num 15</span></span>
 <span><span class="co">#&gt;   ..$ f: num 18</span></span></code></pre></div>
+<hr>
+<p>Another similar project is <a href="https://github.com/JorisChau/rrapply/" class="external-link">rrapply</a>, which also provide list recursion in R.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"alice"</span>,</span>
+<span>    age <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>    scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      math <span class="op">=</span> <span class="fl">80</span>,</span>
+<span>      english <span class="op">=</span> <span class="fl">90</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  status <span class="op">=</span> <span class="st">"active"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result1</span> <span class="op">&lt;-</span> <span class="fu">rrapply</span><span class="op">(</span></span>
+<span>  <span class="va">dat</span>,</span>
+<span>  f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">5</span>,</span>
+<span>  classes <span class="op">=</span> <span class="st">"numeric"</span>,</span>
+<span>  condition <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">&gt;=</span> <span class="fl">80</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">result1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ user  :List of 3</span></span>
+<span><span class="co">#&gt;   ..$ name  : chr "alice"</span></span>
+<span><span class="co">#&gt;   ..$ age   : num 20</span></span>
+<span><span class="co">#&gt;   ..$ scores:List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ math   : num 85</span></span>
+<span><span class="co">#&gt;   .. ..$ english: num 95</span></span>
+<span><span class="co">#&gt;  $ status: chr "active"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/list_modify_if.html">list_modify_if</a></span><span class="op">(</span><span class="va">dat</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">.x</span> <span class="op">&gt;=</span> <span class="fl">80</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">result2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ user  :List of 3</span></span>
+<span><span class="co">#&gt;   ..$ name  : chr "alice"</span></span>
+<span><span class="co">#&gt;   ..$ age   : num 20</span></span>
+<span><span class="co">#&gt;   ..$ scores:List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ math   : num 85</span></span>
+<span><span class="co">#&gt;   .. ..$ english: num 95</span></span>
+<span><span class="co">#&gt;  $ status: chr "active"</span></span></code></pre></div>
+<p>The differences between <code>lstrrr</code> and <code>rrapply</code> are as follows:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code>lstrrr</code> follows the design philosophy of <a href="https://github.com/tidyverse/purrr" class="external-link">purrr</a>, whereas <code>rrapply</code> is based on base R’s <code><a href="https://rdrr.io/r/base/rapply.html" class="external-link">rapply()</a></code>.</li>
+<li>lstrrr provides a native progress bar similar to the one in purrr (using <a href="https://github.com/r-lib/cli" class="external-link">cli</a> C API).</li>
+<li>lstrrr provides several basic functions for working with nested lists, such as <code><a href="reference/list_set.html">list_set()</a></code>, <code><a href="reference/list_get.html">list_get()</a></code>, and <code><a href="reference/list_nleaf.html">list_nleaf()</a></code>.</li>
+</ol>
+<hr>
+<p>To see more examples, click <a href="https://exceret.github.io/lstrrr/index.html">here</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

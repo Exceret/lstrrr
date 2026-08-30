@@ -2,7 +2,7 @@
 <url><loc>https://exceret.github.io/lstrrr/404.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/LICENSE-text.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/LICENSE.html</loc></url>
-<url><loc>https://exceret.github.io/lstrrr/articles/benchmark_with_purrr.html</loc></url>
+<url><loc>https://exceret.github.io/lstrrr/articles/benchmark.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/articles/do_purrrlike.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/articles/index.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/articles/utilities.html</loc></url>
@@ -13,6 +13,7 @@
 <url><loc>https://exceret.github.io/lstrrr/reference/index.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/reference/list_delete.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/reference/list_depth.html</loc></url>
+<url><loc>https://exceret.github.io/lstrrr/reference/list_filter.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/reference/list_find.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/reference/list_find_value.html</loc></url>
 <url><loc>https://exceret.github.io/lstrrr/reference/list_flatten.html</loc></url>

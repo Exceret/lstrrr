@@ -24,6 +24,7 @@ list_flatten(.x, .sep = ".")
 ## See also
 
 Other lstrrr-purrrlike:
+[`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md),
 [`list_imap()`](https://exceret.github.io/lstrrr/reference/list_imap.md),
 [`list_iwalk()`](https://exceret.github.io/lstrrr/reference/list_iwalk.md),
 [`list_map()`](https://exceret.github.io/lstrrr/reference/list_map.md),

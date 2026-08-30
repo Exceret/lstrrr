@@ -2,10 +2,10 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
-  benchmark_with_purrr: benchmark_with_purrr.html
+  benchmark: benchmark.html
   do_purrrlike: do_purrrlike.html
   utilities: utilities.html
-last_built: 2026-07-27T11:56Z
+last_built: 2026-08-30T04:30Z
 urls:
   reference: https://exceret.github.io/lstrrr/reference
   article: https://exceret.github.io/lstrrr/articles

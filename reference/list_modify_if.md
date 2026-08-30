@@ -40,6 +40,7 @@ satisfying `.p` have been replaced by the result of `.f`.
 ## See also
 
 Other lstrrr-purrrlike:
+[`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md),
 [`list_flatten()`](https://exceret.github.io/lstrrr/reference/list_flatten.md),
 [`list_imap()`](https://exceret.github.io/lstrrr/reference/list_imap.md),
 [`list_iwalk()`](https://exceret.github.io/lstrrr/reference/list_iwalk.md),

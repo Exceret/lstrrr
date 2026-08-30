@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">lstrrr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -335,9 +335,16 @@ value using <code><a href="https://rdrr.io/r/base/identical.html" class="externa
 <span></span>
 <span><span class="fu"><a href="../reference/list_find_value.html">list_find_value</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="do_purrrlike_files/figure-html/list_find_value.svg" class="r-plt" alt="" width="700"></p>
+<p><code><a href="../reference/list_filter.html">list_filter()</a></code> is used to filter leaves that satisfy a
+predicate. Unlike <code><a href="../reference/list_find.html">list_find()</a></code>, which returns a flat list of
+matches, <code><a href="../reference/list_filter.html">list_filter()</a></code> keeps the original nested structure
+and replaces non-matching leaves with <code>NULL</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/list_filter.html">list_filter</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">is.numeric</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="do_purrrlike_files/figure-html/list_filter.svg" class="r-plt" alt="" width="700"></p>
 <p><code>list_modify_if</code> is used to modify elements that satisfy a
 predicate. The structure of the list is preserved.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/list_modify_if.html">list_modify_if</a></span><span class="op">(</span><span class="va">foo</span>, <span class="va">is.logical</span>, <span class="op">~</span> <span class="op">!</span><span class="va">.x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="do_purrrlike_files/figure-html/list_modify_if.svg" class="r-plt" alt="" width="700"></p>
 </div>

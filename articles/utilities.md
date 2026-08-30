@@ -5,7 +5,7 @@
 ``` r
 
 library(lstrrr)
-#> ✔ lstrrr v0.1.0 loaded
+#> ✔ lstrrr v0.1.1 loaded
 ```
 
 ## TL;DR
@@ -87,12 +87,12 @@ identical(v3, v4)
 
 files <- list.files(".", recursive = TRUE, full.names = TRUE)
 head(files)
-#> [1] "./benchmark_with_purrr_files/figure-markdown_strict/viz_assign-1.png"     
-#> [2] "./benchmark_with_purrr_files/figure-markdown_strict/viz_depth-1.png"      
-#> [3] "./benchmark_with_purrr_files/figure-markdown_strict/viz_flatten-1.png"    
-#> [4] "./benchmark_with_purrr_files/figure-markdown_strict/viz_map-1.png"        
-#> [5] "./benchmark_with_purrr_files/figure-markdown_strict/viz_modify_list-1.png"
-#> [6] "./benchmark_with_purrr_files/figure-markdown_strict/viz_modify-1.png"
+#> [1] "./benchmark.md"                                                             
+#> [2] "./benchmark.Rmd"                                                            
+#> [3] "./do_purrrlike_cache/html/__packages"                                       
+#> [4] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.cast" 
+#> [5] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.RData"
+#> [6] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.rdb"
 
 files_list <- dir_listwise(files)
 cli::cli_alert_info("Class of files_list: {.cls {class(files_list)}}")

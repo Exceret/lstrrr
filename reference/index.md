@@ -33,6 +33,8 @@ Basic functions for list manipulation.
   : Map over leaves of a nested list
 - [`list_map2()`](https://exceret.github.io/lstrrr/reference/list_map2.md)
   : Map over leaves of two nested lists
+- [`list_filter()`](https://exceret.github.io/lstrrr/reference/list_filter.md)
+  : Filter leaves of a nested list
 - [`list_modify_if()`](https://exceret.github.io/lstrrr/reference/list_modify_if.md)
   : Modify leaves satisfying predicate
 - [`list_pmap()`](https://exceret.github.io/lstrrr/reference/list_pmap.md)
