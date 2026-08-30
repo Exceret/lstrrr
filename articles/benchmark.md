@@ -71,13 +71,13 @@ bench_map <- microbenchmark::microbenchmark(
 )
 print(bench_map)
 #> Unit: milliseconds
-#>        expr       min        lq      mean    median        uq       max neval
-#>    purrr_10  2.842734  2.924511  3.677509  2.968956  3.003343 44.658324   100
-#>   lstrrr_10  2.816564  2.888757  3.147370  2.934870  2.959937  6.726386   100
-#>  rrapply_10  2.848301  2.910264  3.094095  2.944159  2.978852 10.564102   100
-#>    purrr_50 13.629537 14.041110 14.619423 14.158234 14.315182 26.130844   100
-#>   lstrrr_50 13.760311 14.097223 14.980813 14.241087 14.614183 19.160674   100
-#>  rrapply_50 13.764758 14.148104 14.950472 14.241619 14.538049 18.075438   100
+#>        expr       min        lq      mean    median        uq      max neval
+#>    purrr_10  3.615778  3.706007  4.726053  3.756296  3.806342 61.40171   100
+#>   lstrrr_10  3.529089  3.635877  3.989060  3.676284  3.716994  9.00946   100
+#>  rrapply_10  3.590120  3.682322  3.950555  3.739477  3.785840 13.84159   100
+#>    purrr_50 17.239350 17.682814 18.483424 17.868550 18.007398 32.69678   100
+#>   lstrrr_50 17.329775 17.686205 18.905134 17.840725 18.186308 24.78150   100
+#>  rrapply_50 17.108436 17.723896 18.865973 17.894264 18.224511 23.06341   100
 ```
 
 ``` r
@@ -113,9 +113,9 @@ bench_depth <- microbenchmark::microbenchmark(
 )
 print(bench_depth)
 #> Unit: microseconds
-#>    expr      min        lq       mean    median       uq        max neval
-#>   purrr 3747.851 3869.3225 5201.24529 3960.1070 4105.343 110809.244   100
-#>  lstrrr    1.983    2.2685    4.24128    3.8055    5.062     35.082   100
+#>    expr      min        lq       mean   median        uq        max neval
+#>   purrr 4871.576 5037.2565 6616.32380 5117.737 5260.1480 134304.604   100
+#>  lstrrr    2.574    2.8045    6.12085    5.208    8.2675     51.227   100
 ```
 
 ``` r
@@ -142,9 +142,9 @@ bench_assign <- microbenchmark::microbenchmark(
 )
 print(bench_assign)
 #> Unit: microseconds
-#>    expr    min      lq     mean median     uq     max neval
-#>   purrr 14.812 15.2580 18.81461 15.548 15.884 308.059   100
-#>  lstrrr  1.492  1.5925  1.92720  1.728  1.868  18.077   100
+#>    expr    min      lq     mean  median     uq     max neval
+#>   purrr 18.928 19.6145 24.32557 19.9245 20.400 413.725   100
+#>  lstrrr  1.883  2.0130  2.41702  2.1280  2.318  23.465   100
 ```
 
 ``` r
@@ -171,9 +171,9 @@ bench_modify <- microbenchmark::microbenchmark(
 )
 print(bench_modify)
 #> Unit: microseconds
-#>    expr    min      lq     mean  median      uq     max neval
-#>   purrr 25.978 26.5995 28.90147 27.2005 27.7010 156.143   100
-#>  lstrrr  1.382  1.5220  1.76686  1.5875  1.7125  15.263   100
+#>    expr    min      lq     mean median      uq     max neval
+#>   purrr 33.059 33.9605 36.89905 34.401 35.0670 215.040   100
+#>  lstrrr  1.783  1.9475  2.40706  2.023  2.2035  22.844   100
 ```
 
 ``` r
@@ -207,9 +207,9 @@ bench_modify_cond <- microbenchmark::microbenchmark(
 )
 print(bench_modify_cond)
 #> Unit: microseconds
-#>     expr     min       lq      mean  median       uq      max neval
-#>  rrapply  37.947  42.6335  59.77829  45.788  50.1500 1354.066   100
-#>   lstrrr 890.977 907.7765 979.25226 918.838 941.6775 3712.469   100
+#>     expr      min       lq       mean   median        uq      max neval
+#>  rrapply   48.663   55.663   77.31749   60.405   64.1105 1708.572   100
+#>   lstrrr 1160.967 1187.045 1261.49270 1202.164 1224.2460 4062.682   100
 ```
 
 ``` r
@@ -239,10 +239,10 @@ bench_flatten <- microbenchmark::microbenchmark(
 )
 print(bench_flatten)
 #> Unit: microseconds
-#>     expr     min       lq      mean   median      uq      max neval
-#>    purrr 847.893 903.5505 975.49534 924.5815 964.872 3777.355   100
-#>   lstrrr  25.377  28.8430  32.80478  32.0075  35.282   81.271   100
-#>  rrapply  25.969  29.3990  34.86152  34.1010  38.282   75.342   100
+#>     expr      min        lq       mean    median       uq      max neval
+#>    purrr 1112.014 1164.7375 1254.34382 1201.0410 1245.007 4273.135   100
+#>   lstrrr   32.598   36.4495   42.39311   41.4265   45.873  104.035   100
+#>  rrapply   33.079   38.2570   44.63407   43.6300   49.053   94.690   100
 ```
 
 ``` r
@@ -272,9 +272,9 @@ bench_modify_list <- microbenchmark::microbenchmark(
 )
 print(bench_modify_list)
 #> Unit: microseconds
-#>    expr     min       lq      mean   median      uq      max neval
-#>   utils 582.657 596.5985 645.97140 608.4160 635.296 3235.879   100
-#>  lstrrr  12.468  13.2795  15.74163  14.2815  15.593   65.708   100
+#>    expr     min       lq      mean   median       uq      max neval
+#>   utils 747.482 764.9325 816.15411 777.3610 799.5745 3544.722   100
+#>  lstrrr  16.174  17.0410  19.54068  18.5575  19.4990   94.551   100
 ```
 
 ``` r
@@ -322,10 +322,10 @@ mirai::daemons(0L)
 print(bench_parallel)
 #> Unit: milliseconds
 #>             expr      min       lq     mean   median       uq       max neval
-#>  lstrrr_parallel 2.877705 2.987760 3.036089 3.028274 3.064328  3.338872   100
-#>           lstrrr 2.750757 2.823514 3.099370 2.856594 2.922246 10.570871   100
-#>            purrr 2.773691 2.869674 3.176333 2.905812 2.962677 10.011630   100
-#>   purrr_parallel 6.433050 6.856931 7.295807 7.069681 7.311471 13.316044   100
+#>  lstrrr_parallel 3.672142 3.753348 3.824367 3.807904 3.854012  4.563527   100
+#>           lstrrr 3.460006 3.557291 3.870903 3.605533 3.660800 12.262208   100
+#>            purrr 3.497743 3.634986 4.002638 3.677726 3.761004 11.997864   100
+#>   purrr_parallel 8.182746 9.018689 9.496059 9.163802 9.496289 16.325211   100
 ```
 
 ``` r

@@ -181,7 +181,7 @@ dat <- list(
 
 ``` r
 
-result1 <- rrapply(
+result1 <- rrapply::rrapply(
   dat,
   f = function(x) x + 5,
   classes = "numeric",
