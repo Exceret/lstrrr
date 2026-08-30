@@ -6,18 +6,26 @@
 
 ## TESTING
 
-incorporate benchmark tests between lstrrr and rrapply
+* Added comprehensive tests for `list_filter()`, covering predicate matching, structure preservation, `isTRUE()` semantics, edge cases, and error handling.
+* Incorporated benchmark tests between lstrrr and rrapply.
+
+## DOCUMENTATION
+
+* Added `list_filter()` with an example to the `do_purrrlike` vignette.
 
 # lstrrr 0.1.0 (2026-07-21)
 
 ## TESTING
 
 * Incorporate tests for all functions
+* Added tests for `list_find_value()` and `list_nleaf()`
 
 
 ## DOCUMENTATION
 
 * Updated documentation for all functions, including code examples and parameters descriptions
+* Added `list_find_value()` with an example to the `do_purrrlike` vignette
+* Updated the pkgdown reference index (`_pkgdown.yml`) to include `list_find_value()`
 
 
 ## NEW FEATURES

@@ -47,7 +47,6 @@ typedef struct
     int enabled;
     SEXP bar;
     R_xlen_t total;
-    R_xlen_t current;
     R_xlen_t seen;
     int protect_count;
 } progress_t;
@@ -223,7 +222,6 @@ static void progress_init(
     pb->enabled = progress_enabled(progress) && total > 0;
     pb->bar = R_NilValue;
     pb->total = total;
-    pb->current = 0;
     pb->seen = 0;
     pb->protect_count = 0;
     if (!pb->enabled)
@@ -238,24 +236,34 @@ static void progress_init(
 
 static void progress_tick(progress_t *pb)
 {
-    pb->seen++;
-    if (pb->seen % 128 == 0)
+    R_xlen_t seen = ++pb->seen;
+
+    /*
+     * 128 是 2 的幂，因此位运算可替代取模。
+     */
+    if ((seen & 127) == 0)
     {
         R_CheckUserInterrupt();
     }
+
     if (!pb->enabled)
     {
         return;
     }
-    pb->current++;
-    double current = (double) pb->current;
-    if (pb->current > pb->total)
-    {
-        current = (double) pb->total;
-    }
+
     if (CLI_SHOULD_TICK)
     {
-        cli_progress_set(pb->bar, current);
+        R_xlen_t current = seen;
+
+        if (current > pb->total)
+        {
+            current = pb->total;
+        }
+
+        cli_progress_set(
+            pb->bar,
+            (double) current
+        );
     }
 }
 
@@ -424,7 +432,11 @@ SEXP lstrrr_c_list_map(
 )
 {
     progress_t pb;
-    progress_init(&pb, progress, nleaf_rec(x), "");
+    R_xlen_t total = 0;
+    if (progress_enabled(progress)) {
+        total = nleaf_rec(x);
+    }
+    progress_init(&pb, progress, total, "");
     SEXP out = PROTECT(rec_map(x, f, dots, env, &pb));
     progress_done(&pb);
     UNPROTECT(1);
@@ -488,7 +500,11 @@ SEXP lstrrr_c_list_map2(
 )
 {
     progress_t pb;
-    progress_init(&pb, progress, nleaf_rec(x), "");
+    R_xlen_t total = 0;
+    if (progress_enabled(progress)) {
+        total = nleaf_rec(x);
+    }
+    progress_init(&pb, progress, total, "");
     SEXP out = PROTECT(rec_map2(x, y, f, dots, env, &pb));
     progress_done(&pb);
     UNPROTECT(1);
@@ -580,7 +596,11 @@ SEXP lstrrr_c_list_pmap(
         Rf_error("`.l` must contain at least one element.");
     }
     progress_t pb;
-    progress_init(&pb, progress, nleaf_rec(VECTOR_ELT(xs, 0)), "");
+    R_xlen_t total = 0;
+    if (progress_enabled(progress)) {
+        total = nleaf_rec(xs);
+    }
+    progress_init(&pb, progress, total, "");
     SEXP out = PROTECT(rec_pmap(xs, f, dots, env, &pb));
     progress_done(&pb);
     UNPROTECT(1);
@@ -655,7 +675,11 @@ SEXP lstrrr_c_list_imap(
         use_path = 1;
     }
     progress_t pb;
-    progress_init(&pb, progress, nleaf_rec(x), "");
+    R_xlen_t total = 0;
+    if (progress_enabled(progress)) {
+        total = nleaf_rec(x);
+    }
+    progress_init(&pb, progress, total, "");
     SEXP id = PROTECT(Rf_allocVector(STRSXP, 0));
     SEXP out = PROTECT(
                    rec_imap(x, f, dots, env, &pb, id, use_path)
