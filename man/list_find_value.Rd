@@ -31,13 +31,13 @@ x <- list(
 list_find_value(x, 1)
 }
 \seealso{
-Other lstrrr_core: 
-\code{\link{list_delete}()},
-\code{\link{list_depth}()},
-\code{\link{list_get}()},
-\code{\link{list_has}()},
-\code{\link{list_nleaf}()},
-\code{\link{list_path}()},
-\code{\link{list_set}()}
+Other lstrrr_core:
+\code{\link[=list_delete]{list_delete()}},
+\code{\link[=list_depth]{list_depth()}},
+\code{\link[=list_get]{list_get()}},
+\code{\link[=list_has]{list_has()}},
+\code{\link[=list_nleaf]{list_nleaf()}},
+\code{\link[=list_path]{list_path()}},
+\code{\link[=list_set]{list_set()}}
 }
 \concept{lstrrr_core}

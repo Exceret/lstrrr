@@ -72,7 +72,7 @@ list_stats(list(10, a = list(20)))$nodes
 \seealso{
 \code{\link[=viz_list]{viz_list()}}
 
-Other lstrrr-visualization: 
-\code{\link{viz_list}()}
+Other lstrrr-visualization:
+\code{\link[=viz_list]{viz_list()}}
 }
 \concept{lstrrr-visualization}

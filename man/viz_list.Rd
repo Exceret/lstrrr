@@ -98,7 +98,7 @@ viz_list(x, flip = TRUE)
 \seealso{
 \code{\link[=list_stats]{list_stats()}}
 
-Other lstrrr-visualization: 
-\code{\link{list_stats}()}
+Other lstrrr-visualization:
+\code{\link[=list_stats]{list_stats()}}
 }
 \concept{lstrrr-visualization}

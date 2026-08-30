@@ -88,6 +88,7 @@ rlist::list.map(nums, f(x, i) ~ sum(x, i)) |> str()
 If `nums` becomes a complex nested list, rlist may not work as expected.
 
 ```{r}
+#| label = "comparison_with_rlist_complex"
 nums <- list(
   a = c(1, 2, 3),
   b = c(2, 3, 4),
@@ -106,9 +107,54 @@ try(rlist::list.map(nums, f(x, i) ~ sum(x, i)))
 **Recursive mapping is the main difference between lstrrr and rlist**. lstrrr views the list as a tree, and recursively applies the function to leaf nodes. 
 
 ```{r}
+#| label = "comparison_with_lstrrr"
 list_map(nums, \(v) c(min = min(v), max = max(v))) |> str()
 list_find(nums, ~ mean(.x) >= 3) |> str()
 list_map(nums, sum) |> str()
 ```
+
+---
+
+Another similar project is [rrapply](https://github.com/JorisChau/rrapply/), which also provide list recursion in R.
+
+```{r}
+#| label = "comparison_with_rrapply"
+dat <- list(
+  user = list(
+    name = "alice",
+    age = 20,
+    scores = list(
+      math = 80,
+      english = 90
+    )
+  ),
+  status = "active"
+)
+```
+
+```{r}
+#| label = "comparison_with_rrapply_example"
+result1 <- rrapply(
+  dat,
+  f = function(x) x + 5,
+  classes = "numeric",
+  condition = function(x) x >= 80
+)
+str(result1)
+```
+
+```{r}
+#| label = "comparison_with_lstrrr_example"
+result2 <- list_modify_if(dat, ~ is.numeric(.x) & .x >= 80, ~ .x + 5)
+str(result2)
+```
+
+The differences between `lstrrr` and `rrapply` are as follows:
+
+1. `lstrrr` follows the design philosophy of [purrr](https://github.com/tidyverse/purrr), whereas `rrapply` is based on base R’s `rapply()`.
+2. lstrrr provides a native progress bar similar to the one in purrr (using [cli](https://github.com/r-lib/cli) C API).
+3. lstrrr provides several basic functions for working with nested lists, such as `list_set()`, `list_get()`, and `list_nleaf()`.
+
+---
 
 To see more examples, click [here](https://exceret.github.io/lstrrr/index.html)

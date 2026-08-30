@@ -28,6 +28,7 @@ reference:
       - list_imap
       - list_map
       - list_map2
+      - list_filter
       - list_modify_if
       - list_pmap
       - list_pwalk

@@ -51,13 +51,13 @@ list_path(list(a = data.frame(x = 1:3), b = list(c = 1)))
 \seealso{
 \code{\link[=list_get]{list_get()}}, \code{\link[=list_has]{list_has()}}
 
-Other lstrrr_core: 
-\code{\link{list_delete}()},
-\code{\link{list_depth}()},
-\code{\link{list_find_value}()},
-\code{\link{list_get}()},
-\code{\link{list_has}()},
-\code{\link{list_nleaf}()},
-\code{\link{list_set}()}
+Other lstrrr_core:
+\code{\link[=list_delete]{list_delete()}},
+\code{\link[=list_depth]{list_depth()}},
+\code{\link[=list_find_value]{list_find_value()}},
+\code{\link[=list_get]{list_get()}},
+\code{\link[=list_has]{list_has()}},
+\code{\link[=list_nleaf]{list_nleaf()}},
+\code{\link[=list_set]{list_set()}}
 }
 \concept{lstrrr_core}

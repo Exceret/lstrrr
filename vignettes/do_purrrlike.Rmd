@@ -229,6 +229,13 @@ x <- list(
 list_find_value(x, 1) |> str()
 ```
 
+`list_filter()` is used to filter leaves that satisfy a predicate. Unlike `list_find()`, which returns a flat list of matches, `list_filter()` keeps the original nested structure and replaces non-matching leaves with `NULL`.
+
+```{asciicast}
+#| label = "list_filter"
+list_filter(foo, is.numeric) |> str()
+```
+
 `list_modify_if` is used to modify elements that satisfy a predicate. The structure of the list is preserved.
 
 ```{asciicast}

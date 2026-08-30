@@ -52,15 +52,16 @@ list_pmap(list(x,x,x), function(x,y,z) (x + y) *z)
 }
 }
 \seealso{
-Other lstrrr-purrrlike: 
-\code{\link{list_flatten}()},
-\code{\link{list_imap}()},
-\code{\link{list_iwalk}()},
-\code{\link{list_map}()},
-\code{\link{list_map2}()},
-\code{\link{list_modify_if}()},
-\code{\link{list_pwalk}()},
-\code{\link{list_walk}()},
-\code{\link{list_walk2}()}
+Other lstrrr-purrrlike:
+\code{\link[=list_filter]{list_filter()}},
+\code{\link[=list_flatten]{list_flatten()}},
+\code{\link[=list_imap]{list_imap()}},
+\code{\link[=list_iwalk]{list_iwalk()}},
+\code{\link[=list_map]{list_map()}},
+\code{\link[=list_map2]{list_map2()}},
+\code{\link[=list_modify_if]{list_modify_if()}},
+\code{\link[=list_pwalk]{list_pwalk()}},
+\code{\link[=list_walk]{list_walk()}},
+\code{\link[=list_walk2]{list_walk2()}}
 }
 \concept{lstrrr-purrrlike}

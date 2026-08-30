@@ -3,6 +3,7 @@
 export(dir_listwise)
 export(list_delete)
 export(list_depth)
+export(list_filter)
 export(list_find)
 export(list_find_value)
 export(list_flatten)

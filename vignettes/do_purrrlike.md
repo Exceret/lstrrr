@@ -271,6 +271,15 @@ semantics.
 
 ![](do_purrrlike_files/figure-markdown_strict//list_find_value.svg)
 
+`list_filter()` is used to filter leaves that satisfy a predicate.
+Unlike `list_find()`, which returns a flat list of matches,
+`list_filter()` keeps the original nested structure and replaces
+non-matching leaves with `NULL`.
+
+    list_filter(foo, is.numeric) |> str()
+
+![](do_purrrlike_files/figure-markdown_strict//list_filter.svg)
+
 `list_modify_if` is used to modify elements that satisfy a predicate.
 The structure of the list is preserved.
 

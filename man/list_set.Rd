@@ -61,13 +61,13 @@ x2$b$x
 \seealso{
 \code{\link[=list_get]{list_get()}}, \code{\link[=list_has]{list_has()}}
 
-Other lstrrr_core: 
-\code{\link{list_delete}()},
-\code{\link{list_depth}()},
-\code{\link{list_find_value}()},
-\code{\link{list_get}()},
-\code{\link{list_has}()},
-\code{\link{list_nleaf}()},
-\code{\link{list_path}()}
+Other lstrrr_core:
+\code{\link[=list_delete]{list_delete()}},
+\code{\link[=list_depth]{list_depth()}},
+\code{\link[=list_find_value]{list_find_value()}},
+\code{\link[=list_get]{list_get()}},
+\code{\link[=list_has]{list_has()}},
+\code{\link[=list_nleaf]{list_nleaf()}},
+\code{\link[=list_path]{list_path()}}
 }
 \concept{lstrrr_core}

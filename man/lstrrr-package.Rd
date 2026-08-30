@@ -25,5 +25,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}
 
+Authors:
+\itemize{
+  \item Yuxi Yang \email{15364051195@163.com}
+}
+
 }
 \keyword{internal}

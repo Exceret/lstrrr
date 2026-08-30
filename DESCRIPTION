@@ -1,6 +1,6 @@
 Package: lstrrr
 Title: Functional Tools for Working with Complex and Deeply Nested 'R' Lists
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")))
 Description: Provides a suite of functional programming tools for working
@@ -24,13 +24,14 @@ Suggests:
     purrr,
     rlist,
     rmarkdown,
+    rrapply,
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3
 Config/testthat/start-first: watcher, parallel*
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 LazyData: true
 LinkingTo: cli
+Config/roxygen2/version: 8.0.0

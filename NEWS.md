@@ -1,3 +1,13 @@
+# lstrrr 0.1.1 (2026-08-30)
+
+## NEW FEATURES
+ 
+* Added `list_filter()`, which keeps leaves satisfying a predicate and replaces the others with `NULL`, preserving the original nested structure.
+
+## TESTING
+
+incorporate benchmark tests between lstrrr and rrapply
+
 # lstrrr 0.1.0 (2026-07-21)
 
 ## TESTING

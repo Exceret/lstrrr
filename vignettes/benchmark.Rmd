@@ -59,18 +59,28 @@ bench_map <- microbenchmark::microbenchmark(
   lstrrr_10 = {
     list_walk(files_list, \(x) slow_string_op(x))
   },
+  rrapply_10 = {
+    rrapply::rrapply(files_list, f = \(x) slow_string_op(x))
+  },
   purrr_50 = {
     purrr::walk(files, \(x) slow_string_op(x, n = 50))
   },
   lstrrr_50 = {
     list_walk(files_list, \(x) slow_string_op(x, n = 50))
   },
-  purrr_100 = {
-    purrr::walk(files, \(x) slow_string_op(x, n = 100))
-  },
-  lstrrr_100 = {
-    list_walk(files_list, \(x) slow_string_op(x, n = 100))
+  rrapply_50 = {
+    rrapply::rrapply(files_list, f = \(x) slow_string_op(x, n = 50))
   }
+  # ,
+  # purrr_100 = {
+  #   purrr::walk(files, \(x) slow_string_op(x, n = 100))
+  # },
+  # lstrrr_100 = {
+  #   list_walk(files_list, \(x) slow_string_op(x, n = 100))
+  # },
+  # rrapply_100 = {
+  #   rrapply::rrapply(files_list, f = \(x) slow_string_op(x, n = 100))
+  # }
 )
 print(bench_map)
 ```
@@ -152,6 +162,36 @@ ggplot2::autoplot(bench_modify) +
   ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
 ```
 
+## Modification Under Condition
+
+```{r}
+#| label = "benchmarking_modify_cond"
+set.seed(1260)
+
+bench_modify_cond <- microbenchmark::microbenchmark(
+  rrapply = {
+    rrapply::rrapply(
+      sputnik_1,
+      f = function(x) x**2,
+      classes = "numeric",
+      condition = function(x) x >= 10
+    )
+  },
+  lstrrr = {
+    list_modify_if(sputnik_1, function(x) is.numeric(x) & x >= 10, function(x) {
+      x**2
+    })
+  }
+)
+print(bench_modify_cond)
+```
+
+```{r}
+#| label = "viz_modify_cond"
+ggplot2::autoplot(bench_modify_cond) +
+  ggplot2::theme(axis.text = ggplot2::element_text(size = 12))
+```
+
 ## Flatten
 
 ```{r}
@@ -164,6 +204,9 @@ bench_flatten <- microbenchmark::microbenchmark(
   },
   lstrrr = {
     list_flatten(sputnik_1)
+  },
+  rrapply = {
+    rrapply::rrapply(sputnik_1, how = "flatten")
   }
 )
 print(bench_flatten)
