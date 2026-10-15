@@ -23,7 +23,7 @@ comment_output <- function(expr, prefix = c("#", "#'", "#' #")) {
     eval_tidy(quo)
   )
 
-  if (length(out) > 0) {
+  if (length(out) > 0L) {
     message(paste0(prefix, " ", out, collapse = "\n"))
   }
 

@@ -1,8 +1,8 @@
 # nocov start
 
-#' @title What the Package Does (One Line, Title Case)
+#' @title lstrrr
 #'
-#' @description What the package does (one paragraph).
+#' @description Functional Tools for Working with Complex and Deeply Nested 'R' Lists
 #'
 #' @section License:
 #' MIT + file LICENSE

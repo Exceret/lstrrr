@@ -73,3 +73,5 @@
 ^data-raw$
 
 markdown_strict/
+^\.clangd$
+^\.build\.timestamp$

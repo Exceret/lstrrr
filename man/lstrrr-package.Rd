@@ -4,9 +4,9 @@
 \name{lstrrr-package}
 \alias{lstrrr-package}
 \alias{lstrrr}
-\title{What the Package Does (One Line, Title Case)}
+\title{lstrrr}
 \description{
-What the package does (one paragraph).
+Functional Tools for Working with Complex and Deeply Nested 'R' Lists
 }
 \section{License}{
 

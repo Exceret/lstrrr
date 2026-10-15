@@ -67,3 +67,5 @@ pkgdown/*_files
 inst/doc
 docs
 .build.timestamp
+.clangd
+tests/testthat/_snaps

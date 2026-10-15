@@ -4,7 +4,6 @@
 
 <!-- badges: start -->
 
-[![Project-Status:Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN-status](https://www.r-pkg.org/badges/version/lstrrr)](https://CRAN.R-project.org/package=lstrrr)
 [![Devel-version](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)](https://github.com/Exceret/lstrrr)
@@ -223,9 +222,9 @@ The differences between `lstrrr` and `rrapply` are as follows:
 1.  `lstrrr` follows the design philosophy of
     [purrr](https://github.com/tidyverse/purrr), whereas `rrapply` is
     based on base R’s `rapply()`.
-2.  lstrrr provides a native progress bar similar to the one in purrr
+2.  `lstrrr` provides a native progress bar similar to the one in purrr
     (using [cli](https://github.com/r-lib/cli) C API).
-3.  lstrrr provides several basic functions for working with nested
+3.  `lstrrr` provides several basic functions for working with nested
     lists, such as `list_set()`, `list_get()`, and `list_nleaf()`.
 
 ------------------------------------------------------------------------
