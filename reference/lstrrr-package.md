@@ -1,6 +1,6 @@
-# What the Package Does (One Line, Title Case)
+# lstrrr
 
-What the package does (one paragraph).
+Functional Tools for Working with Complex and Deeply Nested 'R' Lists
 
 ## License
 

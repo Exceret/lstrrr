@@ -217,9 +217,9 @@ The differences between `lstrrr` and `rrapply` are as follows:
 1.  `lstrrr` follows the design philosophy of
     [purrr](https://github.com/tidyverse/purrr), whereas `rrapply` is
     based on base R’s [`rapply()`](https://rdrr.io/r/base/rapply.html).
-2.  lstrrr provides a native progress bar similar to the one in purrr
+2.  `lstrrr` provides a native progress bar similar to the one in purrr
     (using [cli](https://github.com/r-lib/cli) C API).
-3.  lstrrr provides several basic functions for working with nested
+3.  `lstrrr` provides several basic functions for working with nested
     lists, such as
     [`list_set()`](https://exceret.github.io/lstrrr/reference/list_set.md),
     [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md),

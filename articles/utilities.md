@@ -90,9 +90,9 @@ head(files)
 #> [1] "./benchmark.md"                                                             
 #> [2] "./benchmark.Rmd"                                                            
 #> [3] "./do_purrrlike_cache/html/__packages"                                       
-#> [4] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.cast" 
-#> [5] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.RData"
-#> [6] "./do_purrrlike_cache/html/list_pwalk_0f1131d1965314cb05dd2699ffbc33eb.rdb"
+#> [4] "./do_purrrlike_cache/html/list_pwalk_a62896bed4862eb3eb5a52bbc66f0c93.cast" 
+#> [5] "./do_purrrlike_cache/html/list_pwalk_a62896bed4862eb3eb5a52bbc66f0c93.RData"
+#> [6] "./do_purrrlike_cache/html/list_pwalk_a62896bed4862eb3eb5a52bbc66f0c93.rdb"
 
 files_list <- dir_listwise(files)
 cli::cli_alert_info("Class of files_list: {.cls {class(files_list)}}")
