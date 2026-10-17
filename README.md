@@ -6,7 +6,7 @@
 
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN-status](https://www.r-pkg.org/badges/version/lstrrr)](https://CRAN.R-project.org/package=lstrrr)
-[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)](https://github.com/Exceret/lstrrr)
+[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.2-blue.svg)](https://github.com/Exceret/lstrrr)
 [![R-CMD-check](https://github.com/Exceret/lstrrr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Exceret/lstrrr/actions/workflows/R-CMD-check.yaml)
 [![Codecov-test-coverage](https://codecov.io/gh/Exceret/lstrrr/graph/badge.svg)](https://app.codecov.io/gh/Exceret/lstrrr)
 [![Dependencies](https://tinyverse.netlify.app/badge/lstrrr)](https://cran.r-project.org/package=lstrrr)

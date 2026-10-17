@@ -65,6 +65,7 @@ Other lstrrr_core:
 \code{\link[=list_get]{list_get()}},
 \code{\link[=list_nleaf]{list_nleaf()}},
 \code{\link[=list_path]{list_path()}},
+\code{\link[=list_rename]{list_rename()}},
 \code{\link[=list_set]{list_set()}}
 }
 \concept{lstrrr_core}

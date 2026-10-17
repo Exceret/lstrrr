@@ -15,12 +15,12 @@
 #' @param prefix The prefix to add to the output.
 #' @noRd
 comment_output <- function(expr, prefix = c("#", "#'", "#' #")) {
-  prefix <- arg_match(prefix)
+  prefix <- rlang::arg_match(prefix)
 
-  quo <- enquo(expr)
+  quo <- rlang::enquo(expr)
 
   out <- utils::capture.output(
-    eval_tidy(quo)
+    rlang::eval_tidy(quo)
   )
 
   if (length(out) > 0L) {

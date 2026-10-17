@@ -13,6 +13,7 @@ reference:
       Basic functions for list manipulation.
     contents:
       - list_path
+      - list_rename
       - list_delete
       - list_depth
       - list_find

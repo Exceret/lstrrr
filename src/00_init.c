@@ -10,6 +10,7 @@ SEXP lstrrr_c_list_path(SEXP x);
 SEXP lstrrr_c_list_flatten(SEXP x, SEXP sep);
 SEXP lstrrr_c_list_set(SEXP x, SEXP path, SEXP value);
 SEXP lstrrr_c_list_delete(SEXP x, SEXP path);
+SEXP lstrrr_c_list_rename(SEXP x, SEXP path, SEXP name);
 SEXP lstrrr_c_list_nleaf(SEXP x);
 SEXP lstrrr_c_list_find_val(SEXP x, SEXP value);
 SEXP lstrrr_c_list_map(SEXP x, SEXP f, SEXP dots, SEXP progress, SEXP env);
@@ -28,6 +29,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"lstrrr_c_list_flatten", (DL_FUNC)&lstrrr_c_list_flatten, 2},
     {"lstrrr_c_list_set", (DL_FUNC)&lstrrr_c_list_set, 3},
     {"lstrrr_c_list_delete", (DL_FUNC)&lstrrr_c_list_delete, 2},
+    {"lstrrr_c_list_rename", (DL_FUNC)&lstrrr_c_list_rename, 3},
     {"lstrrr_c_list_nleaf", (DL_FUNC)&lstrrr_c_list_nleaf, 1},
     {"lstrrr_c_list_find_val", (DL_FUNC)&lstrrr_c_list_find_val, 2},
     {"lstrrr_c_list_map", (DL_FUNC)&lstrrr_c_list_map, 5},

@@ -254,6 +254,55 @@ list_delete <- function(x, path) {
   .Call("lstrrr_c_list_delete", x, path, PACKAGE = "lstrrr")
 }
 
+#' Rename a nested element by path
+#'
+#' Renames the last slot of `path`, leaving the elements themselves untouched.
+#'
+#' @inheritParams list_get
+#'
+#' @param name A single string giving the new name for the element located at
+#'   the end of `path`.
+#'
+#' @family lstrrr_core
+#' @return
+#' A modified copy of `x` with the element at `path` renamed.
+#'
+#'   If `path` does not exist, or if the parent of the last slot is not a list,
+#'   `x` is returned unchanged. Renaming only affects names: the elements of `x`
+#'   are shared with the original object rather than duplicated.
+#'
+#' @examples
+#' x <- list(
+#'   a = 1,
+#'   b = list(
+#'     c = 2,
+#'     d = list(e = 3)
+#'   )
+#' )
+#'
+#' list_rename(x, c("b", "d", "e"), "renamed")
+#'
+#' # Integer paths use positional indices
+#' list_rename(x, c(2L, 2L, 1L), "renamed")
+#'
+#' # Missing paths leave `x` unchanged
+#' list_rename(x, c("b", "missing"), "renamed")
+#'
+#' # Empty path has nothing to rename
+#' list_rename(x, character(0), "renamed")
+#'
+#' # The original object is unchanged unless reassigned
+#' x2 <- list_rename(x, c("b", "d", "e"), "renamed")
+#' names(x$b$d)
+#' names(x2$b$d)
+#'
+#' @seealso [list_get()], [list_set()], [list_delete()]
+#'
+#' @export
+list_rename <- function(x, path, name) {
+  .Call("lstrrr_c_list_rename", x, path, name, PACKAGE = "lstrrr")
+}
+
 
 #' Count Leaf Nodes in a Nested List
 #'

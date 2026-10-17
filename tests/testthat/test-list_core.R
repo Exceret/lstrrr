@@ -492,3 +492,103 @@ test_that("list_find_value errors when x is not a list", {
 test_that("list_find_value errors when x is a data.frame", {
   expect_error(list_find_value(data.frame(a = 1:3), 1))
 })
+
+# list_rename ------------------------------------------------------------------
+
+test_that("list_rename renames the last slot of a character path", {
+  x <- list(a = 1, b = list(c = 2, d = list(e = 3)))
+  out <- list_rename(x, c("b", "d", "e"), "renamed")
+  expect_named(out$b$d, "renamed")
+  expect_identical(list_get(out, c("b", "d", "renamed")), 3)
+})
+
+test_that("list_rename keeps leaf values and sibling names untouched", {
+  x <- list(a = 1, b = list(c = 2, d = list(e = 3)))
+  out <- list_rename(x, c("b", "d", "e"), "renamed")
+  expect_named(out, c("a", "b"))
+  expect_named(out$b, c("c", "d"))
+  expect_identical(out$b$d, list(renamed = 3))
+})
+
+test_that("list_rename renames a top-level slot", {
+  out <- list_rename(list(a = 1, b = 2), "a", "renamed")
+  expect_named(out, c("renamed", "b"))
+})
+
+test_that("list_rename works with integer path", {
+  x <- list(a = 1, b = list(c = 2, d = list(e = 3)))
+  out <- list_rename(x, c(2L, 2L, 1L), "renamed")
+  expect_named(out$b$d, "renamed")
+})
+
+test_that("list_rename works with numeric path", {
+  out <- list_rename(list(a = 1, b = 2), 2, "renamed")
+  expect_named(out, c("a", "renamed"))
+})
+
+test_that("list_rename returns x unchanged for missing character path", {
+  x <- list(a = 1, b = list(c = 2))
+  expect_identical(list_rename(x, c("b", "missing"), "renamed"), x)
+})
+
+test_that("list_rename returns x unchanged when intermediate is not a list", {
+  x <- list(a = 1, b = list(c = 2))
+  expect_identical(list_rename(x, c("a", "missing"), "renamed"), x)
+})
+
+test_that("list_rename returns x unchanged for invalid integer path", {
+  x <- list(a = 1)
+  expect_identical(list_rename(x, c(0L, 1L), "renamed"), x)
+  expect_identical(list_rename(x, c(1L, 3L), "renamed"), x)
+  expect_identical(list_rename(x, c(NA_integer_, 1L), "renamed"), x)
+})
+
+test_that("list_rename with empty path returns x unchanged", {
+  x <- list(a = 1)
+  expect_identical(list_rename(x, character(), "renamed"), x)
+})
+
+test_that("list_rename returns a new list (does not mutate original)", {
+  x <- list(a = 1, b = list(c = 2))
+  list_rename(x, c("b", "c"), "renamed")
+  expect_named(x$b, "c")
+})
+
+test_that("list_rename names unnamed slots NA in line with `names<-`", {
+  out <- list_rename(list(1, 2), 2L, "second")
+  expect_identical(names(out), c(NA, "second"))
+  expect_identical(out[["second"]], 2)
+})
+
+test_that("list_rename can target a data.frame leaf", {
+  x <- list(a = iris[1:2, ], b = 1)
+  out <- list_rename(x, "a", "renamed")
+  expect_identical(out[["renamed"]], iris[1:2, ])
+})
+
+test_that("list_rename handles deeply nested paths", {
+  deep <- list(a = list(b = list(c = 1)))
+  out <- list_rename(deep, c("a", "b", "c"), "renamed")
+  expect_named(out$a$b, "renamed")
+})
+
+test_that("list_rename can rename to an existing sibling name", {
+  out <- list_rename(list(a = 1, b = 2), "a", "b")
+  expect_named(out, c("b", "b"))
+})
+
+test_that("list_rename errors on invalid path type", {
+  expect_snapshot(list_rename(list(a = 1), TRUE, "renamed"), error = TRUE)
+})
+
+test_that("list_rename errors when name is not a string", {
+  expect_snapshot(list_rename(list(a = 1), "a", 1), error = TRUE)
+})
+
+test_that("list_rename errors when name is NA", {
+  expect_snapshot(list_rename(list(a = 1), "a", NA_character_), error = TRUE)
+})
+
+test_that("list_rename errors when name is not length one", {
+  expect_snapshot(list_rename(list(a = 1), "a", c("x", "y")), error = TRUE)
+})
