@@ -5,7 +5,7 @@
 ``` r
 
 library(lstrrr)
-#> ✔ lstrrr v0.1.1 loaded
+#> ✔ lstrrr v0.1.2 loaded
 ```
 
 ## TL;DR

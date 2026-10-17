@@ -4,16 +4,17 @@
 
 ### Core Access
 
-| Function                   | Description                    |
-|----------------------------|--------------------------------|
-| `list_get(x, path)`        | Read an element by path        |
-| `list_set(x, path, value)` | Set an element by path         |
-| `list_delete(x, path)`     | Delete an element by path      |
-| `list_has(x, path)`        | Check if a path exists         |
-| `list_depth(x)`            | Compute nesting depth          |
-| `list_path(x)`             | Get paths to all leaf nodes    |
-| `list_nleaf(x)`            | Count leaf nodes               |
-| `list_find_value(x, val)`  | Find paths where value matches |
+| Function                     | Description                    |
+|------------------------------|--------------------------------|
+| `list_get(x, path)`          | Read an element by path        |
+| `list_set(x, path, value)`   | Set an element by path         |
+| `list_delete(x, path)`       | Delete an element by path      |
+| `list_rename(x, path, name)` | Rename an element by path      |
+| `list_has(x, path)`          | Check if a path exists         |
+| `list_depth(x)`              | Compute nesting depth          |
+| `list_path(x)`               | Get paths to all leaf nodes    |
+| `list_nleaf(x)`              | Count leaf nodes               |
+| `list_find_value(x, val)`    | Find paths where value matches |
 
 ### Map & Walk
 

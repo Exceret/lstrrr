@@ -6,6 +6,8 @@ Basic functions for list manipulation.
 
 - [`list_path()`](https://exceret.github.io/lstrrr/reference/list_path.md)
   : Get all leaf paths in a nested list
+- [`list_rename()`](https://exceret.github.io/lstrrr/reference/list_rename.md)
+  : Rename a nested element by path
 - [`list_delete()`](https://exceret.github.io/lstrrr/reference/list_delete.md)
   : Delete a nested element by path
 - [`list_depth()`](https://exceret.github.io/lstrrr/reference/list_depth.md)

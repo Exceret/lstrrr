@@ -46,6 +46,7 @@ Other lstrrr_core:
 [`list_get()`](https://exceret.github.io/lstrrr/reference/list_get.md),
 [`list_nleaf()`](https://exceret.github.io/lstrrr/reference/list_nleaf.md),
 [`list_path()`](https://exceret.github.io/lstrrr/reference/list_path.md),
+[`list_rename()`](https://exceret.github.io/lstrrr/reference/list_rename.md),
 [`list_set()`](https://exceret.github.io/lstrrr/reference/list_set.md)
 
 ## Examples

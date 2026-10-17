@@ -1,5 +1,14 @@
 # Changelog
 
+## lstrrr 0.1.2 (2026-10-17)
+
+### NEW FEATURES
+
+- Added
+  [`list_rename()`](https://exceret.github.io/lstrrr/reference/list_rename.md),
+  which renames the last slot of a path in a nested list while keeping
+  the elements untouched and shared with the original object.
+
 ## lstrrr 0.1.1 (2026-08-30)
 
 ### NEW FEATURES
