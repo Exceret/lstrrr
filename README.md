@@ -29,6 +29,17 @@ list and return the same list structure.
 pak::pak("Exceret/lstrrr")
 ```
 
+## Agent Skill
+
+`lstrrr` also ships an agent skill that summarizes every exported
+function and the workflow for choosing one. It first checks whether the
+object is really a complex nested list and falls back to `purrr` or
+`base::lapply()` otherwise.
+
+``` bash
+npx skills add Exceret/lstrrr
+```
+
 ## Getting Started
 
 Use it just like `purrr`
