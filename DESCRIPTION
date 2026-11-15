@@ -25,6 +25,7 @@ Suggests:
     rlist,
     rmarkdown,
     rrapply,
+    spelling,
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3
@@ -35,3 +36,4 @@ VignetteBuilder: knitr
 LazyData: true
 LinkingTo: cli
 Config/roxygen2/version: 8.1.0
+Language: en-US

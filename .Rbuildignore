@@ -75,3 +75,4 @@
 markdown_strict/
 ^\.clangd$
 ^\.build\.timestamp$
+^skill$
