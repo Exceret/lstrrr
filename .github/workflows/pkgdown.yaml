@@ -35,6 +35,9 @@ jobs:
           needs: website
 
       - name: Build site
+        env:
+          # record the asciicast output for the `do_purrrlike` vignette
+          LSTRRR_RECORD_CASTS: true
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 

@@ -15,22 +15,38 @@ knitr::opts_chunk$set(
   asciicast_at = "all",
   asciicast_cpp11_linkingto = "[[cpp11::linking_to(\"cli\")]]"
 )
-asciicast::init_knitr_engine(
-  echo = TRUE,
-  echo_input = FALSE,
-  startup = quote({
-    library(lstrrr)
-    data(sputnik_1)
-    options(cli.progress_show_after = 0)
-    options(cli.progress_clear = FALSE)
-    options(cli.progress_format_iterator = NULL)
-    options(cli.progress_format_iterator_nototal = NULL)
-    options(cli.progress_format_tasks = NULL)
-    options(cli.progress_format_tasks_nototal = NULL)
-    options(cli.progress_format_download = NULL)
-    options(cli.progress_format_download_nototal = NULL)
-  })
-)
+
+# Recording runs every chunk in a separate R subprocess attached to a pseudo
+# terminal, which is not always available: on CRAN's check machines it aborted
+# the vignette build with "asciicast subprocess crashed". So only record when
+# the casts are actually wanted (knitting interactively, or `LSTRRR_RECORD_CASTS`
+# set, as in the pkgdown workflow); otherwise the `{asciicast}` chunks fall back
+# to the plain `{R}` engine, which shows the same code and output as text.
+record_casts <- interactive() ||
+  identical(Sys.getenv("LSTRRR_RECORD_CASTS"), "true")
+
+if (record_casts && requireNamespace("asciicast", quietly = TRUE)) {
+  asciicast::init_knitr_engine(
+    echo = TRUE,
+    echo_input = FALSE,
+    startup = quote({
+      library(lstrrr)
+      data(sputnik_1)
+      options(cli.progress_show_after = 0)
+      options(cli.progress_clear = FALSE)
+      options(cli.progress_format_iterator = NULL)
+      options(cli.progress_format_iterator_nototal = NULL)
+      options(cli.progress_format_tasks = NULL)
+      options(cli.progress_format_tasks_nototal = NULL)
+      options(cli.progress_format_download = NULL)
+      options(cli.progress_format_download_nototal = NULL)
+    })
+  )
+} else {
+  knitr::knit_engines$set(asciicast = knitr::knit_engines$get("R"))
+  library(lstrrr)
+  data("sputnik_1", package = "lstrrr")
+}
 options(cli.progress_show_after = 0)
 options(cli.progress_clear = FALSE)
 options(cli.progress_format_iterator = NULL)
